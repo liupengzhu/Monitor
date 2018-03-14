@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Monitor</string>
+    <string name="home_title">昆山张浦德国工业园智慧能源示范园区云平台</string>
+    <string name="home_total">当月综合数据</string>
+    <string name="home_detail">详细信息</string>
+    <string name="home_electric">总用电量</string>
+    <string name="home_water">总用水量</string>
+    <string name="home_steam">总用汽量</string>
+    <string name="home_gas">总用气量</string>
+    <string name="home_energy_consumption">综合能耗</string>
+    <string name="home_carbon_emission">碳排放量</string>
+    <string name="home_generation">光伏发电</string>
+    <string name="home_day">安全用电天数</string>
+    <string name="综合监控">综合监控</string>
+    <string name="用电">用电</string>
+    <string name="用水">用水</string>
+    <string name="天然气">天然气</string>
+    <string name="蒸汽">蒸汽</string>
+    <string name="可再生能源">可再生能源</string>
+    <string name="碳排放量">碳排放量</string>
+    <string name="请输入用户名">请输入用户名</string>
+    <string name="请输入密码">请输入密码</string>
+    <string name="网络错误">网络错误</string>
+    <string name="用电详情">用电详情</string>
+</resources>

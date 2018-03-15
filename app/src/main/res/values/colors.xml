@@ -22,5 +22,8 @@
     <color name="login_color1">#14a8f4</color>
     <color name="login_color2">#1657b4</color>
     <color name="login_hint">#99ffffff</color>
-
+    <color name="rush_color">#d85452</color>
+    <color name="peak_color">#ff8705</color>
+    <color name="normal_color">#458cc8</color>
+    <color name="valley_color">#5fb861</color>
 </resources>

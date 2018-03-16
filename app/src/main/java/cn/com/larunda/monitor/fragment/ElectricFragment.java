@@ -116,6 +116,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
 
     private XYMarkerView barMarkerView;
     private XYMarkerView lineMarkerView;
+    private XYMarkerView pieMarerView;
 
 
     @Nullable
@@ -241,6 +242,10 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         lineMarkerView = new XYMarkerView(getContext());
         lineMarkerView.setChartView(mLineChart);
         mLineChart.setMarker(lineMarkerView);
+
+        pieMarerView = new XYMarkerView(getContext());
+        pieMarerView.setChartView(mPieChart);
+        mPieChart.setMarker(pieMarerView);
     }
 
     /**
@@ -390,6 +395,18 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        pieMarerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                StringBuffer content = new StringBuffer();
+                if (type.equals("original")) {
+                    content.append("当日能耗:" + e.getY() + radio + powerUnit);
+                } else {
+                    content.append("当日能耗:" + e.getY() + "tce");
+                }
+                ((TextView) v).setText(content.toString());
+            }
+        });
     }
 
     /**

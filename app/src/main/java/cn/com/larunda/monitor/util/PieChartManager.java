@@ -49,7 +49,9 @@ public class PieChartManager {
 
         pieChart.setRotationAngle(0);//设置一个抵消RadarChart的旋转度
         // 触摸旋转
-        pieChart.setRotationEnabled(true);//通过触摸使图表旋转
+        pieChart.setRotationEnabled(false);//通过触摸使图表旋转
+
+
         pieChart.setHighlightPerTapEnabled(true);//通过点击手势突出显示的值
 
         /**

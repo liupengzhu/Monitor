@@ -55,6 +55,9 @@ public class LineChartManager {
         lineChart.animateY(1000, Easing.EasingOption.Linear);
         lineChart.animateX(1000, Easing.EasingOption.Linear);
 
+        //禁止缩放
+        lineChart.setScaleEnabled(false);
+
         //折线图例 标签 设置
         Legend legend = lineChart.getLegend();
 

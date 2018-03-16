@@ -63,6 +63,8 @@ public class BarChartManager {
         //设置动画效果
         mBarChart.animateY(1000, Easing.EasingOption.Linear);
         mBarChart.animateX(1000, Easing.EasingOption.Linear);
+        //禁止缩放
+        mBarChart.setScaleEnabled(false);
 
         //折线图例 标签 设置
         Legend legend = mBarChart.getLegend();

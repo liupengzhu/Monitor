@@ -38,7 +38,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_marginTop="10dp"
         android:background="@color/white">
 
@@ -58,11 +58,11 @@
             android:layout_marginLeft="20dp"
             android:text="当月综合数据"
             android:textColor="@color/tab_text_color2"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
@@ -76,7 +76,7 @@
             android:layout_marginRight="38dp"
             android:text="详细信息"
             android:textColor="@color/home_text_l"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <View

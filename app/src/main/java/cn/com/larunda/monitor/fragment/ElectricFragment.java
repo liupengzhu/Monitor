@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.data.PieEntry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import cn.com.larunda.dialog.DateDialog;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.util.BarChartManager;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.LineChartManager;
 import cn.com.larunda.monitor.util.LineChartViewPager;
 import cn.com.larunda.monitor.util.MyApplication;
@@ -33,6 +35,9 @@ import cn.com.larunda.monitor.util.PieChartViewPager;
 import cn.com.larunda.monitor.util.Util;
 import cn.com.larunda.monitor.util.XValueFormatter;
 import cn.com.larunda.monitor.util.YValueFormatter;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by sddt on 18-3-14.
@@ -297,5 +302,20 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
      * 发送网络请求
      */
     private void sendRequest() {
+        getType();
+        String time = dateText.getText().toString().trim();
+        HttpUtil.sendGetRequestWithHttp(ELECTRIC_URL + token + "&date_type=" + date_type + "&type=" + type
+                + "&time=" + time, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String content = response.body().string();
+                Log.d("main", content);
+            }
+        });
     }
 }

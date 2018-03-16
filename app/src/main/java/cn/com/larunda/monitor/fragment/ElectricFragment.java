@@ -23,7 +23,9 @@ import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.data.PieEntry;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.com.larunda.dialog.DateDialog;
@@ -70,6 +72,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private LineChartViewPager mLineChart;
     private PieChartViewPager mPieChart;
     private LinearLayout mPieLayout;
+    private TextView textView1;
 
     private DateDialog dateDialog;
     private DateDialog yearDialog;
@@ -89,6 +92,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private LinearLayoutManager manager;
     private List<ElectricBean> electricBeanList = new ArrayList<>();
     private String powerUnit;
+    private BarChartManager manager3;
+    private String radio;
+    private LineChartManager manager1;
 
     @Nullable
     @Override
@@ -117,6 +123,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         powerUnit = preferences.getString("power_unit", null);
 
         mPieLayout = view.findViewById(R.id.electric_fragment_pie_layout);
+        textView1 = view.findViewById(R.id.electric_fragment_chart_text);
 
         dateDialog = new DateDialog(getContext());
         yearDialog = new DateDialog(getContext(), false, false);
@@ -138,46 +145,35 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(adapter);
 
         mBarChart = view.findViewById(R.id.electric_fragment_chart);
-        BarChartManager manager = new BarChartManager(mBarChart);
-        manager.setDescription("");
-        manager.setxValueFormatter(new XValueFormatter() {
+        manager3 = new BarChartManager(mBarChart);
+        manager3.setDescription("");
+        manager3.setxValueFormatter(new XValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) value + "日";
+                if (date_type.equals("year")) {
+                    return (int) value + "月";
+                } else {
+                    return (int) value + "日";
+                }
             }
         });
-        manager.setyValueFormatter(new YValueFormatter() {
+        manager3.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return value + " kwh";
+                if (type.equals("original")) {
+                    return (int) Math.ceil(value) + " " + radio + powerUnit;
+                } else {
+                    return (int) Math.ceil(value) + " tce";
+                }
+
             }
         });
-        //设置y轴的数据()
-        List<List<Float>> yValues = new ArrayList<>();
-        for (int i = 0; i <= 29; i++) {
-            List<Float> yValue = new ArrayList<>();
-            for (int j = 0; j < 4; j++) {
-                yValue.add((float) (Math.random() * 80));
-            }
-            yValues.add(yValue);
-        }
-        manager.showBarChart(yValues, colors);
+
 
         mLineChart = view.findViewById(R.id.electric_fragment_line);
-        LineChartManager manager1 = new LineChartManager(mLineChart);
+        manager1 = new LineChartManager(mLineChart);
         manager1.setDescription("");
-        //设置x轴的数据
-        ArrayList<Float> xValues = new ArrayList<>();
-        for (int i = 0; i <= 100; i++) {
-            xValues.add((float) i);
-        }
-        //设置y轴的数据()
-        List<Float> yValue = new ArrayList<>();
-        for (int j = 0; j <= 100; j++) {
-            yValue.add((float) (Math.random() * 80 + 50));
-        }
-        manager1.showLineChart(xValues, yValue, "小时", Color.RED);
-        manager1.setDescription("");
+
 
         mPieChart = view.findViewById(R.id.electric_fragment_pie);
         PieChartManager manager2 = new PieChartManager(mPieChart);
@@ -390,6 +386,45 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         mLineChart.setVisibility(View.GONE);
         mPieChart.setVisibility(View.GONE);
         mPieLayout.setVisibility(View.GONE);
+        if (electricInfo.getChart() != null) {
+            //设置y轴的数据()
+            float[][] values = new float[electricInfo.getChart().getValley().size()][4];
+            for (int i = 0; i < electricInfo.getChart().getValley().size(); i++) {
+                String valley = electricInfo.getChart().getValley().get(i);
+                if (valley != null) {
+                    values[i][0] = Float.valueOf(valley);
+                }
+            }
+            for (int i = 0; i < electricInfo.getChart().getNormal().size(); i++) {
+                String normal = electricInfo.getChart().getNormal().get(i);
+                if (normal != null) {
+                    values[i][1] = Float.valueOf(normal);
+                }
+            }
+            for (int i = 0; i < electricInfo.getChart().getPeak().size(); i++) {
+                String peak = electricInfo.getChart().getPeak().get(i);
+                if (peak != null) {
+                    values[i][2] = Float.valueOf(peak);
+                }
+            }
+            for (int i = 0; i < electricInfo.getChart().getRush().size(); i++) {
+                String rush = electricInfo.getChart().getRush().get(i);
+                if (rush != null) {
+                    values[i][3] = Float.valueOf(rush);
+                }
+            }
+            manager3.showBarChart(values, colors);
+        }
+
+        if (date_type.equals("year")) {
+            textView1.setText(dateText.getText().toString() + "年 区间用电量柱状图");
+        } else {
+            textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                    + dateText.getText().toString().split("-")[1]
+                    + "月 区间用电量柱状图");
+        }
+
+        //显示列表信息
         electricBeanList.clear();
         if (electricInfo.getTable_data() != null) {
             for (ElectricInfo.TableDataBean tableDataBean : electricInfo.getTable_data()) {
@@ -404,6 +439,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                 electricBean.setRange(tableDataBean.getRange() + "");
                 if (type.equals("original")) {
                     electricBean.setRatio(electricInfo.getRatio() + powerUnit + "");
+                    radio = electricInfo.getRatio();
                 } else {
                     electricBean.setRatio("tce");
                 }
@@ -423,6 +459,21 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         mLineChart.setVisibility(View.VISIBLE);
         mPieChart.setVisibility(View.VISIBLE);
         mPieLayout.setVisibility(View.VISIBLE);
+
+        //设置x轴的数据
+        ArrayList<Float> xValues = new ArrayList<>();
+        for (int i = 0; i <= 100; i++) {
+            xValues.add((float) i);
+        }
+        //设置y轴的数据()
+        List<Float> yValue = new ArrayList<>();
+        for (int j = 0; j <= 100; j++) {
+            yValue.add((float) (Math.random() * 80 + 50));
+        }
+        manager1.showLineChart(xValues, yValue, "小时", Color.RED);
+
+
+
         electricBeanList.clear();
         if (electricInfo.getTable_data() != null) {
             for (DayElectricInfo.TableDataBean tableDataBean : electricInfo.getTable_data()) {

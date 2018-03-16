@@ -149,15 +149,11 @@ public class BarChartManager {
      *
      * @param yAxisValues
      */
-    public void showBarChart(List<List<Float>> yAxisValues, int[] colors) {
+    public void showBarChart(float[][] yAxisValues, int[] colors) {
         initLineChart();
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
-        for (int i = 0; i < yAxisValues.size(); i++) {
-            float[] vals = new float[yAxisValues.get(i).size()];
-            for (int j = 0; j < yAxisValues.get(i).size(); j++) {
-                vals[j] = yAxisValues.get(i).get(j);
-            }
-            yVals1.add(new BarEntry(i + 1, vals));
+        for (int i = 0; i < yAxisValues.length; i++) {
+            yVals1.add(new BarEntry(i + 1, yAxisValues[i]));
         }
         BarDataSet set1;
 

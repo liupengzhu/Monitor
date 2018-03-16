@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -50,6 +51,8 @@ public class ElectricRecyclerAdapter extends RecyclerView.Adapter<ElectricRecycl
         RelativeLayout history_averageLayout;
         RelativeLayout rangeLayout;
 
+        ImageView rangeImg;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -74,6 +77,8 @@ public class ElectricRecyclerAdapter extends RecyclerView.Adapter<ElectricRecycl
             valleyLayout = itemView.findViewById(R.id.electric_item_valley_layout);
             history_averageLayout = itemView.findViewById(R.id.electric_item_history_average_layout);
             rangeLayout = itemView.findViewById(R.id.electric_item_range_layout);
+
+            rangeImg = itemView.findViewById(R.id.electric_item_range_img);
 
         }
     }
@@ -132,6 +137,14 @@ public class ElectricRecyclerAdapter extends RecyclerView.Adapter<ElectricRecycl
         if (bean.getRange() != null) {
             holder.rangeLayout.setVisibility(View.VISIBLE);
             holder.range.setText(bean.getRange());
+            float range = Float.valueOf(bean.getRange());
+            if (range > 0) {
+                holder.rangeImg.setImageResource(R.drawable.rise);
+            } else if (range < 0) {
+                holder.rangeImg.setImageResource(R.drawable.decline);
+            } else {
+                holder.rangeImg.setImageResource(R.drawable.none);
+            }
         } else {
             holder.rangeLayout.setVisibility(View.GONE);
         }

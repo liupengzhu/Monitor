@@ -21,6 +21,7 @@ import cn.com.larunda.monitor.MainActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
+import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
@@ -151,7 +152,7 @@ public class HomeFragment extends Fragment {
                                 intent.putExtra("token_timeout", "登录超时");
                                 preferences.edit().putString("token", null).commit();
                                 startActivity(intent);
-                                getActivity().finish();
+                                ActivityCollector.finishAllActivity();
                             }
                         }
                     });
@@ -179,6 +180,7 @@ public class HomeFragment extends Fragment {
         if (unit != null && Util.isGoodJson(unit)) {
             UnitInfo info = Util.handleUnitInfo(unit);
             powerUnitText.setText("单位:" + homeInfo.getPower().getRatio() + info.getPower());
+            preferences.edit().putString("power_unit", info.getPower()).commit();
             waterUnitText.setText("单位:" + info.getWater_usage());
             steamUnitText.setText("单位:" + info.getSteam_usage());
             gasUnitText.setText("单位:" + info.getGas_usage());
@@ -186,6 +188,7 @@ public class HomeFragment extends Fragment {
             carbonUnitText.setText("单位:" + info.getCarbon_emissions());
             powerGeneratedUnitText.setText("单位:" + homeInfo.getPower_generated().getRatio() + info.getPower());
             safeDayUnitText.setText("单位:天");
+
         }
 
     }

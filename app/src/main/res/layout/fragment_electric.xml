@@ -75,6 +75,7 @@
             android:background="@drawable/date_text"
             android:gravity="center"
             android:text="2018-02-04"
+            android:maxLines="1"
             android:textSize="12sp" />
 
         <RadioGroup
@@ -172,6 +173,7 @@
 
 
             <LinearLayout
+                android:id="@+id/electric_fragment_pie_layout"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -203,10 +205,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="250dp"></cn.com.larunda.monitor.util.PieChartViewPager>
             </RelativeLayout>
-
-            <include layout="@layout/item_electric_recycler" />
-
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/electric_fragment_recyclerView"
+                android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

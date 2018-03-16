@@ -1,15 +1,19 @@
 package cn.com.larunda.monitor.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -23,7 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.larunda.dialog.DateDialog;
+import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
+import cn.com.larunda.monitor.adapter.ElectricRecyclerAdapter;
+import cn.com.larunda.monitor.bean.ElectricBean;
+import cn.com.larunda.monitor.gson.DayElectricInfo;
+import cn.com.larunda.monitor.gson.ElectricInfo;
+import cn.com.larunda.monitor.gson.UnitInfo;
+import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.BarChartManager;
 import cn.com.larunda.monitor.util.BarChartViewPager;
 import cn.com.larunda.monitor.util.HttpUtil;
@@ -58,6 +69,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private BarChartViewPager mBarChart;
     private LineChartViewPager mLineChart;
     private PieChartViewPager mPieChart;
+    private LinearLayout mPieLayout;
 
     private DateDialog dateDialog;
     private DateDialog yearDialog;
@@ -72,6 +84,11 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private RadioButton originalButton;
     private RadioButton foldButton;
 
+    private RecyclerView recyclerView;
+    private ElectricRecyclerAdapter adapter;
+    private LinearLayoutManager manager;
+    private List<ElectricBean> electricBeanList = new ArrayList<>();
+    private String powerUnit;
 
     @Nullable
     @Override
@@ -97,6 +114,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private void initView(View view) {
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
+        powerUnit = preferences.getString("power_unit", null);
+
+        mPieLayout = view.findViewById(R.id.electric_fragment_pie_layout);
 
         dateDialog = new DateDialog(getContext());
         yearDialog = new DateDialog(getContext(), false, false);
@@ -110,6 +130,12 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         typeGroup = view.findViewById(R.id.electric_fragment_type_group);
         originalButton = view.findViewById(R.id.electric_fragment_original_button);
         foldButton = view.findViewById(R.id.electric_fragment_fold_button);
+
+        recyclerView = view.findViewById(R.id.electric_fragment_recyclerView);
+        adapter = new ElectricRecyclerAdapter(getContext(), electricBeanList);
+        manager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
 
         mBarChart = view.findViewById(R.id.electric_fragment_chart);
         BarChartManager manager = new BarChartManager(mBarChart);
@@ -212,6 +238,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             public void OnClick(View view, String date) {
                 if (dateText != null && date != null) {
                     dateText.setText(date);
+                    sendRequest();
                 }
                 dateDialog.cancel();
             }
@@ -221,6 +248,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             public void OnClick(View view, String date) {
                 if (dateText != null && date != null) {
                     dateText.setText(date);
+                    sendRequest();
                 }
                 yearDialog.cancel();
             }
@@ -230,6 +258,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             public void OnClick(View view, String date) {
                 if (dateText != null && date != null) {
                     dateText.setText(date);
+                    sendRequest();
                 }
                 monthDialog.cancel();
             }
@@ -249,24 +278,26 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                 long time1 = System.currentTimeMillis();
                 String date1 = Util.parseTime(time1, 1);
                 dateText.setText(date1);
-
+                sendRequest();
                 break;
             case R.id.electric_fragment_month_button:
                 long time2 = System.currentTimeMillis();
                 String date2 = Util.parseTime(time2, 2);
                 dateText.setText(date2);
-
+                sendRequest();
                 break;
             case R.id.electric_fragment_day_button:
                 long time3 = System.currentTimeMillis();
                 String date3 = Util.parseTime(time3, 3);
                 dateText.setText(date3);
-
+                sendRequest();
                 break;
 
             case R.id.electric_fragment_original_button:
+                sendRequest();
                 break;
             case R.id.electric_fragment_fold_button:
+                sendRequest();
                 break;
             case R.id.electric_date_text:
                 if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_year_button) {
@@ -292,7 +323,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_year_button) {
             date_type = "year";
         } else if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_day_button) {
-            date_type = "day";
+            date_type = "date";
         } else {
             date_type = "month";
         }
@@ -313,9 +344,99 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String content = response.body().string();
-                Log.d("main", content);
+                final String content = response.body().string();
+                if (Util.isGoodJson(content)) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (date_type.equals("date")) {
+                                DayElectricInfo electricInfo = Util.handleDayElectricInfo(content);
+                                if (electricInfo != null && electricInfo.getError() == null) {
+                                    parseElectricForLine(electricInfo);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
+                            } else {
+                                ElectricInfo electricInfo = Util.handleElectricInfo(content);
+                                if (electricInfo != null && electricInfo.getError() == null) {
+                                    parseElectricForBar(electricInfo);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
+                            }
+                        }
+                    });
+                }
             }
         });
+    }
+
+
+    /**
+     * 当选择时间为年月时
+     *
+     * @param electricInfo
+     */
+    private void parseElectricForBar(ElectricInfo electricInfo) {
+        mBarChart.setVisibility(View.VISIBLE);
+        mLineChart.setVisibility(View.GONE);
+        mPieChart.setVisibility(View.GONE);
+        mPieLayout.setVisibility(View.GONE);
+        electricBeanList.clear();
+        if (electricInfo.getTable_data() != null) {
+            for (ElectricInfo.TableDataBean tableDataBean : electricInfo.getTable_data()) {
+                ElectricBean electricBean = new ElectricBean();
+                electricBean.setTime(tableDataBean.getTime() + "");
+                electricBean.setRush(tableDataBean.getRush() + "");
+                electricBean.setPeak(tableDataBean.getPeak() + "");
+                electricBean.setNormal(tableDataBean.getNormal() + "");
+                electricBean.setValley(tableDataBean.getValley() + "");
+                electricBean.setTotal(tableDataBean.getTotal() + "");
+                electricBean.setHistory_average(tableDataBean.getHistory_average() + "");
+                electricBean.setRange(tableDataBean.getRange() + "");
+                if (type.equals("original")) {
+                    electricBean.setRatio(electricInfo.getRatio() + powerUnit + "");
+                } else {
+                    electricBean.setRatio("tce");
+                }
+                electricBeanList.add(electricBean);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 当选择时间为日时
+     *
+     * @param electricInfo
+     */
+    private void parseElectricForLine(DayElectricInfo electricInfo) {
+        mBarChart.setVisibility(View.GONE);
+        mLineChart.setVisibility(View.VISIBLE);
+        mPieChart.setVisibility(View.VISIBLE);
+        mPieLayout.setVisibility(View.VISIBLE);
+        electricBeanList.clear();
+        if (electricInfo.getTable_data() != null) {
+            for (DayElectricInfo.TableDataBean tableDataBean : electricInfo.getTable_data()) {
+                ElectricBean electricBean = new ElectricBean();
+                electricBean.setTime(tableDataBean.getTime() + "");
+                electricBean.setTotal(tableDataBean.getValue() + "");
+                if (type.equals("original")) {
+                    electricBean.setRatio(electricInfo.getTable_ratio() + powerUnit + "");
+                } else {
+                    electricBean.setRatio("tce");
+                }
+                electricBeanList.add(electricBean);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 }

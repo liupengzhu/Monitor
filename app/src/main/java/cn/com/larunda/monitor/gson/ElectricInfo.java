@@ -33,6 +33,15 @@ public class ElectricInfo {
     private List<?> peak_valley_pie;
     private List<?> legend;
     private List<String> x_name;
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     public ChartBean getChart() {
         return chart;
@@ -123,40 +132,40 @@ public class ElectricInfo {
     }
 
     public static class ChartBean {
-        private List<Integer> normal;
-        private List<Integer> rush;
-        private List<Integer> valley;
-        private List<Integer> peak;
+        private List<String> normal;
+        private List<String> rush;
+        private List<String> valley;
+        private List<String> peak;
 
-        public List<Integer> getNormal() {
+        public List<String> getNormal() {
             return normal;
         }
 
-        public void setNormal(List<Integer> normal) {
+        public void setNormal(List<String> normal) {
             this.normal = normal;
         }
 
-        public List<Integer> getRush() {
+        public List<String> getRush() {
             return rush;
         }
 
-        public void setRush(List<Integer> rush) {
+        public void setRush(List<String> rush) {
             this.rush = rush;
         }
 
-        public List<Integer> getValley() {
+        public List<String> getValley() {
             return valley;
         }
 
-        public void setValley(List<Integer> valley) {
+        public void setValley(List<String> valley) {
             this.valley = valley;
         }
 
-        public List<Integer> getPeak() {
+        public List<String> getPeak() {
             return peak;
         }
 
-        public void setPeak(List<Integer> peak) {
+        public void setPeak(List<String> peak) {
             this.peak = peak;
         }
     }
@@ -242,13 +251,13 @@ public class ElectricInfo {
          */
 
         private String time;
-        private int peak;
+        private String peak;
         private String rush;
-        private int valley;
-        private int normal;
-        private int total;
-        private int history_average;
-        private double range;
+        private String valley;
+        private String normal;
+        private String total;
+        private String history_average;
+        private String range;
 
         public String getTime() {
             return time;
@@ -258,11 +267,11 @@ public class ElectricInfo {
             this.time = time;
         }
 
-        public int getPeak() {
+        public String getPeak() {
             return peak;
         }
 
-        public void setPeak(int peak) {
+        public void setPeak(String peak) {
             this.peak = peak;
         }
 
@@ -274,43 +283,43 @@ public class ElectricInfo {
             this.rush = rush;
         }
 
-        public int getValley() {
+        public String getValley() {
             return valley;
         }
 
-        public void setValley(int valley) {
+        public void setValley(String valley) {
             this.valley = valley;
         }
 
-        public int getNormal() {
+        public String getNormal() {
             return normal;
         }
 
-        public void setNormal(int normal) {
+        public void setNormal(String normal) {
             this.normal = normal;
         }
 
-        public int getTotal() {
+        public String getTotal() {
             return total;
         }
 
-        public void setTotal(int total) {
+        public void setTotal(String total) {
             this.total = total;
         }
 
-        public int getHistory_average() {
+        public String getHistory_average() {
             return history_average;
         }
 
-        public void setHistory_average(int history_average) {
+        public void setHistory_average(String history_average) {
             this.history_average = history_average;
         }
 
-        public double getRange() {
+        public String getRange() {
             return range;
         }
 
-        public void setRange(double range) {
+        public void setRange(String range) {
             this.range = range;
         }
     }

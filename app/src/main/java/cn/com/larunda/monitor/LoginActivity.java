@@ -28,7 +28,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String LOGIN_NAME = "login_name";
     public static final String LOGIN_PASSWORD = "login_password";
@@ -100,7 +100,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onResponse(Call call, Response response) throws IOException {
                 String content = response.body().string();
                 if (Util.isGoodJson(content)) {
-                    editor.putString("unit",content).commit();
+                    editor.putString("unit", content).commit();
                 }
             }
         });

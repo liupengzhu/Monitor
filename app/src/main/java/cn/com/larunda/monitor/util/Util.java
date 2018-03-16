@@ -13,6 +13,8 @@ import com.google.gson.JsonParser;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 
+import cn.com.larunda.monitor.gson.DayElectricInfo;
+import cn.com.larunda.monitor.gson.ElectricInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.gson.UserToken;
@@ -113,5 +115,17 @@ public class Util {
         Gson gson = new Gson();
         UnitInfo unitInfo = gson.fromJson(response, UnitInfo.class);
         return unitInfo;
+    }
+
+    public static ElectricInfo handleElectricInfo(String response){
+        Gson gson = new Gson();
+        ElectricInfo electricInfo = gson.fromJson(response,ElectricInfo.class);
+        return electricInfo;
+    }
+
+    public static DayElectricInfo handleDayElectricInfo(String response){
+        Gson gson = new Gson();
+        DayElectricInfo dayelectricInfo = gson.fromJson(response,DayElectricInfo.class);
+        return dayelectricInfo;
     }
 }

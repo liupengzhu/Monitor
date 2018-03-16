@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:text="2018-03-01"
         android:textColor="@color/tab_text_color2"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <View
         android:layout_width="match_parent"
@@ -197,6 +197,15 @@
             android:textColor="@color/home_text_l"
             android:textSize="15sp" />
 
+        <ImageView
+            android:id="@+id/electric_item_range_img"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/electric_item_range"
+            android:src="@drawable/rise" />
+
         <TextView
             android:id="@+id/electric_item_range"
             android:layout_width="wrap_content"
@@ -210,6 +219,6 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="8dp" />
+        android:layout_height="18dp" />
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
@@ -12,6 +13,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ public class LineChartManager {
     private YAxis leftAxis;   //左边Y轴
     private YAxis rightAxis;  //右边Y轴
     private XAxis xAxis;      //X轴
+
+    private XValueFormatter xValueFormatter;
+    private YValueFormatter yValueFormatter;
 
     public LineChartManager(LineChartViewPager mLineChart) {
         this.lineChart = mLineChart;
@@ -81,6 +86,25 @@ public class LineChartManager {
         leftAxis.setDrawGridLines(false);
         rightAxis.setDrawGridLines(false);
         rightAxis.setEnabled(false);
+
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if (xValueFormatter != null) {
+                    return xValueFormatter.getFormattedValue(value, axis);
+                }
+                return (int) value + "";
+            }
+        });
+        leftAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if (yValueFormatter != null) {
+                    return yValueFormatter.getFormattedValue(value, axis);
+                }
+                return (int) value + "";
+            }
+        });
     }
 
     /**
@@ -245,5 +269,13 @@ public class LineChartManager {
         description.setText(str);
         lineChart.setDescription(description);
         lineChart.invalidate();
+    }
+
+    public void setxValueFormatter(XValueFormatter xValueFormatter) {
+        this.xValueFormatter = xValueFormatter;
+    }
+
+    public void setyValueFormatter(YValueFormatter yValueFormatter) {
+        this.yValueFormatter = yValueFormatter;
     }
 }

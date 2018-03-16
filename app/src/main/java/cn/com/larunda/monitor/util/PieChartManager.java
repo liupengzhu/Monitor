@@ -117,7 +117,7 @@ public class PieChartManager {
     public void showPieChart(ArrayList<PieEntry> entries, int[] colors) {
         initChart();
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setSliceSpace(1f);//饼图区块之间的距离
+        dataSet.setSliceSpace(0f);//饼图区块之间的距离
         dataSet.setSelectionShift(5f);//
 
         //添加对应的颜色值
@@ -130,6 +130,7 @@ public class PieChartManager {
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.BLACK);
+        data.setDrawValues(false);
         pieChart.setData(data);
         pieChart.highlightValues(null);//在给定的数据集中突出显示给定索引的值
         //刷新

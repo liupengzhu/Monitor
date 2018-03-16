@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="queren">#2181f3</color>
+    <color name="quxiao">#ffffff</color>
+    <color name="quxiaoline">#DCDee3</color>
+    <color name="text_black">#1a1c1e</color>
+    <color name="lan">#00B2EE</color>
+    <color name="error">#ff0000</color>
+
+    <color name="text_h">#1a1c1e</color>
+    <color name="text_n">#696e83</color>
+    <color name="text_l">#b1b1bb</color>
+
+</resources>

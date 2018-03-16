@@ -140,6 +140,7 @@ public class BarChartManager {
         BarData data = new BarData(dataSets);
         //设置X轴的刻度数
         xAxis.setLabelCount(xAxisValues.size() - 1, false);
+        data.setDrawValues(false);
         mBarChart.setData(data);
     }
 
@@ -176,6 +177,7 @@ public class BarChartManager {
             BarData data = new BarData(dataSets);
             /*data.setValueFormatter(new MainActivity.MyValueFormatter());*/
             data.setValueTextColor(Color.BLACK);
+            data.setDrawValues(false);
             mBarChart.setData(data);
         }
         mBarChart.setFitBars(true);

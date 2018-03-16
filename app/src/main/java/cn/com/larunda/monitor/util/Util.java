@@ -11,6 +11,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
@@ -75,6 +76,25 @@ public class Util {
         }
 
 
+    }
+
+    public static String parseTime(long time, int type) {
+        String date = "";
+        switch (type) {
+            case 1:
+                SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy");
+                date = formatter1.format(time);
+                break;
+            case 2:
+                SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM");
+                date = formatter2.format(time);
+                break;
+            case 3:
+                SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd");
+                date = formatter3.format(time);
+                break;
+        }
+        return date;
     }
 
     public static UserToken handleLoginInfo(String response) {

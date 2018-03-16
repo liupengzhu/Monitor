@@ -29,6 +29,7 @@ import cn.com.larunda.monitor.R;
 public class BarChartManager {
 
     private BarChartViewPager mBarChart;
+
     private YAxis leftAxis;
     private YAxis rightAxis;
     private XAxis xAxis;

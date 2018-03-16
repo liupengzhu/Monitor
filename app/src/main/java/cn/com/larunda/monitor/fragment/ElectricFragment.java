@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -40,6 +42,7 @@ import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.BarChartManager;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.BarOnClickListener;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.LineChartManager;
 import cn.com.larunda.monitor.util.LineChartViewPager;
@@ -48,6 +51,7 @@ import cn.com.larunda.monitor.util.PieChartManager;
 import cn.com.larunda.monitor.util.PieChartViewPager;
 import cn.com.larunda.monitor.util.Util;
 import cn.com.larunda.monitor.util.XValueFormatter;
+import cn.com.larunda.monitor.util.XYMarkerView;
 import cn.com.larunda.monitor.util.YValueFormatter;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -67,6 +71,12 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             MyApplication.getContext().getResources().getColor(R.color.normal_color),
             MyApplication.getContext().getResources().getColor(R.color.peak_color),
             MyApplication.getContext().getResources().getColor(R.color.rush_color)};
+
+    List<String> normal = new ArrayList<>();
+    List<String> rush = new ArrayList<>();
+    List<String> valley = new ArrayList<>();
+    List<String> peak = new ArrayList<>();
+
     private SharedPreferences preferences;
     public static String token;
     private BarChartViewPager mBarChart;
@@ -102,6 +112,8 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout layout;
     private LinearLayout errorLayout;
+
+    private XYMarkerView barMarkerView;
 
     @Nullable
     @Override
@@ -219,6 +231,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         mPieChart = view.findViewById(R.id.electric_fragment_pie);
         manager2 = new PieChartManager(mPieChart);
 
+        barMarkerView = new XYMarkerView(getContext());
+        barMarkerView.setChartView(mBarChart);
+        mBarChart.setMarker(barMarkerView);
     }
 
     /**
@@ -289,6 +304,52 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                     sendRequest();
                 }
                 monthDialog.cancel();
+            }
+        });
+
+
+        barMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                if (v instanceof TextView) {
+                    int position = (int) e.getX() - 1;
+                    StringBuffer content = new StringBuffer();
+                    if (isNoData(position)) {
+                        v.setVisibility(View.GONE);
+                    } else {
+                        v.setVisibility(View.VISIBLE);
+                    }
+                    content.append("时间:" + dateText.getText().toString() + "\r\n");
+                    if (type.equals("original")) {
+                        if (rush.get(position) != null) {
+                            content.append("尖:" + rush.get(position) + radio + powerUnit + "\r\n");
+                        }
+                        if (peak.get(position) != null) {
+                            content.append("峰:" + peak.get(position) + radio + powerUnit + "\r\n");
+                        }
+                        if (normal.get(position) != null) {
+                            content.append("平:" + normal.get(position) + radio + powerUnit + "\r\n");
+                        }
+                        if (valley.get(position) != null) {
+                            content.append("谷:" + valley.get(position) + radio + powerUnit);
+                        }
+                    } else {
+                        if (rush.get(position) != null) {
+                            content.append("尖:" + rush.get(position) + "tce" + "\r\n");
+                        }
+                        if (peak.get(position) != null) {
+                            content.append("峰:" + peak.get(position) + "tce" + "\r\n");
+                        }
+                        if (normal.get(position) != null) {
+                            content.append("平:" + normal.get(position) + "tce" + "\r\n");
+                        }
+                        if (valley.get(position) != null) {
+                            content.append("谷:" + valley.get(position) + "tce");
+                        }
+                    }
+
+                    ((TextView) v).setText(content.toString());
+                }
             }
         });
 
@@ -421,7 +482,6 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-
     /**
      * 当选择时间为年月时
      *
@@ -434,7 +494,13 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         mPieLayout.setVisibility(View.GONE);
         radio = electricInfo.getChart_ratio();
 
+
         if (electricInfo.getChart() != null) {
+            valley = electricInfo.getChart().getValley();
+            normal = electricInfo.getChart().getNormal();
+            peak = electricInfo.getChart().getPeak();
+            rush = electricInfo.getChart().getRush();
+
             //设置y轴的数据()
             float[][] values = new float[electricInfo.getChart().getValley().size()][4];
             for (int i = 0; i < electricInfo.getChart().getValley().size(); i++) {
@@ -495,6 +561,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         }
         adapter.notifyDataSetChanged();
     }
+
 
     /**
      * 当选择时间为日时
@@ -568,5 +635,19 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 判断是否有数据
+     *
+     * @param position
+     * @return
+     */
+    private boolean isNoData(int position) {
+        if (peak.get(position) == null && normal.get(position) == null && valley.get(position) == null
+                && rush.get(position) == null) {
+            return true;
+        }
+        return false;
     }
 }

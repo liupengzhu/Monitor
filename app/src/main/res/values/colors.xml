@@ -26,4 +26,5 @@
     <color name="peak_color">#ff8705</color>
     <color name="normal_color">#458cc8</color>
     <color name="valley_color">#5fb861</color>
+    <color name="mark_color">#4c000000</color>
 </resources>

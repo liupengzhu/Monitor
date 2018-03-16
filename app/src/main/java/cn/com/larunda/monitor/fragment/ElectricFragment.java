@@ -72,10 +72,11 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             MyApplication.getContext().getResources().getColor(R.color.peak_color),
             MyApplication.getContext().getResources().getColor(R.color.rush_color)};
 
-    List<String> normal = new ArrayList<>();
-    List<String> rush = new ArrayList<>();
-    List<String> valley = new ArrayList<>();
-    List<String> peak = new ArrayList<>();
+    private List<String> normal = new ArrayList<>();
+    private List<String> rush = new ArrayList<>();
+    private List<String> valley = new ArrayList<>();
+    private List<String> peak = new ArrayList<>();
+    private List<String> electricList = new ArrayList<>();
 
     private SharedPreferences preferences;
     public static String token;
@@ -114,6 +115,8 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private LinearLayout errorLayout;
 
     private XYMarkerView barMarkerView;
+    private XYMarkerView lineMarkerView;
+
 
     @Nullable
     @Override
@@ -234,6 +237,10 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         barMarkerView = new XYMarkerView(getContext());
         barMarkerView.setChartView(mBarChart);
         mBarChart.setMarker(barMarkerView);
+
+        lineMarkerView = new XYMarkerView(getContext());
+        lineMarkerView.setChartView(mLineChart);
+        mLineChart.setMarker(lineMarkerView);
     }
 
     /**
@@ -319,7 +326,11 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                     } else {
                         v.setVisibility(View.VISIBLE);
                     }
-                    content.append("时间:" + dateText.getText().toString() + "\r\n");
+                    if (e.getX() < 10) {
+                        content.append("时间:" + dateText.getText().toString() + "-0" + (int) e.getX() + "\r\n");
+                    } else {
+                        content.append("时间:" + dateText.getText().toString() + "-" + (int) e.getX() + "\r\n");
+                    }
                     if (type.equals("original")) {
                         if (rush.get(position) != null) {
                             content.append("尖:" + rush.get(position) + radio + powerUnit + "\r\n");
@@ -350,6 +361,32 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
 
                     ((TextView) v).setText(content.toString());
                 }
+            }
+        });
+
+        lineMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                int position = (int) e.getX();
+                if (electricList.size() == 288 && electricList.get(position) != null) {
+                    v.setVisibility(View.VISIBLE);
+                } else {
+                    v.setVisibility(View.GONE);
+                }
+                StringBuffer content = new StringBuffer();
+                if (dateXList != null && dateXList.size() == 288) {
+                    content.append("时间:" + dateXList.get(position) + "\r\n");
+                }
+                if (type.equals("original")) {
+                    if (electricList.size() == 288 && electricList.get(position) != null) {
+                        content.append("电量:" + electricList.get(position) + radio + powerUnit);
+                    }
+                } else {
+                    if (electricList.size() == 288 && electricList.get(position) != null) {
+                        content.append("电量:" + electricList.get(position) + "tce");
+                    }
+                }
+                ((TextView) v).setText(content.toString());
             }
         });
 
@@ -578,6 +615,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
 
         dateXList = electricInfo.getX_name();
         if (electricInfo.getChart() != null) {
+            electricList = electricInfo.getChart();
             //设置x轴的数据
             ArrayList<Float> xValues = new ArrayList<>();
             for (int i = 0; i < 288; i++) {

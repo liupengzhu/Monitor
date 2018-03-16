@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -98,6 +99,10 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private List<String> dateXList;
     private PieChartManager manager2;
 
+    private SwipeRefreshLayout refreshLayout;
+    private LinearLayout layout;
+    private LinearLayout errorLayout;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,6 +117,8 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         sendRequest();
+        layout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
     }
 
     /**
@@ -145,6 +152,18 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        layout = view.findViewById(R.id.electric_fragment_layout);
+        errorLayout = view.findViewById(R.id.electric_fragment_error_layout);
+
+        refreshLayout = view.findViewById(R.id.electric_fragment_swipe);
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                sendRequest();
+            }
+        });
 
         mBarChart = view.findViewById(R.id.electric_fragment_chart);
         manager3 = new BarChartManager(mBarChart);
@@ -344,11 +363,19 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private void sendRequest() {
         getType();
         String time = dateText.getText().toString().trim();
+        refreshLayout.setRefreshing(true);
         HttpUtil.sendGetRequestWithHttp(ELECTRIC_URL + token + "&date_type=" + date_type + "&type=" + type
                 + "&time=" + time, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        layout.setVisibility(View.GONE);
+                        errorLayout.setVisibility(View.VISIBLE);
+                    }
+                });
             }
 
             @Override
@@ -362,6 +389,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                                 DayElectricInfo electricInfo = Util.handleDayElectricInfo(content);
                                 if (electricInfo != null && electricInfo.getError() == null) {
                                     parseElectricForLine(electricInfo);
+                                    refreshLayout.setRefreshing(false);
+                                    layout.setVisibility(View.VISIBLE);
+                                    errorLayout.setVisibility(View.GONE);
                                 } else {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                                     intent.putExtra("token_timeout", "登录超时");
@@ -373,6 +403,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                                 ElectricInfo electricInfo = Util.handleElectricInfo(content);
                                 if (electricInfo != null && electricInfo.getError() == null) {
                                     parseElectricForBar(electricInfo);
+                                    refreshLayout.setRefreshing(false);
+                                    layout.setVisibility(View.VISIBLE);
+                                    errorLayout.setVisibility(View.GONE);
                                 } else {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                                     intent.putExtra("token_timeout", "登录超时");

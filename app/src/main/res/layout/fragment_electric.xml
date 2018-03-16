@@ -74,8 +74,8 @@
             android:layout_toRightOf="@id/electric_fragment_time_group"
             android:background="@drawable/date_text"
             android:gravity="center"
-            android:text="2018-02-04"
             android:maxLines="1"
+            android:text="2018-02-04"
             android:textSize="12sp" />
 
         <RadioGroup
@@ -116,108 +116,144 @@
 
     </RelativeLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/electric_fragment_swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:layout_margin="20dp"
-                    android:background="@color/tab_text_color1" />
-
-                <TextView
-                    android:id="@+id/electric_fragment_chart_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="2018年03月 区间用电量柱状图"
-                    android:textColor="@color/tab_text_color2"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="10dp">
-
-                <cn.com.larunda.monitor.util.BarChartViewPager
-                    android:id="@+id/electric_fragment_chart"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"></cn.com.larunda.monitor.util.BarChartViewPager>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="10dp">
-
-                <cn.com.larunda.monitor.util.LineChartViewPager
-                    android:id="@+id/electric_fragment_line"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"></cn.com.larunda.monitor.util.LineChartViewPager>
-            </RelativeLayout>
-
-
-            <LinearLayout
-                android:id="@+id/electric_fragment_pie_layout"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal">
-                <View
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:layout_margin="20dp"
-                    android:background="@color/tab_text_color1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="当日区间用电排行占比图"
-                    android:textColor="@color/tab_text_color2"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="10dp">
-
-                <cn.com.larunda.monitor.util.PieChartViewPager
-                    android:id="@+id/electric_fragment_pie"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"></cn.com.larunda.monitor.util.PieChartViewPager>
-            </RelativeLayout>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/electric_fragment_recyclerView"
-                android:nestedScrollingEnabled="false"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </android.support.v7.widget.RecyclerView>
+                <LinearLayout
+                    android:id="@+id/electric_fragment_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_margin="20dp"
+                            android:background="@color/tab_text_color1" />
+
+                        <TextView
+                            android:id="@+id/electric_fragment_chart_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="2018年03月 区间用电量柱状图"
+                            android:textColor="@color/tab_text_color2"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:padding="10dp">
+
+                        <cn.com.larunda.monitor.util.BarChartViewPager
+                            android:id="@+id/electric_fragment_chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"></cn.com.larunda.monitor.util.BarChartViewPager>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:padding="10dp">
+
+                        <cn.com.larunda.monitor.util.LineChartViewPager
+                            android:id="@+id/electric_fragment_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"></cn.com.larunda.monitor.util.LineChartViewPager>
+                    </RelativeLayout>
 
 
-    </android.support.v4.widget.NestedScrollView>
+                    <LinearLayout
+                        android:id="@+id/electric_fragment_pie_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_margin="20dp"
+                            android:background="@color/tab_text_color1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="当日区间用电排行占比图"
+                            android:textColor="@color/tab_text_color2"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:padding="10dp">
+
+                        <cn.com.larunda.monitor.util.PieChartViewPager
+                            android:id="@+id/electric_fragment_pie"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"></cn.com.larunda.monitor.util.PieChartViewPager>
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/electric_fragment_recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="false">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/electric_fragment_error_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="100dp"
+                        android:src="@drawable/no_network" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/网络错误"
+                        android:textColor="@color/home_text_l"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </FrameLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </LinearLayout>

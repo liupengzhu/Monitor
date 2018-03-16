@@ -120,10 +120,12 @@ public class LineChartManager {
     private void initLineDataSet(LineDataSet lineDataSet, int color, boolean mode) {
         lineDataSet.setColor(color);
         lineDataSet.setCircleColor(color);
-        lineDataSet.setLineWidth(1f);
+        lineDataSet.setLineWidth(0.5f);
         lineDataSet.setCircleRadius(1f);
         //设置曲线值的圆点是实心还是空心
         lineDataSet.setDrawCircleHole(false);
+        //禁止画园
+        lineDataSet.setDrawCircles(false);
         lineDataSet.setValueTextSize(9f);
         //设置折线图填充
         lineDataSet.setDrawFilled(mode);

@@ -457,24 +457,6 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * 获取当前按钮组状态
-     */
-    private void getType() {
-        if (typeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_fold_button) {
-            type = "fold";
-        } else {
-            type = "original";
-        }
-        if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_year_button) {
-            date_type = "year";
-        } else if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_day_button) {
-            date_type = "date";
-        } else {
-            date_type = "month";
-        }
-    }
-
-    /**
      * 发送网络请求
      */
     private void sendRequest() {
@@ -622,7 +604,6 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         adapter.notifyDataSetChanged();
     }
 
-
     /**
      * 当选择时间为日时
      *
@@ -698,6 +679,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         adapter.notifyDataSetChanged();
     }
 
+
     /**
      * 判断是否有数据
      *
@@ -710,5 +692,23 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取当前按钮组状态
+     */
+    private void getType() {
+        if (typeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_fold_button) {
+            type = "fold";
+        } else {
+            type = "original";
+        }
+        if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_year_button) {
+            date_type = "year";
+        } else if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_day_button) {
+            date_type = "date";
+        } else {
+            date_type = "month";
+        }
     }
 }

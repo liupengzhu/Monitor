@@ -180,7 +180,6 @@ public class HomeFragment extends Fragment {
         if (unit != null && Util.isGoodJson(unit)) {
             UnitInfo info = Util.handleUnitInfo(unit);
             powerUnitText.setText("单位:" + homeInfo.getPower().getRatio() + info.getPower());
-            preferences.edit().putString("power_unit", info.getPower()).commit();
             waterUnitText.setText("单位:" + info.getWater_usage());
             steamUnitText.setText("单位:" + info.getSteam_usage());
             gasUnitText.setText("单位:" + info.getGas_usage());

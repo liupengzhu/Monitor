@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import cn.com.larunda.monitor.ElectricActivity;
 import cn.com.larunda.monitor.R;
+import cn.com.larunda.monitor.WaterActivity;
 
 /**
  * Created by sddt on 18-3-13.
@@ -65,6 +66,8 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
                 startActivity(electricIntent);
                 break;
             case R.id.monitor_button2:
+                Intent waterIntent = new Intent(getContext(), WaterActivity.class);
+                startActivity(waterIntent);
                 break;
             default:
                 break;

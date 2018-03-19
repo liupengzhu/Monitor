@@ -19,6 +19,7 @@ import cn.com.larunda.monitor.fragment.HomeFragment;
 import cn.com.larunda.monitor.fragment.MaintenanceFragment;
 import cn.com.larunda.monitor.fragment.MapFragment;
 import cn.com.larunda.monitor.fragment.MonitorFragment;
+import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.CustomViewPager;
 import cn.com.larunda.monitor.util.HttpUtil;
@@ -40,6 +41,7 @@ public class MainActivity extends BaseActivity {
     private SharedPreferences.Editor editor;
     private final String UNIT_URL = MyApplication.URL + "config/unit";
     public static String token;
+    private String unit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +49,24 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         initView();
         initTabs();
+        unit = preferences.getString("unit", null);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (preferences.getString("unit", null) == null) {
+        if (unit == null) {
             sendRequest();
+        } else {
+            if (Util.isGoodJson(unit)) {
+                UnitInfo info = Util.handleUnitInfo(unit);
+                editor.putString("power_unit", info.getPower()).commit();
+                editor.putString("water_unit", info.getWater_usage()).commit();
+                editor.putString("steam_unit", info.getSteam_usage()).commit();
+                editor.putString("gas_unit", info.getGas_usage()).commit();
+                editor.putString("energy_unit", info.getEnergy_usage()).commit();
+                editor.putString("carbon_unit", info.getCarbon_emissions()).commit();
+            }
         }
     }
 
@@ -69,6 +82,13 @@ public class MainActivity extends BaseActivity {
                 String content = response.body().string();
                 if (Util.isGoodJson(content)) {
                     editor.putString("unit", content).commit();
+                    UnitInfo info = Util.handleUnitInfo(unit);
+                    editor.putString("power_unit", info.getPower()).commit();
+                    editor.putString("water_unit", info.getWater_usage()).commit();
+                    editor.putString("steam_unit", info.getSteam_usage()).commit();
+                    editor.putString("gas_unit", info.getGas_usage()).commit();
+                    editor.putString("energy_unit", info.getEnergy_usage()).commit();
+                    editor.putString("carbon_unit", info.getCarbon_emissions()).commit();
                 }
             }
         });

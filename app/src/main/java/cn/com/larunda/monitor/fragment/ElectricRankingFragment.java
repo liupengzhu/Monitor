@@ -18,6 +18,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +37,14 @@ import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.BarOnClickListener;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.LineChartViewPager;
 import cn.com.larunda.monitor.util.MyApplication;
+import cn.com.larunda.monitor.util.PieChartManager;
 import cn.com.larunda.monitor.util.PieChartViewPager;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.monitor.util.XYMarkerView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -48,41 +55,55 @@ import okhttp3.Response;
 
 public class ElectricRankingFragment extends Fragment implements View.OnClickListener {
 
+    private int[] colors = {MyApplication.getContext().getResources().getColor(R.color.rank_color1),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color2),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color3),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color4),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color5),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color6),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color7),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color8),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color9),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color10),
+            MyApplication.getContext().getResources().getColor(R.color.rank_color11)};
     private final String COMPANY_URL = MyApplication.URL + "power/rank_company" + MyApplication.TOKEN;
     private final String INDUSTRY_URL = MyApplication.URL + "power/rank_industry" + MyApplication.TOKEN;
     private String date_type = "month";
-    private String type = "original";
 
+    private String type = "original";
     private String style = "company";
     private SharedPreferences preferences;
     public static String token;
-    private PieChartViewPager mPieChart;
 
+    private PieChartViewPager mPieChart;
     private TextView textView1;
     private DateDialog dateDialog;
     private DateDialog monthDialog;
     private TextView dateText;
     private RadioButton monthButton;
-    private RadioButton dayButton;
 
+    private RadioButton dayButton;
     private RadioGroup timeGroup;
     private RadioGroup typeGroup;
-    private RadioButton originalButton;
 
+    private RadioButton originalButton;
     private RadioButton foldButton;
     private RadioGroup styleGroup;
-    private RadioButton companyButton;
 
+    private RadioButton companyButton;
     private RadioButton industryButton;
     private SwipeRefreshLayout refreshLayout;
-    private LinearLayout layout;
 
+    private LinearLayout layout;
     private LinearLayout errorLayout;
     private RecyclerView recyclerView;
     private ElectricRankingRecyclerAdapter adapter;
     private LinearLayoutManager manager;
     private List<ElectricRankingBean> electricRankingBeanList = new ArrayList<>();
     private String powerUnit;
+    private PieChartManager pieChartManager;
+    private XYMarkerView pieMarerView;
+    private String ratio;
 
     @Nullable
     @Override
@@ -146,6 +167,13 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        mPieChart = view.findViewById(R.id.electric_ranking_fragment_pie);
+        pieChartManager = new PieChartManager(mPieChart);
+        pieMarerView = new XYMarkerView(getContext());
+        pieMarerView.setChartView(mPieChart);
+        mPieChart.setMarker(pieMarerView);
+
     }
 
     /**
@@ -202,6 +230,27 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
                     sendRequest();
                 }
                 monthDialog.cancel();
+            }
+        });
+
+        pieMarerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                StringBuffer content = new StringBuffer();
+                if (date_type.equals("date")) {
+                    if (type.equals("original")) {
+                        content.append("当日能耗:" + e.getY() + ratio + powerUnit);
+                    } else {
+                        content.append("当日能耗:" + e.getY() + "tce");
+                    }
+                } else {
+                    if (type.equals("original")) {
+                        content.append("当月能耗:" + e.getY() + ratio + powerUnit);
+                    } else {
+                        content.append("当月能耗:" + e.getY() + "tce");
+                    }
+                }
+                ((TextView) v).setText(content.toString());
             }
         });
     }
@@ -349,6 +398,45 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
      * @param rankCompanyInfo
      */
     private void parseInfo(RankCompanyInfo rankCompanyInfo) {
+
+        ratio = rankCompanyInfo.getChart().getRatio();
+        if (style.equals("company")) {
+            if (date_type.equals("month")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1]
+                        + "月 企业耗电排行占比图");
+            } else {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1] + "月"
+                        + dateText.getText().toString().split("-")[2]
+                        + "日 企业耗电排行占比图");
+            }
+        } else {
+            if (date_type.equals("month")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1]
+                        + "月 行业耗电排行占比图");
+            } else {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1] + "月"
+                        + dateText.getText().toString().split("-")[2]
+                        + "日 行业耗电排行占比图");
+            }
+        }
+
+        if (rankCompanyInfo.getChart() != null) {
+            //设置饼图数据
+            ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+            for (int i = 0; i < rankCompanyInfo.getChart().getData().size(); i++) {
+                entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
+                        rankCompanyInfo.getChart().getData().get(i).getName()));
+            }
+
+            pieChartManager.showPieChart(entries, colors);
+            pieChartManager.setLegendPosition();
+        }
+
+
         electricRankingBeanList.clear();
         if (rankCompanyInfo.getTable_data() != null) {
             for (RankCompanyInfo.TableDataBean bean : rankCompanyInfo.getTable_data()) {

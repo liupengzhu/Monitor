@@ -19,9 +19,12 @@ import java.util.List;
 
 public class PieChartManager {
     private PieChartViewPager pieChart;
+    private Legend legend;
+    private PieDataSet dataSet;
 
     public PieChartManager(PieChartViewPager pieChart) {
         this.pieChart = pieChart;
+        initChart();
     }
 
     private void initChart() {
@@ -32,6 +35,7 @@ public class PieChartManager {
         pieChart.setExtraOffsets(5, 10, 5, 5);//设置额外的偏移量(在图表视图周围)
 
         pieChart.setDragDecelerationFrictionCoef(0.95f);//设置滑动减速摩擦系数，在0~1之间
+
         //设置中间文件
         // pieChart.setCenterText(generateCenterSpannableText());
         pieChart.setDrawSliceText(false);//设置隐藏饼图上文字，只显示百分比
@@ -57,7 +61,7 @@ public class PieChartManager {
         /**
          * 设置比例图
          */
-        Legend legend = pieChart.getLegend();
+        legend = pieChart.getLegend();
 
         legend.setForm(Legend.LegendForm.SQUARE);
         legend.setTextSize(11f);
@@ -117,8 +121,8 @@ public class PieChartManager {
 
     //设置数据
     public void showPieChart(ArrayList<PieEntry> entries, int[] colors) {
-        initChart();
-        PieDataSet dataSet = new PieDataSet(entries, "");
+        pieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        dataSet = new PieDataSet(entries, "");
         dataSet.setSliceSpace(0f);//饼图区块之间的距离
         dataSet.setSelectionShift(5f);//
 
@@ -136,6 +140,19 @@ public class PieChartManager {
         pieChart.setData(data);
         pieChart.highlightValues(null);//在给定的数据集中突出显示给定索引的值
         //刷新
+        pieChart.invalidate();
+    }
+
+    public void setLegendPosition() {
+        legend.setForm(Legend.LegendForm.SQUARE);
+        legend.setTextSize(6f);
+        //显示位置
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setDrawInside(false);
+        legend.setWordWrapEnabled(true);
+        legend.setXEntrySpace(7f);
         pieChart.invalidate();
     }
 

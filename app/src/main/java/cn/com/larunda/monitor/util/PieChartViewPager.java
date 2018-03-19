@@ -25,19 +25,5 @@ public class PieChartViewPager extends PieChart {
     public PieChartViewPager(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                downPoint.x = event.getX();
-                downPoint.y = event.getY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                getParent().requestDisallowInterceptTouchEvent(true);
-                break;
-        }
-
-        return super.onTouchEvent(event);
-    }
+    
 }

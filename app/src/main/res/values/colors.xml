@@ -28,4 +28,15 @@
     <color name="valley_color">#5fb861</color>
     <color name="mark_color">#4c000000</color>
     <color name="water_color">#3ea5f3</color>
+    <color name="rank_color1">#d94a2b</color>
+    <color name="rank_color2">#498dc6</color>
+    <color name="rank_color3">#e6a138</color>
+    <color name="rank_color4">#f5f047</color>
+    <color name="rank_color5">#65d22a</color>
+    <color name="rank_color6">#62b664</color>
+    <color name="rank_color7">#3ea5f3</color>
+    <color name="rank_color8">#77b1f2</color>
+    <color name="rank_color9">#75c2d2</color>
+    <color name="rank_color10">#888fe6</color>
+    <color name="rank_color11">#4c494d</color>
 </resources>

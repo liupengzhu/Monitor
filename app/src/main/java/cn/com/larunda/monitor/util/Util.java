@@ -18,6 +18,7 @@ import cn.com.larunda.monitor.gson.ElectricInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.gson.UserToken;
+import cn.com.larunda.monitor.gson.WaterInfo;
 
 /**
  * Created by sddt on 18-3-14.
@@ -117,15 +118,21 @@ public class Util {
         return unitInfo;
     }
 
-    public static ElectricInfo handleElectricInfo(String response){
+    public static ElectricInfo handleElectricInfo(String response) {
         Gson gson = new Gson();
-        ElectricInfo electricInfo = gson.fromJson(response,ElectricInfo.class);
+        ElectricInfo electricInfo = gson.fromJson(response, ElectricInfo.class);
         return electricInfo;
     }
 
-    public static DayElectricInfo handleDayElectricInfo(String response){
+    public static DayElectricInfo handleDayElectricInfo(String response) {
         Gson gson = new Gson();
-        DayElectricInfo dayelectricInfo = gson.fromJson(response,DayElectricInfo.class);
+        DayElectricInfo dayelectricInfo = gson.fromJson(response, DayElectricInfo.class);
         return dayelectricInfo;
+    }
+
+    public static WaterInfo handleWaterInfo(String response) {
+        Gson gson = new Gson();
+        WaterInfo waterInfo = gson.fromJson(response, WaterInfo.class);
+        return waterInfo;
     }
 }

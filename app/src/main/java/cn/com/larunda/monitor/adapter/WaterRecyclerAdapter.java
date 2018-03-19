@@ -66,7 +66,7 @@ public class WaterRecyclerAdapter extends RecyclerView.Adapter<WaterRecyclerAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         WaterBean bean = waterBeanList.get(position);
 
-        holder.totalUnit.setText("区间用电量 (" + bean.getRatio() + ")");
+        holder.totalUnit.setText("区间用水量 (" + bean.getRatio() + ")");
         holder.history_averageUnit.setText("同期历史值 (" + bean.getRatio() + ")");
         holder.time.setText(bean.getTime() + "");
         holder.total.setText(bean.getTotal() + "");

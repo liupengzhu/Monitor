@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ElectricActivity" />
-        <activity android:name=".WaterActivity"></activity>
+        <activity android:name=".WaterActivity" />
+        <activity android:name=".GasActivity"></activity>
     </application>
 
 </manifest>

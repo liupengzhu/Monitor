@@ -2,7 +2,6 @@ package cn.com.larunda.monitor;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,39 +9,40 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.com.larunda.monitor.adapter.WaterFragmentAdapter;
-import cn.com.larunda.monitor.fragment.WaterFragment;
-import cn.com.larunda.monitor.fragment.WaterRankingFragment;
+import cn.com.larunda.monitor.adapter.GasFragmentAdapter;
+import cn.com.larunda.monitor.fragment.GasFragment;
+import cn.com.larunda.monitor.fragment.GasRankingFragment;
 import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.CustomViewPager;
 import cn.com.larunda.monitor.util.Util;
 
-public class WaterActivity extends BaseActivity implements View.OnClickListener {
+public class GasActivity extends BaseActivity implements View.OnClickListener {
 
     private TabLayout tabLayout;
     private CustomViewPager viewPager;
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<String> titleList = new ArrayList<>();
-    private WaterFragmentAdapter adapter;
+    private GasFragmentAdapter adapter;
 
     private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_water);
+        setContentView(R.layout.activity_gas);
         init();
         initView();
         initEvent();
     }
+
     /**
      * 初始化信息
      */
     private void init() {
-        fragmentList.add(new WaterFragment());
-        fragmentList.add(new WaterRankingFragment());
-        titleList.add("区间用水量");
-        titleList.add("耗水排行");
+        fragmentList.add(new GasFragment());
+        fragmentList.add(new GasRankingFragment());
+        titleList.add("区间用气量");
+        titleList.add("耗气排行");
     }
 
     /**
@@ -50,11 +50,11 @@ public class WaterActivity extends BaseActivity implements View.OnClickListener 
      */
     private void initView() {
 
-        backButton = findViewById(R.id.water_back_button);
+        backButton = findViewById(R.id.gas_back_button);
 
-        tabLayout = findViewById(R.id.water_tabLayout);
-        viewPager = findViewById(R.id.water_viewPager);
-        adapter = new WaterFragmentAdapter(getSupportFragmentManager(), fragmentList, titleList);
+        tabLayout = findViewById(R.id.gas_tabLayout);
+        viewPager = findViewById(R.id.gas_viewPager);
+        adapter = new GasFragmentAdapter(getSupportFragmentManager(), fragmentList, titleList);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         //设置下划线长度
@@ -77,7 +77,7 @@ public class WaterActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.water_back_button:
+            case R.id.gas_back_button:
                 finish();
                 break;
             default:
@@ -85,4 +85,8 @@ public class WaterActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }

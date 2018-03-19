@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.com.larunda.monitor.WaterActivity">
+    tools:context="cn.com.larunda.monitor.GasActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/water_toolbar"
+        android:id="@+id/gas_toolbar"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:background="@drawable/tool_bar_color"
@@ -17,7 +17,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <Button
-            android:id="@+id/water_back_button"
+            android:id="@+id/gas_back_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="20dp"
@@ -27,14 +27,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="@string/用水详情"
+            android:text="@string/用气详情"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/water_tabLayout"
+        android:id="@+id/gas_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:tabIndicatorColor="@color/tab_text_color1"
@@ -47,7 +47,7 @@
         android:background="@color/line" />
 
     <cn.com.larunda.monitor.util.CustomViewPager
-        android:id="@+id/water_viewPager"
+        android:id="@+id/gas_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></cn.com.larunda.monitor.util.CustomViewPager>
 

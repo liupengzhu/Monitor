@@ -380,11 +380,11 @@ public class WaterFragment extends Fragment implements View.OnClickListener {
         }
 
         if (date_type.equals("year")) {
-            textView1.setText(dateText.getText().toString() + "年 区间用电量柱状图");
+            textView1.setText(dateText.getText().toString() + "年 区间用水量柱状图");
         } else {
             textView1.setText(dateText.getText().toString().split("-")[0] + "年"
                     + dateText.getText().toString().split("-")[1]
-                    + "月 区间用电量柱状图");
+                    + "月 区间用水量柱状图");
         }
 
         waterBeanList.clear();

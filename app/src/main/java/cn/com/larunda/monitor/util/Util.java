@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 
 import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.ElectricInfo;
+import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.gson.UserToken;
@@ -134,5 +135,11 @@ public class Util {
         Gson gson = new Gson();
         WaterInfo waterInfo = gson.fromJson(response, WaterInfo.class);
         return waterInfo;
+    }
+
+    public static GasInfo handleGasInfo(String response) {
+        Gson gson = new Gson();
+        GasInfo gasInfo = gson.fromJson(response, GasInfo.class);
+        return gasInfo;
     }
 }

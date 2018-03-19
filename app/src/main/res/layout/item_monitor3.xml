@@ -11,22 +11,21 @@
         android:layout_weight="1"
         android:background="@drawable/card_background"
         android:clickable="true"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="25dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/monitor5" />
+            android:src="@drawable/home_generation_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
             android:text="@string/可再生能源"
             android:textColor="@color/tab_text_color2"
             android:textSize="20sp" />
@@ -44,22 +43,21 @@
         android:layout_weight="1"
         android:background="@drawable/card_background"
         android:clickable="true"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="25dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/monitor6" />
+            android:src="@drawable/home_carbon_emission_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
             android:text="@string/碳排放量"
             android:textColor="@color/tab_text_color2"
             android:textSize="20sp" />

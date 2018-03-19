@@ -11,23 +11,22 @@
         android:layout_weight="1"
         android:background="@drawable/card_background"
         android:clickable="true"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="25dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/monitor1" />
+            android:src="@drawable/home_electric_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/用电"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/用电"
             android:textColor="@color/tab_text_color2"
             android:textSize="20sp" />
     </LinearLayout>
@@ -43,23 +42,22 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/card_background"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="25dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/monitor2" />
+            android:src="@drawable/home_water_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/用水"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/用水"
             android:textColor="@color/tab_text_color2"
             android:textSize="20sp" />
     </LinearLayout>

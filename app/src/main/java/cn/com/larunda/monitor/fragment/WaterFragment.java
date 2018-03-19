@@ -216,25 +216,27 @@ public class WaterFragment extends Fragment implements View.OnClickListener {
             public void onResponse(Call call, Response response) throws IOException {
                 final String content = response.body().string();
                 if (Util.isGoodJson(content)) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            WaterInfo waterInfo = Util.handleWaterInfo(content);
-                            if (waterInfo != null && waterInfo.getError() == null) {
-                                parseWater(waterInfo);
-                                refreshLayout.setRefreshing(false);
-                                layout.setVisibility(View.VISIBLE);
-                                errorLayout.setVisibility(View.GONE);
-                            } else {
-                                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                intent.putExtra("token_timeout", "登录超时");
-                                preferences.edit().putString("token", null).commit();
-                                startActivity(intent);
-                                ActivityCollector.finishAllActivity();
-                            }
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                WaterInfo waterInfo = Util.handleWaterInfo(content);
+                                if (waterInfo != null && waterInfo.getError() == null) {
+                                    parseWater(waterInfo);
+                                    refreshLayout.setRefreshing(false);
+                                    layout.setVisibility(View.VISIBLE);
+                                    errorLayout.setVisibility(View.GONE);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
             }
         });

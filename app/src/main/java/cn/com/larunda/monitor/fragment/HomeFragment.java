@@ -124,14 +124,16 @@ public class HomeFragment extends Fragment {
         HttpUtil.sendGetRequestWithHttp(HOME_URL + token, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        layout.setVisibility(View.GONE);
-                        errorLayout.setVisibility(View.VISIBLE);
-                    }
-                });
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            layout.setVisibility(View.GONE);
+                            errorLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -139,23 +141,25 @@ public class HomeFragment extends Fragment {
                 String content = response.body().string();
                 if (Util.isGoodJson(content)) {
                     final HomeInfo homeInfo = Util.handleHomeInfo(content);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (homeInfo != null && homeInfo.getError() == null) {
-                                parseHomeInfo(homeInfo);
-                                refreshLayout.setRefreshing(false);
-                                layout.setVisibility(View.VISIBLE);
-                                errorLayout.setVisibility(View.GONE);
-                            } else {
-                                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                intent.putExtra("token_timeout", "登录超时");
-                                preferences.edit().putString("token", null).commit();
-                                startActivity(intent);
-                                ActivityCollector.finishAllActivity();
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (homeInfo != null && homeInfo.getError() == null) {
+                                    parseHomeInfo(homeInfo);
+                                    refreshLayout.setRefreshing(false);
+                                    layout.setVisibility(View.VISIBLE);
+                                    errorLayout.setVisibility(View.GONE);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
 
                 }
             }

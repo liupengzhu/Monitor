@@ -483,54 +483,58 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                 + "&time=" + time, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        layout.setVisibility(View.GONE);
-                        errorLayout.setVisibility(View.VISIBLE);
-                    }
-                });
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            layout.setVisibility(View.GONE);
+                            errorLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String content = response.body().string();
                 if (Util.isGoodJson(content)) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (date_type.equals("date")) {
-                                DayElectricInfo electricInfo = Util.handleDayElectricInfo(content);
-                                if (electricInfo != null && electricInfo.getError() == null) {
-                                    parseElectricForLine(electricInfo);
-                                    refreshLayout.setRefreshing(false);
-                                    layout.setVisibility(View.VISIBLE);
-                                    errorLayout.setVisibility(View.GONE);
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (date_type.equals("date")) {
+                                    DayElectricInfo electricInfo = Util.handleDayElectricInfo(content);
+                                    if (electricInfo != null && electricInfo.getError() == null) {
+                                        parseElectricForLine(electricInfo);
+                                        refreshLayout.setRefreshing(false);
+                                        layout.setVisibility(View.VISIBLE);
+                                        errorLayout.setVisibility(View.GONE);
+                                    } else {
+                                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                        intent.putExtra("token_timeout", "登录超时");
+                                        preferences.edit().putString("token", null).commit();
+                                        startActivity(intent);
+                                        ActivityCollector.finishAllActivity();
+                                    }
                                 } else {
-                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                    intent.putExtra("token_timeout", "登录超时");
-                                    preferences.edit().putString("token", null).commit();
-                                    startActivity(intent);
-                                    ActivityCollector.finishAllActivity();
-                                }
-                            } else {
-                                ElectricInfo electricInfo = Util.handleElectricInfo(content);
-                                if (electricInfo != null && electricInfo.getError() == null) {
-                                    parseElectricForBar(electricInfo);
-                                    refreshLayout.setRefreshing(false);
-                                    layout.setVisibility(View.VISIBLE);
-                                    errorLayout.setVisibility(View.GONE);
-                                } else {
-                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                    intent.putExtra("token_timeout", "登录超时");
-                                    preferences.edit().putString("token", null).commit();
-                                    startActivity(intent);
-                                    ActivityCollector.finishAllActivity();
+                                    ElectricInfo electricInfo = Util.handleElectricInfo(content);
+                                    if (electricInfo != null && electricInfo.getError() == null) {
+                                        parseElectricForBar(electricInfo);
+                                        refreshLayout.setRefreshing(false);
+                                        layout.setVisibility(View.VISIBLE);
+                                        errorLayout.setVisibility(View.GONE);
+                                    } else {
+                                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                        intent.putExtra("token_timeout", "登录超时");
+                                        preferences.edit().putString("token", null).commit();
+                                        startActivity(intent);
+                                        ActivityCollector.finishAllActivity();
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });

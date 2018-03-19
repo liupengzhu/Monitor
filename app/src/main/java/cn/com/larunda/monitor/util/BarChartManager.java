@@ -3,7 +3,6 @@ package cn.com.larunda.monitor.util;
 import android.graphics.Color;
 
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -15,12 +14,8 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import cn.com.larunda.monitor.R;
 
 /**
  * Created by sddt on 18-3-13.
@@ -36,6 +31,7 @@ public class BarChartManager {
 
     private XValueFormatter xValueFormatter;
     private YValueFormatter yValueFormatter;
+    private Legend legend;
 
     public BarChartManager(BarChartViewPager barChart) {
         this.mBarChart = barChart;
@@ -68,7 +64,7 @@ public class BarChartManager {
         mBarChart.setScaleEnabled(false);
 
         //折线图例 标签 设置
-        Legend legend = mBarChart.getLegend();
+        legend = mBarChart.getLegend();
         legend.setForm(Legend.LegendForm.SQUARE);
         legend.setTextSize(11f);
         //显示位置
@@ -119,16 +115,15 @@ public class BarChartManager {
     /**
      * 展示柱状图(一条)
      *
-     * @param xAxisValues
      * @param yAxisValues
      * @param label
      * @param color
      */
-    public void showBarChart(List<Float> xAxisValues, List<Float> yAxisValues, String label, int color) {
+    public void showBarChart(float[] yAxisValues, String label, int color) {
         initLineChart();
         ArrayList<BarEntry> entries = new ArrayList<>();
-        for (int i = 0; i < xAxisValues.size(); i++) {
-            entries.add(new BarEntry(xAxisValues.get(i), yAxisValues.get(i)));
+        for (int i = 0; i < yAxisValues.length; i++) {
+            entries.add(new BarEntry((i + 1), yAxisValues[i]));
         }
         // 每一个BarDataSet代表一类柱状图
         BarDataSet barDataSet = new BarDataSet(entries, label);
@@ -142,8 +137,10 @@ public class BarChartManager {
         dataSets.add(barDataSet);
         BarData data = new BarData(dataSets);
         //设置X轴的刻度数
-        xAxis.setLabelCount(xAxisValues.size() - 1, false);
+        xAxis.setLabelCount(6, false);
         data.setDrawValues(false);
+
+        legend.setEnabled(false);//隐藏折标
         mBarChart.setData(data);
     }
 

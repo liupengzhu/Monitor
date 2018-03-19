@@ -347,8 +347,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                             content.append("平:" + normal.get(position) + radio + powerUnit + "\r\n");
                         }
                         if (valley.get(position) != null) {
-                            content.append("谷:" + valley.get(position) + radio + powerUnit);
+                            content.append("谷:" + valley.get(position) + radio + powerUnit + "\r\n");
                         }
+                        content.append("总量:" + e.getY() + radio + powerUnit);
                     } else {
                         if (rush.get(position) != null) {
                             content.append("尖:" + rush.get(position) + "tce" + "\r\n");
@@ -360,8 +361,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                             content.append("平:" + normal.get(position) + "tce" + "\r\n");
                         }
                         if (valley.get(position) != null) {
-                            content.append("谷:" + valley.get(position) + "tce");
+                            content.append("谷:" + valley.get(position) + "tce" + "\r\n");
                         }
+                        content.append("总量:" + e.getY() + "tce");
                     }
 
                     ((TextView) v).setText(content.toString());

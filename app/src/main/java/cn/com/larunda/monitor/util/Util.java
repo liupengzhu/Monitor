@@ -13,6 +13,7 @@ import com.google.gson.JsonParser;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 
+import cn.com.larunda.monitor.gson.CarbonInfo;
 import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.ElectricInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
@@ -157,4 +158,9 @@ public class Util {
         return rankCompanyInfo;
     }
 
+    public static CarbonInfo handleCarbonInfo(String response) {
+        Gson gson = new Gson();
+        CarbonInfo carbonInfo = gson.fromJson(response, CarbonInfo.class);
+        return carbonInfo;
+    }
 }

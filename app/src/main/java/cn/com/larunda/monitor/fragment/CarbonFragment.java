@@ -1,5 +1,6 @@
 package cn.com.larunda.monitor.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,25 +17,34 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.larunda.dialog.DateDialog;
+import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.adapter.CarbonRecyclerAdapter;
 import cn.com.larunda.monitor.adapter.GasRecyclerAdapter;
 import cn.com.larunda.monitor.bean.CarbonBean;
 import cn.com.larunda.monitor.bean.GasBean;
+import cn.com.larunda.monitor.gson.CarbonInfo;
+import cn.com.larunda.monitor.gson.GasInfo;
+import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by sddt on 18-3-20.
  */
 
 public class CarbonFragment extends Fragment implements View.OnClickListener {
-    private final String GAS_URL = MyApplication.URL + "carbon/data" + MyApplication.TOKEN;
+    private final String CARBON_URL = MyApplication.URL + "carbon/data" + MyApplication.TOKEN;
     private String date_type = "month";
     private String type = "usage";
 
@@ -67,6 +77,14 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
         initData();
         initEvent();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        sendRequest();
+        layout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
     }
 
     /**
@@ -167,6 +185,74 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
      * 发送网络数据
      */
     private void sendRequest() {
+
+        getType();
+        String time = dateText.getText().toString().trim();
+        refreshLayout.setRefreshing(true);
+        HttpUtil.sendGetRequestWithHttp(CARBON_URL + token + "&date_type=" + date_type + "&type=" + type
+                + "&time=" + time, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        layout.setVisibility(View.GONE);
+                        errorLayout.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String content = response.body().string();
+                if (Util.isGoodJson(content)) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                CarbonInfo carbonInfo = Util.handleCarbonInfo(content);
+                                if (carbonInfo != null && carbonInfo.getError() == null) {
+                                    parseCarbon(carbonInfo);
+                                    refreshLayout.setRefreshing(false);
+                                    layout.setVisibility(View.VISIBLE);
+                                    errorLayout.setVisibility(View.GONE);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
+
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 解析服务器返回数据
+     *
+     * @param carbonInfo
+     */
+    private void parseCarbon(CarbonInfo carbonInfo) {
+
+        carbonBeanList.clear();
+        if (carbonInfo.getTable_data() != null) {
+            for (CarbonInfo.TableDataBean bean : carbonInfo.getTable_data()) {
+                CarbonBean carbonBean = new CarbonBean();
+                carbonBean.setTime(bean.getTime() + "");
+                carbonBean.setTotal(bean.getData() + "");
+                carbonBean.setHistory_average(bean.getHistory_average() + "");
+                carbonBean.setRange(bean.getRange() + "");
+                carbonBean.setRatio(preferences.getString("carbon_unit", null) + "");
+                carbonBeanList.add(carbonBean);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     /**

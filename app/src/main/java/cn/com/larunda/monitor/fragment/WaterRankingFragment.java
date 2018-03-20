@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +28,17 @@ import java.util.List;
 import cn.com.larunda.dialog.DateDialog;
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
-import cn.com.larunda.monitor.adapter.ElectricRankingRecyclerAdapter;
 import cn.com.larunda.monitor.adapter.WaterRankingRecyclerAdapter;
-import cn.com.larunda.monitor.bean.ElectricRankingBean;
 import cn.com.larunda.monitor.bean.WaterRankingBean;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
+import cn.com.larunda.monitor.util.BarOnClickListener;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
+import cn.com.larunda.monitor.util.PieChartManager;
 import cn.com.larunda.monitor.util.PieChartViewPager;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.monitor.util.XYMarkerView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -64,6 +68,7 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
     private String style = "company";
     private SharedPreferences preferences;
     public static String token;
+    private String waterUnit;
 
     private PieChartViewPager mPieChart;
     private TextView textView1;
@@ -92,6 +97,10 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
     private LinearLayoutManager manager;
     private List<WaterRankingBean> waterRankingBeanList = new ArrayList<>();
 
+    private PieChartManager pieChartManager;
+    private XYMarkerView pieMarkerView;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -118,6 +127,7 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
     private void initView(View view) {
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
+        waterUnit = preferences.getString("water_unit", null);
 
         textView1 = view.findViewById(R.id.water_ranking_fragment_chart_text);
 
@@ -153,6 +163,12 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        mPieChart = view.findViewById(R.id.water_ranking_fragment_pie);
+        pieChartManager = new PieChartManager(mPieChart);
+        pieMarkerView = new XYMarkerView(getContext());
+        pieMarkerView.setChartView(mPieChart);
+        mPieChart.setMarker(pieMarkerView);
     }
 
     /**
@@ -214,6 +230,27 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
                     sendRequest();
                 }
                 monthDialog.cancel();
+            }
+        });
+
+        pieMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                StringBuffer content = new StringBuffer();
+                if (date_type.equals("date")) {
+                    if (type.equals("original")) {
+                        content.append("当日能耗:" + e.getY() + waterUnit);
+                    } else {
+                        content.append("当日能耗:" + e.getY() + "tce");
+                    }
+                } else {
+                    if (type.equals("original")) {
+                        content.append("当月能耗:" + e.getY() + waterUnit);
+                    } else {
+                        content.append("当月能耗:" + e.getY() + "tce");
+                    }
+                }
+                ((TextView) v).setText(content.toString());
             }
         });
     }
@@ -321,6 +358,42 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
      * @param rankCompanyInfo
      */
     private void parseInfo(RankCompanyInfo rankCompanyInfo) {
+        if (style.equals("company")) {
+            if (date_type.equals("month")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1]
+                        + "月 企业耗水排行占比图");
+            } else {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1] + "月"
+                        + dateText.getText().toString().split("-")[2]
+                        + "日 企业耗水排行占比图");
+            }
+        } else {
+            if (date_type.equals("month")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1]
+                        + "月 行业耗水排行占比图");
+            } else {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1] + "月"
+                        + dateText.getText().toString().split("-")[2]
+                        + "日 行业耗水排行占比图");
+            }
+        }
+
+        if (rankCompanyInfo.getChart() != null) {
+            //设置饼图数据
+            ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+            for (int i = 0; i < rankCompanyInfo.getChart().getData().size(); i++) {
+                entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
+                        rankCompanyInfo.getChart().getData().get(i).getName()));
+            }
+
+            pieChartManager.showPieChart(entries, colors);
+            pieChartManager.setLegendPosition();
+        }
+
         waterRankingBeanList.clear();
         if (rankCompanyInfo.getTable_data() != null) {
             for (RankCompanyInfo.TableDataBean bean : rankCompanyInfo.getTable_data()) {
@@ -330,7 +403,7 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
                 waterRankingBean.setData(bean.getData() + "");
                 waterRankingBean.setPercent(bean.getPercent() + "");
                 if (type.equals("original")) {
-                    waterRankingBean.setRatio(preferences.getString("water_unit", null) + "");
+                    waterRankingBean.setRatio(waterUnit + "");
                 } else {
                     waterRankingBean.setRatio("tce");
                 }

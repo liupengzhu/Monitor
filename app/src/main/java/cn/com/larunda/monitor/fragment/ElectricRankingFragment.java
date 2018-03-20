@@ -181,7 +181,12 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
      */
     private void initData() {
         long time = System.currentTimeMillis();
-        String date = Util.parseTime(time, 2);
+        String date;
+        if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_day_button) {
+            date = Util.parseTime(time, 3);
+        } else {
+            date = Util.parseTime(time, 2);
+        }
         dateText.setText(date);
     }
 

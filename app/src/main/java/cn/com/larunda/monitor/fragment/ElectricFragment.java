@@ -253,7 +253,14 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
      */
     private void initData() {
         long time = System.currentTimeMillis();
-        String date = Util.parseTime(time, 2);
+        String date;
+        if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_year_button) {
+            date = Util.parseTime(time, 1);
+        } else if (timeGroup.getCheckedRadioButtonId() == R.id.electric_fragment_day_button) {
+            date = Util.parseTime(time, 3);
+        } else {
+            date = Util.parseTime(time, 2);
+        }
         dateText.setText(date);
     }
 

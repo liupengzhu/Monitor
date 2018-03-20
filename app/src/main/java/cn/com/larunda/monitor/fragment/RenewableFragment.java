@@ -2,6 +2,7 @@ package cn.com.larunda.monitor.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -18,26 +19,38 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 import cn.com.larunda.dialog.DateDialog;
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.adapter.RenewableRecyclerAdapter;
-import cn.com.larunda.monitor.bean.GasBean;
 import cn.com.larunda.monitor.bean.RenewableBean;
+import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.DayRenewableInfo;
-import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.RenewableInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
+import cn.com.larunda.monitor.util.BarChartManager;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.BarOnClickListener;
 import cn.com.larunda.monitor.util.HttpUtil;
+import cn.com.larunda.monitor.util.LineChartManager;
 import cn.com.larunda.monitor.util.LineChartViewPager;
 import cn.com.larunda.monitor.util.MyApplication;
+import cn.com.larunda.monitor.util.PieChartManager;
 import cn.com.larunda.monitor.util.PieChartViewPager;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.monitor.util.XValueFormatter;
+import cn.com.larunda.monitor.util.XYMarkerView;
+import cn.com.larunda.monitor.util.YValueFormatter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -47,6 +60,10 @@ import okhttp3.Response;
  */
 
 public class RenewableFragment extends Fragment implements View.OnClickListener {
+    private int[] colors = {MyApplication.getContext().getResources().getColor(R.color.valley_color),
+            MyApplication.getContext().getResources().getColor(R.color.normal_color),
+            MyApplication.getContext().getResources().getColor(R.color.peak_color),
+            MyApplication.getContext().getResources().getColor(R.color.rush_color)};
 
     private final String RENEWABLE_URL = MyApplication.URL + "renewable/usage" + MyApplication.TOKEN;
     private String date_type = "month";
@@ -78,6 +95,14 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
     private LinearLayoutManager manager;
     private List<RenewableBean> renewableBeanList = new ArrayList<>();
     private String ratio;
+
+    private XYMarkerView barMarkerView;
+    private XYMarkerView lineMarkerView;
+    private XYMarkerView pieMarkerView;
+    private BarChartManager barChartManager;
+    private LineChartManager lineChartManager;
+    private PieChartManager pieChartManager;
+    private List<String> dateXList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -136,6 +161,62 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        mBarChart = view.findViewById(R.id.renewable_fragment_chart);
+        barChartManager = new BarChartManager(mBarChart);
+        barChartManager.setDescription("");
+        barChartManager.setxValueFormatter(new XValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if (date_type.equals("year")) {
+                    return (int) value + "月";
+                } else {
+                    return (int) value + "日";
+                }
+            }
+        });
+        barChartManager.setyValueFormatter(new YValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return (int) Math.ceil(value) + " " + ratio + powerUnit;
+            }
+        });
+
+
+        mLineChart = view.findViewById(R.id.renewable_fragment_line);
+        lineChartManager = new LineChartManager(mLineChart);
+        lineChartManager.setDescription("");
+        lineChartManager.setxValueFormatter(new XValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if (dateXList != null && dateXList.size() == 288) {
+                    return dateXList.get((int) value);
+                }
+                return (int) value + "";
+            }
+        });
+        lineChartManager.setyValueFormatter(new YValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return (int) Math.ceil(value) + " " + ratio + powerUnit;
+            }
+        });
+
+
+        mPieChart = view.findViewById(R.id.renewable_fragment_pie);
+        pieChartManager = new PieChartManager(mPieChart);
+
+        barMarkerView = new XYMarkerView(getContext());
+        barMarkerView.setChartView(mBarChart);
+        mBarChart.setMarker(barMarkerView);
+
+        lineMarkerView = new XYMarkerView(getContext());
+        lineMarkerView.setChartView(mLineChart);
+        mLineChart.setMarker(lineMarkerView);
+
+        pieMarkerView = new XYMarkerView(getContext());
+        pieMarkerView.setChartView(mPieChart);
+        mPieChart.setMarker(pieMarkerView);
     }
 
     /**
@@ -209,6 +290,54 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
                     sendRequest();
                 }
                 monthDialog.cancel();
+            }
+        });
+
+        barMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                if (v instanceof TextView) {
+                    StringBuffer content = new StringBuffer();
+                    if (e.getY() > 0) {
+                        v.setVisibility(View.VISIBLE);
+                    } else {
+                        v.setVisibility(View.GONE);
+                    }
+                    if (e.getX() < 10) {
+                        content.append("时间:" + dateText.getText().toString() + "-0" + (int) e.getX() + "\r\n");
+                    } else {
+                        content.append("时间:" + dateText.getText().toString() + "-" + (int) e.getX() + "\r\n");
+                    }
+                    content.append("发电量:" + e.getY() + ratio + powerUnit + "");
+                    ((TextView) v).setText(content.toString());
+                }
+            }
+        });
+
+        lineMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                int position = (int) e.getX();
+                StringBuffer content = new StringBuffer();
+                if (e.getY() > 0) {
+                    v.setVisibility(View.VISIBLE);
+                } else {
+                    v.setVisibility(View.GONE);
+                }
+                if (dateXList != null && dateXList.size() == 288) {
+                    content.append("时间:" + dateXList.get(position) + "\r\n");
+                }
+                content.append("发电量:" + e.getY() + ratio + powerUnit + "");
+                ((TextView) v).setText(content.toString());
+            }
+        });
+
+        pieMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                StringBuffer content = new StringBuffer();
+                content.append("当日发电量:" + e.getY() + ratio + powerUnit);
+                ((TextView) v).setText(content.toString());
             }
         });
     }
@@ -287,7 +416,55 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
      * @param renewableInfo
      */
     private void parseRenewableForLine(DayRenewableInfo renewableInfo) {
+        mBarChart.setVisibility(View.GONE);
+        mLineChart.setVisibility(View.VISIBLE);
+        mPieChart.setVisibility(View.VISIBLE);
+        mPieLayout.setVisibility(View.VISIBLE);
         ratio = renewableInfo.getTable_ratio();
+
+        dateXList = renewableInfo.getX_name();
+        if (renewableInfo.getChart() != null) {
+            //设置x轴的数据
+            ArrayList<Float> xValues = new ArrayList<>();
+            for (int i = 0; i < 288; i++) {
+                xValues.add((float) i);
+            }
+            //设置y轴的数据()
+            List<Float> yValue = new ArrayList<>();
+            for (int i = 0; i < renewableInfo.getChart().size(); i++) {
+                if (renewableInfo.getChart().get(i) != null) {
+                    yValue.add(Float.valueOf(renewableInfo.getChart().get(i)));
+                } else {
+                    yValue.add(0f);
+                }
+            }
+            lineChartManager.showLineChart(xValues, yValue, "小时", Color.RED);
+        }
+
+        textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                + dateText.getText().toString().split("-")[1]
+                + "月"
+                + dateText.getText().toString().split("-")[2]
+                + "日 区间发电量曲线图");
+
+
+        if (renewableInfo.getPeak_valley_pie() != null) {
+            List<DayRenewableInfo.PeakValleyPieBean> peakList = renewableInfo.getPeak_valley_pie();
+            //设置饼图数据
+            ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+            if (peakList.size() == 3) {
+                entries.add(new PieEntry(Float.valueOf(peakList.get(2).getValue()), peakList.get(2).getName()));
+                entries.add(new PieEntry(Float.valueOf(peakList.get(1).getValue()), peakList.get(1).getName()));
+                entries.add(new PieEntry(Float.valueOf(peakList.get(0).getValue()), peakList.get(0).getName()));
+            } else if (peakList.size() == 4) {
+                entries.add(new PieEntry(Float.valueOf(peakList.get(3).getValue()), peakList.get(3).getName()));
+                entries.add(new PieEntry(Float.valueOf(peakList.get(2).getValue()), peakList.get(2).getName()));
+                entries.add(new PieEntry(Float.valueOf(peakList.get(1).getValue()), peakList.get(1).getName()));
+                entries.add(new PieEntry(Float.valueOf(peakList.get(0).getValue()), peakList.get(0).getName()));
+            }
+            pieChartManager.showPieChart(entries, colors);
+        }
+
         renewableBeanList.clear();
         if (renewableInfo.getTable_data() != null) {
             for (DayRenewableInfo.TableDataBean bean : renewableInfo.getTable_data()) {
@@ -307,8 +484,31 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
      * @param renewableInfo
      */
     private void parseRenewableForBar(RenewableInfo renewableInfo) {
-
+        mBarChart.setVisibility(View.VISIBLE);
+        mLineChart.setVisibility(View.GONE);
+        mPieChart.setVisibility(View.GONE);
+        mPieLayout.setVisibility(View.GONE);
         ratio = renewableInfo.getRatio();
+
+        if (renewableInfo.getChart() != null) {
+            float values[] = new float[renewableInfo.getChart().size()];
+            for (int i = 0; i < renewableInfo.getChart().size(); i++) {
+                String value = renewableInfo.getChart().get(i);
+                if (value != null) {
+                    values[i] = Float.valueOf(value);
+                }
+            }
+            barChartManager.showBarChart(values, "", getResources().getColor(R.color.water_color));
+        }
+
+        if (date_type.equals("year")) {
+            textView1.setText(dateText.getText().toString() + "年 区间发电量柱状图");
+        } else {
+            textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                    + dateText.getText().toString().split("-")[1]
+                    + "月 区间发电量柱状图");
+        }
+
         renewableBeanList.clear();
         if (renewableInfo.getTable_data() != null) {
             for (RenewableInfo.TableDataBean bean : renewableInfo.getTable_data()) {

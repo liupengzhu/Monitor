@@ -71,12 +71,12 @@
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_toRightOf="@id/renewable_fragment_time_group"
             android:background="@drawable/date_text"
             android:gravity="center"
             android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="2018-02-04"
             android:textSize="12sp" />
 
@@ -168,7 +168,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="当日区间用电排行占比图"
+                            android:text="当日区间发电排行占比图"
                             android:textColor="@color/tab_text_color2"
                             android:textSize="15sp" />
                     </LinearLayout>

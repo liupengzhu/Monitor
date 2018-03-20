@@ -14,6 +14,7 @@ import android.widget.Toast;
 import cn.com.larunda.monitor.ElectricActivity;
 import cn.com.larunda.monitor.GasActivity;
 import cn.com.larunda.monitor.R;
+import cn.com.larunda.monitor.SteamActivity;
 import cn.com.larunda.monitor.WaterActivity;
 
 /**
@@ -25,6 +26,7 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
     LinearLayout electricButton;
     LinearLayout waterButton;
     LinearLayout gasButton;
+    LinearLayout steamButton;
 
     @Nullable
     @Override
@@ -45,6 +47,7 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
         electricButton = view.findViewById(R.id.monitor_button1);
         waterButton = view.findViewById(R.id.monitor_button2);
         gasButton = view.findViewById(R.id.monitor_button3);
+        steamButton = view.findViewById(R.id.monitor_button4);
 
     }
 
@@ -55,6 +58,7 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
         electricButton.setOnClickListener(this);
         waterButton.setOnClickListener(this);
         gasButton.setOnClickListener(this);
+        steamButton.setOnClickListener(this);
     }
 
     /**
@@ -76,6 +80,10 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
             case R.id.monitor_button3:
                 Intent gasIntent = new Intent(getContext(), GasActivity.class);
                 startActivity(gasIntent);
+                break;
+            case R.id.monitor_button4:
+                Intent steamIntent = new Intent(getContext(), SteamActivity.class);
+                startActivity(steamIntent);
                 break;
             default:
                 break;

@@ -72,14 +72,14 @@ public class CarbonRankingRecyclerAdapter extends RecyclerView.Adapter<CarbonRan
         }
         if (bean.getStyle().equals("industry")) {
             holder.name.setText("行业名称:");
-            holder.data.setText("行业能耗:");
+            holder.data.setText("行业排放量:");
             holder.percent.setText("行业占比:");
         } else {
             holder.name.setText("企业名称:");
-            holder.data.setText("企业能耗:");
+            holder.data.setText("企业排放量:");
             holder.percent.setText("企业占比:");
         }
-        holder.textView.setText("耗气排行" + (position + 1));
+        holder.textView.setText("排放排行" + (position + 1));
         holder.nameText.setText(bean.getName());
         holder.dataText.setText(bean.getData() + bean.getRatio());
         holder.percentText.setText(bean.getPercent() + "%");

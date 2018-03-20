@@ -13,21 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.larunda.monitor.R;
-import cn.com.larunda.monitor.bean.CarbonBean;
 import cn.com.larunda.monitor.bean.GasBean;
+import cn.com.larunda.monitor.bean.RenewableBean;
 
 
 /**
  * Created by sddt on 18-3-15.
  */
 
-public class CarbonRecyclerAdapter extends RecyclerView.Adapter<CarbonRecyclerAdapter.ViewHolder> {
+public class RenewableRecyclerAdapter extends RecyclerView.Adapter<RenewableRecyclerAdapter.ViewHolder> {
     private Context context;
-    private List<CarbonBean> carbonBeanList = new ArrayList<>();
+    private List<RenewableBean> renewableBeanList = new ArrayList<>();
 
-    public CarbonRecyclerAdapter(Context context, List<CarbonBean> carbonBeanList) {
+    public RenewableRecyclerAdapter(Context context, List<RenewableBean> renewableBeanList) {
         this.context = context;
-        this.carbonBeanList = carbonBeanList;
+        this.renewableBeanList = renewableBeanList;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -44,30 +44,30 @@ public class CarbonRecyclerAdapter extends RecyclerView.Adapter<CarbonRecyclerAd
 
         public ViewHolder(View itemView) {
             super(itemView);
-            time = itemView.findViewById(R.id.carbon_item_date);
-            total = itemView.findViewById(R.id.carbon_item_total);
-            history_average = itemView.findViewById(R.id.carbon_item_history_average);
-            range = itemView.findViewById(R.id.carbon_item_range);
-            totalUnit = itemView.findViewById(R.id.carbon_item_total_unit);
-            history_averageUnit = itemView.findViewById(R.id.carbon_item_history_average_unit);
-            history_averageLayout = itemView.findViewById(R.id.carbon_item_history_average_layout);
-            rangeLayout = itemView.findViewById(R.id.carbon_item_range_layout);
-            rangeImg = itemView.findViewById(R.id.carbon_item_range_img);
+            time = itemView.findViewById(R.id.renewable_item_date);
+            total = itemView.findViewById(R.id.renewable_item_total);
+            history_average = itemView.findViewById(R.id.renewable_item_history_average);
+            range = itemView.findViewById(R.id.renewable_item_range);
+            totalUnit = itemView.findViewById(R.id.renewable_item_total_unit);
+            history_averageUnit = itemView.findViewById(R.id.renewable_item_history_average_unit);
+            history_averageLayout = itemView.findViewById(R.id.renewable_item_history_average_layout);
+            rangeLayout = itemView.findViewById(R.id.renewable_item_range_layout);
+            rangeImg = itemView.findViewById(R.id.renewable_item_range_img);
 
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_carbon_recycler, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_renewable_recycler, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CarbonBean bean = carbonBeanList.get(position);
+        RenewableBean bean = renewableBeanList.get(position);
 
-        holder.totalUnit.setText("排放量 (" + bean.getRatio() + ")");
+        holder.totalUnit.setText("区间发电量 (" + bean.getRatio() + ")");
         holder.history_averageUnit.setText("同期历史值 (" + bean.getRatio() + ")");
         holder.time.setText(bean.getTime() + "");
         holder.total.setText(bean.getTotal() + "");
@@ -99,6 +99,6 @@ public class CarbonRecyclerAdapter extends RecyclerView.Adapter<CarbonRecyclerAd
 
     @Override
     public int getItemCount() {
-        return carbonBeanList.size();
+        return renewableBeanList.size();
     }
 }

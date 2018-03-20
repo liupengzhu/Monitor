@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 
 import cn.com.larunda.monitor.gson.CarbonInfo;
 import cn.com.larunda.monitor.gson.DayElectricInfo;
+import cn.com.larunda.monitor.gson.DayRenewableInfo;
 import cn.com.larunda.monitor.gson.ElectricInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
@@ -168,6 +169,12 @@ public class Util {
     public static RenewableInfo handleRenewableInfo(String response) {
         Gson gson = new Gson();
         RenewableInfo renewableInfo = gson.fromJson(response, RenewableInfo.class);
+        return renewableInfo;
+    }
+
+    public static DayRenewableInfo handleDayRenewableInfo(String response) {
+        Gson gson = new Gson();
+        DayRenewableInfo renewableInfo = gson.fromJson(response,DayRenewableInfo.class);
         return renewableInfo;
     }
 }

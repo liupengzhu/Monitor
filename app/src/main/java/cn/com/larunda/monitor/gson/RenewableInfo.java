@@ -1,5 +1,7 @@
 package cn.com.larunda.monitor.gson;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -17,6 +19,7 @@ public class RenewableInfo {
      */
 
     private String chart_type;
+    @SerializedName("table_ratio")
     private String ratio;
     private List<String> chart;
     private List<TableDataBean> table_data;

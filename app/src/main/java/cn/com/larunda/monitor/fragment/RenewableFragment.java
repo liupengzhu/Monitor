@@ -1,11 +1,15 @@
 package cn.com.larunda.monitor.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +18,29 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.com.larunda.dialog.DateDialog;
+import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
+import cn.com.larunda.monitor.adapter.RenewableRecyclerAdapter;
+import cn.com.larunda.monitor.bean.GasBean;
+import cn.com.larunda.monitor.bean.RenewableBean;
+import cn.com.larunda.monitor.gson.DayRenewableInfo;
+import cn.com.larunda.monitor.gson.GasInfo;
+import cn.com.larunda.monitor.gson.RenewableInfo;
+import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.LineChartViewPager;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.PieChartViewPager;
 import cn.com.larunda.monitor.util.Util;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by sddt on 18-3-20.
@@ -53,6 +73,12 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
     private LinearLayout errorLayout;
     private String powerUnit;
 
+    private RecyclerView recyclerView;
+    private RenewableRecyclerAdapter adapter;
+    private LinearLayoutManager manager;
+    private List<RenewableBean> renewableBeanList = new ArrayList<>();
+    private String ratio;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,6 +87,14 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
         initData();
         initEvent();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        sendRequest();
+        layout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
     }
 
     /**
@@ -96,6 +130,12 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
                 sendRequest();
             }
         });
+
+        recyclerView = view.findViewById(R.id.renewable_fragment_recyclerView);
+        adapter = new RenewableRecyclerAdapter(getContext(), renewableBeanList);
+        manager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
     }
 
     /**
@@ -177,6 +217,111 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
      * 发送网络请求
      */
     private void sendRequest() {
+        getType();
+        String time = dateText.getText().toString().trim();
+        refreshLayout.setRefreshing(true);
+        HttpUtil.sendGetRequestWithHttp(RENEWABLE_URL + token + "&date_type=" + date_type
+                + "&time=" + time, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            layout.setVisibility(View.GONE);
+                            errorLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String content = response.body().string();
+                if (Util.isGoodJson(content)) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (date_type.equals("date")) {
+                                    DayRenewableInfo renewableInfo = Util.handleDayRenewableInfo(content);
+                                    if (renewableInfo != null && renewableInfo.getError() == null) {
+                                        parseRenewableForLine(renewableInfo);
+                                        refreshLayout.setRefreshing(false);
+                                        layout.setVisibility(View.VISIBLE);
+                                        errorLayout.setVisibility(View.GONE);
+                                    } else {
+                                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                        intent.putExtra("token_timeout", "登录超时");
+                                        preferences.edit().putString("token", null).commit();
+                                        startActivity(intent);
+                                        ActivityCollector.finishAllActivity();
+                                    }
+                                } else {
+                                    RenewableInfo renewableInfo = Util.handleRenewableInfo(content);
+                                    if (renewableInfo != null && renewableInfo.getError() == null) {
+                                        parseRenewableForBar(renewableInfo);
+                                        refreshLayout.setRefreshing(false);
+                                        layout.setVisibility(View.VISIBLE);
+                                        errorLayout.setVisibility(View.GONE);
+                                    } else {
+                                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                        intent.putExtra("token_timeout", "登录超时");
+                                        preferences.edit().putString("token", null).commit();
+                                        startActivity(intent);
+                                        ActivityCollector.finishAllActivity();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 解析服务器返回日数据
+     *
+     * @param renewableInfo
+     */
+    private void parseRenewableForLine(DayRenewableInfo renewableInfo) {
+        ratio = renewableInfo.getTable_ratio();
+        renewableBeanList.clear();
+        if (renewableInfo.getTable_data() != null) {
+            for (DayRenewableInfo.TableDataBean bean : renewableInfo.getTable_data()) {
+                RenewableBean renewableBean = new RenewableBean();
+                renewableBean.setTime(bean.getTime() + "");
+                renewableBean.setTotal(bean.getValue() + "");
+                renewableBean.setRatio(ratio + powerUnit + "");
+                renewableBeanList.add(renewableBean);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 解析服务器返回数据
+     *
+     * @param renewableInfo
+     */
+    private void parseRenewableForBar(RenewableInfo renewableInfo) {
+
+        ratio = renewableInfo.getRatio();
+        renewableBeanList.clear();
+        if (renewableInfo.getTable_data() != null) {
+            for (RenewableInfo.TableDataBean bean : renewableInfo.getTable_data()) {
+                RenewableBean renewableBean = new RenewableBean();
+                renewableBean.setTime(bean.getTime() + "");
+                renewableBean.setTotal(bean.getData() + "");
+                renewableBean.setHistory_average(bean.getHistory_average() + "");
+                renewableBean.setRange(bean.getRange() + "");
+                renewableBean.setRatio(ratio + powerUnit + "");
+                renewableBeanList.add(renewableBean);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     /**

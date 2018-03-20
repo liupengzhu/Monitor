@@ -1,5 +1,6 @@
 package cn.com.larunda.monitor.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,25 +18,31 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.larunda.dialog.DateDialog;
+import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.adapter.SteamRecyclerAdapter;
-import cn.com.larunda.monitor.adapter.WaterRecyclerAdapter;
 import cn.com.larunda.monitor.bean.SteamBean;
-import cn.com.larunda.monitor.bean.WaterBean;
+import cn.com.larunda.monitor.gson.SteamInfo;
+import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by sddt on 18-3-20.
  */
 
 public class SteamFragment extends Fragment implements View.OnClickListener {
-    private final String WATER_URL = MyApplication.URL + "steam/usage" + MyApplication.TOKEN;
+    private final String STEAM_URL = MyApplication.URL + "steam/usage" + MyApplication.TOKEN;
     private String date_type = "month";
     private String type = "original";
 
@@ -71,6 +79,14 @@ public class SteamFragment extends Fragment implements View.OnClickListener {
         initData();
         initEvent();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        sendRequest();
+        layout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
     }
 
     /**
@@ -179,6 +195,77 @@ public class SteamFragment extends Fragment implements View.OnClickListener {
      * 发送网络数据
      */
     private void sendRequest() {
+        getType();
+        String time = dateText.getText().toString().trim();
+        refreshLayout.setRefreshing(true);
+        HttpUtil.sendGetRequestWithHttp(STEAM_URL + token + "&date_type=" + date_type + "&type=" + type
+                + "&time=" + time, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        layout.setVisibility(View.GONE);
+                        errorLayout.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String content = response.body().string();
+                if (Util.isGoodJson(content)) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SteamInfo steamInfo = Util.handleSteamInfo(content);
+                                if (steamInfo != null && steamInfo.getError() == null) {
+                                    parseSteam(steamInfo);
+                                    refreshLayout.setRefreshing(false);
+                                    layout.setVisibility(View.VISIBLE);
+                                    errorLayout.setVisibility(View.GONE);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
+
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 处理服务器返回数据
+     *
+     * @param steamInfo
+     */
+    private void parseSteam(SteamInfo steamInfo) {
+
+        steamBeanList.clear();
+        if (steamInfo.getTable_data() != null) {
+            for (SteamInfo.TableDataBean bean : steamInfo.getTable_data()) {
+                SteamBean steamBean = new SteamBean();
+                steamBean.setTime(bean.getTime() + "");
+                steamBean.setTotal(bean.getData() + "");
+                steamBean.setHistory_average(bean.getHistory_average() + "");
+                steamBean.setRange(bean.getRange() + "");
+                if (type.equals("original")) {
+                    steamBean.setRatio(preferences.getString("steam_unit", null) + "");
+                } else {
+                    steamBean.setRatio("tce");
+                }
+                steamBeanList.add(steamBean);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     /**

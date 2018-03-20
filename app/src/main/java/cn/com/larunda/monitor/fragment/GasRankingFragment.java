@@ -17,6 +17,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +34,13 @@ import cn.com.larunda.monitor.bean.GasRankingBean;
 import cn.com.larunda.monitor.bean.WaterRankingBean;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
+import cn.com.larunda.monitor.util.BarOnClickListener;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
+import cn.com.larunda.monitor.util.PieChartManager;
 import cn.com.larunda.monitor.util.PieChartViewPager;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.monitor.util.XYMarkerView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -92,6 +99,9 @@ public class GasRankingFragment extends Fragment implements View.OnClickListener
     private GasRankingRecyclerAdapter adapter;
     private LinearLayoutManager manager;
     private List<GasRankingBean> gasRankingBeanList = new ArrayList<>();
+
+    private PieChartManager pieChartManager;
+    private XYMarkerView pieMarkerView;
 
     @Nullable
     @Override
@@ -156,6 +166,11 @@ public class GasRankingFragment extends Fragment implements View.OnClickListener
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
+        mPieChart = view.findViewById(R.id.gas_ranking_fragment_pie);
+        pieChartManager = new PieChartManager(mPieChart);
+        pieMarkerView = new XYMarkerView(getContext());
+        pieMarkerView.setChartView(mPieChart);
+        mPieChart.setMarker(pieMarkerView);
     }
 
     /**
@@ -217,6 +232,27 @@ public class GasRankingFragment extends Fragment implements View.OnClickListener
                     sendRequest();
                 }
                 monthDialog.cancel();
+            }
+        });
+
+        pieMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                StringBuffer content = new StringBuffer();
+                if (date_type.equals("date")) {
+                    if (type.equals("original")) {
+                        content.append("当日能耗:" + e.getY() + gasUnit);
+                    } else {
+                        content.append("当日能耗:" + e.getY() + "tce");
+                    }
+                } else {
+                    if (type.equals("original")) {
+                        content.append("当月能耗:" + e.getY() + gasUnit);
+                    } else {
+                        content.append("当月能耗:" + e.getY() + "tce");
+                    }
+                }
+                ((TextView) v).setText(content.toString());
             }
         });
     }
@@ -324,6 +360,42 @@ public class GasRankingFragment extends Fragment implements View.OnClickListener
      * @param rankCompanyInfo
      */
     private void parseInfo(RankCompanyInfo rankCompanyInfo) {
+
+        if (style.equals("company")) {
+            if (date_type.equals("month")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1]
+                        + "月 企业耗气排行占比图");
+            } else {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1] + "月"
+                        + dateText.getText().toString().split("-")[2]
+                        + "日 企业耗气排行占比图");
+            }
+        } else {
+            if (date_type.equals("month")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1]
+                        + "月 行业耗气排行占比图");
+            } else {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                        + dateText.getText().toString().split("-")[1] + "月"
+                        + dateText.getText().toString().split("-")[2]
+                        + "日 行业耗气排行占比图");
+            }
+        }
+
+        if (rankCompanyInfo.getChart() != null) {
+            //设置饼图数据
+            ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+            for (int i = 0; i < rankCompanyInfo.getChart().getData().size(); i++) {
+                entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
+                        rankCompanyInfo.getChart().getData().get(i).getName()));
+            }
+
+            pieChartManager.showPieChart(entries, colors);
+            pieChartManager.setLegendPosition();
+        }
 
         gasRankingBeanList.clear();
         if (rankCompanyInfo.getTable_data() != null) {

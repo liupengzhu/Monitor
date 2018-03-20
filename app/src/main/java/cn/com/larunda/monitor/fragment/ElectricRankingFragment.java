@@ -96,13 +96,14 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
 
     private LinearLayout layout;
     private LinearLayout errorLayout;
+
     private RecyclerView recyclerView;
     private ElectricRankingRecyclerAdapter adapter;
     private LinearLayoutManager manager;
     private List<ElectricRankingBean> electricRankingBeanList = new ArrayList<>();
     private String powerUnit;
     private PieChartManager pieChartManager;
-    private XYMarkerView pieMarerView;
+    private XYMarkerView pieMarkerView;
     private String ratio;
 
     @Nullable
@@ -170,9 +171,9 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
 
         mPieChart = view.findViewById(R.id.electric_ranking_fragment_pie);
         pieChartManager = new PieChartManager(mPieChart);
-        pieMarerView = new XYMarkerView(getContext());
-        pieMarerView.setChartView(mPieChart);
-        mPieChart.setMarker(pieMarerView);
+        pieMarkerView = new XYMarkerView(getContext());
+        pieMarkerView.setChartView(mPieChart);
+        mPieChart.setMarker(pieMarkerView);
 
     }
 
@@ -238,7 +239,7 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
             }
         });
 
-        pieMarerView.setBarOnClickListener(new BarOnClickListener() {
+        pieMarkerView.setBarOnClickListener(new BarOnClickListener() {
             @Override
             public void onClick(Entry e, Highlight highlight, View v) {
                 StringBuffer content = new StringBuffer();

@@ -18,6 +18,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +33,15 @@ import cn.com.larunda.monitor.adapter.SteamRecyclerAdapter;
 import cn.com.larunda.monitor.bean.SteamBean;
 import cn.com.larunda.monitor.gson.SteamInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
+import cn.com.larunda.monitor.util.BarChartManager;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.BarOnClickListener;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.monitor.util.XValueFormatter;
+import cn.com.larunda.monitor.util.XYMarkerView;
+import cn.com.larunda.monitor.util.YValueFormatter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -70,6 +79,9 @@ public class SteamFragment extends Fragment implements View.OnClickListener {
     private SteamRecyclerAdapter adapter;
     private LinearLayoutManager manager;
     private List<SteamBean> steamBeanList = new ArrayList<>();
+
+    private BarChartManager barManager;
+    private XYMarkerView barMarkerView;
 
     @Nullable
     @Override
@@ -126,6 +138,35 @@ public class SteamFragment extends Fragment implements View.OnClickListener {
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        mBarChart = view.findViewById(R.id.steam_fragment_chart);
+        barManager = new BarChartManager(mBarChart);
+        barManager.setDescription("");
+        barManager.setxValueFormatter(new XValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if (date_type.equals("year")) {
+                    return (int) value + "月";
+                } else {
+                    return (int) value + "日";
+                }
+            }
+        });
+        barManager.setyValueFormatter(new YValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if (type.equals("original")) {
+                    return (int) Math.ceil(value) + " " + preferences.getString("steam_unit", null) + "";
+                } else {
+                    return (int) Math.ceil(value) + " tce";
+                }
+
+            }
+        });
+
+        barMarkerView = new XYMarkerView(getContext());
+        barMarkerView.setChartView(mBarChart);
+        mBarChart.setMarker(barMarkerView);
     }
 
     /**
@@ -189,6 +230,33 @@ public class SteamFragment extends Fragment implements View.OnClickListener {
                 monthDialog.cancel();
             }
         });
+
+        barMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                if (v instanceof TextView) {
+                    StringBuffer content = new StringBuffer();
+                    if (e.getY() > 0) {
+                        v.setVisibility(View.VISIBLE);
+                    } else {
+                        v.setVisibility(View.GONE);
+                    }
+                    if (e.getX() < 10) {
+                        content.append("时间:" + dateText.getText().toString() + "-0" + (int) e.getX() + "\r\n");
+                    } else {
+                        content.append("时间:" + dateText.getText().toString() + "-" + (int) e.getX() + "\r\n");
+                    }
+                    if (type.equals("original")) {
+
+                        content.append("用汽量:" + e.getY() + preferences.getString("steam_unit", null) + "");
+                    } else {
+                        content.append("用汽量:" + e.getY() + "tce");
+                    }
+
+                    ((TextView) v).setText(content.toString());
+                }
+            }
+        });
     }
 
     /**
@@ -248,6 +316,25 @@ public class SteamFragment extends Fragment implements View.OnClickListener {
      * @param steamInfo
      */
     private void parseSteam(SteamInfo steamInfo) {
+
+        if (steamInfo.getChart() != null) {
+            float values[] = new float[steamInfo.getChart().size()];
+            for (int i = 0; i < steamInfo.getChart().size(); i++) {
+                String value = steamInfo.getChart().get(i);
+                if (value != null) {
+                    values[i] = Float.valueOf(value);
+                }
+            }
+            barManager.showBarChart(values, "", getResources().getColor(R.color.water_color));
+        }
+
+        if (date_type.equals("year")) {
+            textView1.setText(dateText.getText().toString() + "年 区间用汽量柱状图");
+        } else {
+            textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                    + dateText.getText().toString().split("-")[1]
+                    + "月 区间用汽量柱状图");
+        }
 
         steamBeanList.clear();
         if (steamInfo.getTable_data() != null) {

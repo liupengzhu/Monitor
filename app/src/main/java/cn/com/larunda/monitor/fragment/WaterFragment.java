@@ -83,6 +83,7 @@ public class WaterFragment extends Fragment implements View.OnClickListener {
     private WaterRecyclerAdapter adapter;
     private LinearLayoutManager manager;
     private List<WaterBean> waterBeanList = new ArrayList<>();
+
     private BarChartManager barManager;
     private XYMarkerView barMarkerView;
 

@@ -23,7 +23,8 @@
         <activity android:name=".ElectricActivity" />
         <activity android:name=".WaterActivity" />
         <activity android:name=".GasActivity" />
-        <activity android:name=".SteamActivity"></activity>
+        <activity android:name=".SteamActivity" />
+        <activity android:name=".CarbonActivity"></activity>
     </application>
 
 </manifest>

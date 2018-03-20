@@ -103,6 +103,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
     private LineChartManager lineChartManager;
     private PieChartManager pieChartManager;
     private List<String> dateXList = new ArrayList<>();
+    private String pieRatio;
 
     @Nullable
     @Override
@@ -336,7 +337,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onClick(Entry e, Highlight highlight, View v) {
                 StringBuffer content = new StringBuffer();
-                content.append("当日发电量:" + e.getY() + ratio + powerUnit);
+                content.append("当日发电量:" + e.getY() + pieRatio + powerUnit);
                 ((TextView) v).setText(content.toString());
             }
         });
@@ -420,7 +421,8 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
         mLineChart.setVisibility(View.VISIBLE);
         mPieChart.setVisibility(View.VISIBLE);
         mPieLayout.setVisibility(View.VISIBLE);
-        ratio = renewableInfo.getTable_ratio();
+        ratio = renewableInfo.getChart_ratio();
+        pieRatio = renewableInfo.getPie_ratio();
 
         dateXList = renewableInfo.getX_name();
         if (renewableInfo.getChart() != null) {
@@ -471,7 +473,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
                 RenewableBean renewableBean = new RenewableBean();
                 renewableBean.setTime(bean.getTime() + "");
                 renewableBean.setTotal(bean.getValue() + "");
-                renewableBean.setRatio(ratio + powerUnit + "");
+                renewableBean.setRatio(renewableInfo.getTable_ratio() + powerUnit + "");
                 renewableBeanList.add(renewableBean);
             }
         }

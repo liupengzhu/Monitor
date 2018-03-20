@@ -66,6 +66,7 @@ public class MainActivity extends BaseActivity {
                 editor.putString("gas_unit", info.getGas_usage()).commit();
                 editor.putString("energy_unit", info.getEnergy_usage()).commit();
                 editor.putString("carbon_unit", info.getCarbon_emissions()).commit();
+                editor.putString("installed_capacity_unit",info.getInstalled_capacity()).commit();
             }
         }
     }
@@ -89,6 +90,7 @@ public class MainActivity extends BaseActivity {
                     editor.putString("gas_unit", info.getGas_usage()).commit();
                     editor.putString("energy_unit", info.getEnergy_usage()).commit();
                     editor.putString("carbon_unit", info.getCarbon_emissions()).commit();
+                    editor.putString("installed_capacity_unit",info.getInstalled_capacity()).commit();
                 }
             }
         });

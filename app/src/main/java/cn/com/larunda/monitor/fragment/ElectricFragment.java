@@ -105,7 +105,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private List<ElectricBean> electricBeanList = new ArrayList<>();
     private String powerUnit;
     private BarChartManager manager3;
-    private String radio;
+    private String ratio;
     private LineChartManager manager1;
     private List<String> dateXList;
     private PieChartManager manager2;
@@ -117,6 +117,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
     private XYMarkerView barMarkerView;
     private XYMarkerView lineMarkerView;
     private XYMarkerView pieMarkerView;
+    private String pieRatio;
 
 
     @Nullable
@@ -198,7 +199,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 if (type.equals("original")) {
-                    return (int) Math.ceil(value) + " " + radio + powerUnit;
+                    return (int) Math.ceil(value) + " " + ratio + powerUnit;
                 } else {
                     return (int) Math.ceil(value) + " tce";
                 }
@@ -223,7 +224,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 if (type.equals("original")) {
-                    return (int) Math.ceil(value) + " " + radio + powerUnit;
+                    return (int) Math.ceil(value) + " " + ratio + powerUnit;
                 } else {
                     return (int) Math.ceil(value) + " tce";
                 }
@@ -345,18 +346,18 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                     }
                     if (type.equals("original")) {
                         if (rush.get(position) != null) {
-                            content.append("尖:" + rush.get(position) + radio + powerUnit + "\r\n");
+                            content.append("尖:" + rush.get(position) + ratio + powerUnit + "\r\n");
                         }
                         if (peak.get(position) != null) {
-                            content.append("峰:" + peak.get(position) + radio + powerUnit + "\r\n");
+                            content.append("峰:" + peak.get(position) + ratio + powerUnit + "\r\n");
                         }
                         if (normal.get(position) != null) {
-                            content.append("平:" + normal.get(position) + radio + powerUnit + "\r\n");
+                            content.append("平:" + normal.get(position) + ratio + powerUnit + "\r\n");
                         }
                         if (valley.get(position) != null) {
-                            content.append("谷:" + valley.get(position) + radio + powerUnit + "\r\n");
+                            content.append("谷:" + valley.get(position) + ratio + powerUnit + "\r\n");
                         }
-                        content.append("总量:" + e.getY() + radio + powerUnit);
+                        content.append("总量:" + e.getY() + ratio + powerUnit);
                     } else {
                         if (rush.get(position) != null) {
                             content.append("尖:" + rush.get(position) + "tce" + "\r\n");
@@ -393,7 +394,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                 }
                 if (type.equals("original")) {
                     if (electricList.size() == 288 && electricList.get(position) != null) {
-                        content.append("电量:" + electricList.get(position) + radio + powerUnit);
+                        content.append("电量:" + electricList.get(position) + ratio + powerUnit);
                     }
                 } else {
                     if (electricList.size() == 288 && electricList.get(position) != null) {
@@ -409,7 +410,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             public void onClick(Entry e, Highlight highlight, View v) {
                 StringBuffer content = new StringBuffer();
                 if (type.equals("original")) {
-                    content.append("当日能耗:" + e.getY() + radio + powerUnit);
+                    content.append("当日能耗:" + e.getY() + pieRatio + powerUnit);
                 } else {
                     content.append("当日能耗:" + e.getY() + "tce");
                 }
@@ -541,7 +542,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         mLineChart.setVisibility(View.GONE);
         mPieChart.setVisibility(View.GONE);
         mPieLayout.setVisibility(View.GONE);
-        radio = electricInfo.getChart_ratio();
+        ratio = electricInfo.getRatio();
 
 
         if (electricInfo.getChart() != null) {
@@ -622,8 +623,8 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         mPieChart.setVisibility(View.VISIBLE);
         mPieLayout.setVisibility(View.VISIBLE);
 
-        radio = electricInfo.getChart_ratio();
-
+        ratio = electricInfo.getChart_ratio();
+        pieRatio = electricInfo.getPie_ratio();
         dateXList = electricInfo.getX_name();
         if (electricInfo.getChart() != null) {
             electricList = electricInfo.getChart();

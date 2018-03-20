@@ -21,6 +21,7 @@ import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
 import cn.com.larunda.monitor.gson.RenewableInfo;
+import cn.com.larunda.monitor.gson.RenewableRankInfo;
 import cn.com.larunda.monitor.gson.SteamInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.gson.UserToken;
@@ -174,7 +175,13 @@ public class Util {
 
     public static DayRenewableInfo handleDayRenewableInfo(String response) {
         Gson gson = new Gson();
-        DayRenewableInfo renewableInfo = gson.fromJson(response,DayRenewableInfo.class);
+        DayRenewableInfo renewableInfo = gson.fromJson(response, DayRenewableInfo.class);
         return renewableInfo;
+    }
+
+    public static RenewableRankInfo handleRenewableRankInfo(String response) {
+        Gson gson = new Gson();
+        RenewableRankInfo renewableRankInfo = gson.fromJson(response, RenewableRankInfo.class);
+        return renewableRankInfo;
     }
 }

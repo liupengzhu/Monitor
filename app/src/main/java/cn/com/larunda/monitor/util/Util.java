@@ -18,6 +18,7 @@ import cn.com.larunda.monitor.gson.ElectricInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
+import cn.com.larunda.monitor.gson.SteamInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.gson.UserToken;
 import cn.com.larunda.monitor.gson.WaterInfo;
@@ -142,6 +143,12 @@ public class Util {
         Gson gson = new Gson();
         GasInfo gasInfo = gson.fromJson(response, GasInfo.class);
         return gasInfo;
+    }
+
+    public static SteamInfo handleSteamInfo(String response) {
+        Gson gson = new Gson();
+        SteamInfo steamInfo = gson.fromJson(response, SteamInfo.class);
+        return steamInfo;
     }
 
     public static RankCompanyInfo handleRankCompanyInfo(String response) {

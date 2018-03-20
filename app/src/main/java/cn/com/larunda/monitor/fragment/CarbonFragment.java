@@ -17,6 +17,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.highlight.Highlight;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +35,15 @@ import cn.com.larunda.monitor.bean.GasBean;
 import cn.com.larunda.monitor.gson.CarbonInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
+import cn.com.larunda.monitor.util.BarChartManager;
 import cn.com.larunda.monitor.util.BarChartViewPager;
+import cn.com.larunda.monitor.util.BarOnClickListener;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.monitor.util.XValueFormatter;
+import cn.com.larunda.monitor.util.XYMarkerView;
+import cn.com.larunda.monitor.util.YValueFormatter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -68,6 +77,9 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
     private CarbonRecyclerAdapter adapter;
     private LinearLayoutManager manager;
     private List<CarbonBean> carbonBeanList = new ArrayList<>();
+
+    private BarChartManager barManager;
+    private XYMarkerView barMarkerView;
 
     @Nullable
     @Override
@@ -120,6 +132,30 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
         manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        mBarChart = view.findViewById(R.id.carbon_fragment_chart);
+        barManager = new BarChartManager(mBarChart);
+        barManager.setDescription("");
+        barManager.setxValueFormatter(new XValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                if (date_type.equals("year")) {
+                    return (int) value + "月";
+                } else {
+                    return (int) value + "日";
+                }
+            }
+        });
+        barManager.setyValueFormatter(new YValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return (int) Math.ceil(value) + " " + preferences.getString("carbon_unit", null) + "";
+            }
+        });
+
+        barMarkerView = new XYMarkerView(getContext());
+        barMarkerView.setChartView(mBarChart);
+        mBarChart.setMarker(barMarkerView);
     }
 
     /**
@@ -177,6 +213,28 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
                     sendRequest();
                 }
                 monthDialog.cancel();
+            }
+        });
+
+        barMarkerView.setBarOnClickListener(new BarOnClickListener() {
+            @Override
+            public void onClick(Entry e, Highlight highlight, View v) {
+                if (v instanceof TextView) {
+                    StringBuffer content = new StringBuffer();
+                    if (e.getY() > 0) {
+                        v.setVisibility(View.VISIBLE);
+                    } else {
+                        v.setVisibility(View.GONE);
+                    }
+                    if (e.getX() < 10) {
+                        content.append("时间:" + dateText.getText().toString() + "-0" + (int) e.getX() + "\r\n");
+                    } else {
+                        content.append("时间:" + dateText.getText().toString() + "-" + (int) e.getX() + "\r\n");
+                    }
+                    content.append("排放量:" + e.getY() + preferences.getString("carbon_unit", null) + "");
+                    
+                    ((TextView) v).setText(content.toString());
+                }
             }
         });
     }
@@ -239,6 +297,25 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
      * @param carbonInfo
      */
     private void parseCarbon(CarbonInfo carbonInfo) {
+
+        if (carbonInfo.getChart() != null) {
+            float values[] = new float[carbonInfo.getChart().size()];
+            for (int i = 0; i < carbonInfo.getChart().size(); i++) {
+                String value = carbonInfo.getChart().get(i);
+                if (value != null) {
+                    values[i] = Float.valueOf(value);
+                }
+            }
+            barManager.showBarChart(values, "", getResources().getColor(R.color.water_color));
+        }
+
+        if (date_type.equals("year")) {
+            textView1.setText(dateText.getText().toString() + "年 二氧化碳排放量柱状图");
+        } else {
+            textView1.setText(dateText.getText().toString().split("-")[0] + "年"
+                    + dateText.getText().toString().split("-")[1]
+                    + "月 二氧化碳排放量柱状图");
+        }
 
         carbonBeanList.clear();
         if (carbonInfo.getTable_data() != null) {

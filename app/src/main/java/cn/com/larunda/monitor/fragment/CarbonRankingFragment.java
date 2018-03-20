@@ -80,7 +80,7 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
 
     private RadioButton dayButton;
     private RadioGroup timeGroup;
-  
+
     private RadioGroup styleGroup;
 
     private RadioButton companyButton;

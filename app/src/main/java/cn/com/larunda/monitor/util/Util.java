@@ -13,12 +13,14 @@ import com.google.gson.JsonParser;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 
+import cn.com.larunda.monitor.bean.MaintenanceCompany;
 import cn.com.larunda.monitor.gson.CarbonInfo;
 import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.DayRenewableInfo;
 import cn.com.larunda.monitor.gson.ElectricInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
+import cn.com.larunda.monitor.gson.MaintenanceCompanyInfo;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
 import cn.com.larunda.monitor.gson.RenewableInfo;
 import cn.com.larunda.monitor.gson.RenewableRankInfo;
@@ -183,5 +185,11 @@ public class Util {
         Gson gson = new Gson();
         RenewableRankInfo renewableRankInfo = gson.fromJson(response, RenewableRankInfo.class);
         return renewableRankInfo;
+    }
+
+    public static MaintenanceCompanyInfo handleMaintenanceCompanyInfo(String response){
+        Gson gson = new Gson();
+        MaintenanceCompanyInfo info = gson.fromJson(response,MaintenanceCompanyInfo.class);
+        return info;
     }
 }

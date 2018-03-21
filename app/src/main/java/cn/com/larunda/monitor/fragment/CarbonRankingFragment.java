@@ -250,14 +250,16 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                     + "&time=" + time, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshLayout.setRefreshing(false);
-                            layout.setVisibility(View.GONE);
-                            errorLayout.setVisibility(View.VISIBLE);
-                        }
-                    });
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshLayout.setRefreshing(false);
+                                layout.setVisibility(View.GONE);
+                                errorLayout.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
                 }
 
                 @Override
@@ -293,14 +295,16 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                     + "&time=" + time, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshLayout.setRefreshing(false);
-                            layout.setVisibility(View.GONE);
-                            errorLayout.setVisibility(View.VISIBLE);
-                        }
-                    });
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                refreshLayout.setRefreshing(false);
+                                layout.setVisibility(View.GONE);
+                                errorLayout.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
                 }
 
                 @Override

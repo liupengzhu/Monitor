@@ -10,6 +10,7 @@ public class MyApplication extends Application {
 
     public static final String VERSION = "V1.0.1";
     public static final String URL = "http://kunshan.dsmcase.com:90/api/";
+    public static final String IMG_URL = "http://kunshan.dsmcase.com:90";
     public static final String TOKEN = "?_token=";
     private static Context context;
 

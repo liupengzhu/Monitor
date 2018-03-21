@@ -232,7 +232,7 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
                         content.append("时间:" + dateText.getText().toString() + "-" + (int) e.getX() + "\r\n");
                     }
                     content.append("排放量:" + e.getY() + preferences.getString("carbon_unit", null) + "");
-                    
+
                     ((TextView) v).setText(content.toString());
                 }
             }
@@ -251,14 +251,16 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
                 + "&time=" + time, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        layout.setVisibility(View.GONE);
-                        errorLayout.setVisibility(View.VISIBLE);
-                    }
-                });
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            layout.setVisibility(View.GONE);
+                            errorLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
             }
 
             @Override

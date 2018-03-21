@@ -14,12 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.com.larunda.monitor.CompanyListActivity;
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.adapter.MaintenanceSituationAdapter;
@@ -37,7 +39,7 @@ import okhttp3.Response;
  * Created by sddt on 18-3-21.
  */
 
-public class MaintenanceSituationFragment extends Fragment {
+public class MaintenanceSituationFragment extends Fragment implements View.OnClickListener {
     private static final String COMPANY_URL = MyApplication.URL + "integrated_maint_company/lists" + MyApplication.TOKEN;
     private HashMap<String, Integer> iconList = new HashMap<>();
     private List<MaintenanceCompany> companyList = new ArrayList<>();
@@ -48,6 +50,7 @@ public class MaintenanceSituationFragment extends Fragment {
     private String token;
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout errorLayout;
+    private RelativeLayout button;
 
     @Nullable
     @Override
@@ -55,6 +58,7 @@ public class MaintenanceSituationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_maintenance_situation, container, false);
         initData();
         initView(view);
+        initEvent();
         return view;
     }
 
@@ -104,6 +108,23 @@ public class MaintenanceSituationFragment extends Fragment {
                 sendRequest();
             }
         });
+
+        button = view.findViewById(R.id.maintenance_situation_button);
+    }
+
+    /**
+     * 初始化点击事件
+     */
+    private void initEvent() {
+        adapter.setOnClickListener(new MaintenanceSituationAdapter.MaintenanceCompanyOnClickListener() {
+            @Override
+            public void onClick(View v, int id) {
+                Intent intent = new Intent(getContext(), CompanyListActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+        button.setOnClickListener(this);
     }
 
     /**
@@ -188,5 +209,20 @@ public class MaintenanceSituationFragment extends Fragment {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 点击事件监听
+     *
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.maintenance_situation_button:
+                Intent intent = new Intent(getContext(), CompanyListActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

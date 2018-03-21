@@ -1,11 +1,14 @@
 package cn.com.larunda.monitor.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +28,11 @@ public class MaintenanceSituationAdapter extends RecyclerView.Adapter<Maintenanc
     private Context context;
     private List<MaintenanceCompany> companyList = new ArrayList<>();
     private HashMap<String, Integer> iconList = new HashMap<>();
+    private MaintenanceCompanyOnClickListener onClickListener;
+
+    public void setOnClickListener(MaintenanceCompanyOnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
     public MaintenanceSituationAdapter(Context context, List<MaintenanceCompany> companyList, HashMap<String, Integer> iconList) {
         this.context = context;
@@ -46,6 +54,7 @@ public class MaintenanceSituationAdapter extends RecyclerView.Adapter<Maintenanc
         ImageView img3;
         ImageView img4;
         ImageView img5;
+        LinearLayout layout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,13 +71,23 @@ public class MaintenanceSituationAdapter extends RecyclerView.Adapter<Maintenanc
             img3 = itemView.findViewById(R.id.maintenance_situation_item_img3);
             img4 = itemView.findViewById(R.id.maintenance_situation_item_img4);
             img5 = itemView.findViewById(R.id.maintenance_situation_item_img5);
+            layout = itemView.findViewById(R.id.maintenance_situation_item_layout);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_maintenance_situation, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = viewHolder.getAdapterPosition();
+                if (onClickListener != null) {
+                    onClickListener.onClick(v, companyList.get(position).getId());
+                }
+            }
+        });
         return viewHolder;
     }
 
@@ -126,5 +145,9 @@ public class MaintenanceSituationAdapter extends RecyclerView.Adapter<Maintenanc
     @Override
     public int getItemCount() {
         return companyList.size();
+    }
+
+    public interface MaintenanceCompanyOnClickListener {
+        void onClick(View v, int id);
     }
 }

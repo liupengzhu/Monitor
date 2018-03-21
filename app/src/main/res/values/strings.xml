@@ -26,4 +26,6 @@
     <string name="用气详情">用气详情</string>
     <string name="用汽详情">用汽详情</string>
     <string name="发电详情">发电详情</string>
+    <string name="维保总览">维保总览</string>
+    <item name="tag_first" type="id"></item>
 </resources>

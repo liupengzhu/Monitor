@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity {
                 String content = response.body().string();
                 if (Util.isGoodJson(content)) {
                     editor.putString("unit", content).commit();
-                    UnitInfo info = Util.handleUnitInfo(unit);
+                    UnitInfo info = Util.handleUnitInfo(content);
                     editor.putString("power_unit", info.getPower()).commit();
                     editor.putString("water_unit", info.getWater_usage()).commit();
                     editor.putString("steam_unit", info.getSteam_usage()).commit();

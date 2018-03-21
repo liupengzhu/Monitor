@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.larunda.monitor.R;
-import cn.com.larunda.monitor.adapter.GasFragmentAdapter;
 import cn.com.larunda.monitor.adapter.MaintenanceFragmentAdapter;
 import cn.com.larunda.monitor.util.CustomViewPager;
 import cn.com.larunda.monitor.util.Util;
@@ -37,18 +36,18 @@ public class MaintenanceFragment extends Fragment {
         View view;
         if (container.getTag(R.id.tag_first) == null) {
             view = inflater.inflate(R.layout.fragment_maintenance, container, false);
+            init();
+            initView(view);
+            initEvent();
             container.setTag(R.id.tag_first, view);
         } else {
             view = (View) container.getTag(R.id.tag_first);
         }
-        init();
-        initView(view);
-        initEvent();
         return view;
     }
 
     private void init() {
-        fragmentList.add(new MaintenanceSurveyFragment());
+        fragmentList.add(new MaintenanceSituationFragment());
         fragmentList.add(new MaintenanceWarningFragment());
         fragmentList.add(new MaintenanceWorksheetFragment());
         titleList.add("维保概况");

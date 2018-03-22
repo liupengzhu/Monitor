@@ -60,12 +60,21 @@ public class FilterCompanyAdapter extends RecyclerView.Adapter<FilterCompanyAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         FilterCompanyBean companyBean = filterCompanyBeanList.get(position);
         holder.name.setText(companyBean.getName() + "");
-        if ((companyBean.getTotal() != null && !companyBean.getTotal().equals("0"))
-                || (companyBean.getUnderway() != null && !companyBean.getUnderway().equals("0"))) {
-            holder.type.setVisibility(View.VISIBLE);
-            holder.type.setText(companyBean.getUnderway() + "/" + companyBean.getTotal());
+        if (companyBean.getType().equals("alarm")) {
+            if ((companyBean.getTotal() != null && !companyBean.getTotal().equals("0"))
+                    || (companyBean.getUnderway() != null && !companyBean.getUnderway().equals("0"))) {
+                holder.type.setVisibility(View.VISIBLE);
+                holder.type.setText(companyBean.getUnderway() + "/" + companyBean.getTotal());
+            } else {
+                holder.type.setVisibility(View.GONE);
+            }
         } else {
-            holder.type.setVisibility(View.GONE);
+            if (companyBean.getTotal() != null && !companyBean.getTotal().equals("0")) {
+                holder.type.setVisibility(View.VISIBLE);
+                holder.type.setText(companyBean.getTotal() + "");
+            } else {
+                holder.type.setVisibility(View.GONE);
+            }
         }
     }
 

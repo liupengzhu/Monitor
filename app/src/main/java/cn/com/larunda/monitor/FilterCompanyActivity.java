@@ -23,6 +23,7 @@ import java.util.List;
 import cn.com.larunda.monitor.adapter.FilterCompanyAdapter;
 import cn.com.larunda.monitor.bean.FilterCompanyBean;
 import cn.com.larunda.monitor.gson.FilterCompanyInfo;
+import cn.com.larunda.monitor.gson.FilterCompanyWorksheetInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
@@ -95,28 +96,64 @@ public class FilterCompanyActivity extends AppCompatActivity implements View.OnC
             public void onResponse(Call call, Response response) throws IOException {
                 String content = response.body().string();
                 if (Util.isGoodJson(content)) {
-                    final FilterCompanyInfo info = Util.handleFilterCompanyInfo(content);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (info != null && info.getError() == null) {
-                                parseInfo(info);
-                                refreshLayout.setRefreshing(false);
-                                recyclerView.setVisibility(View.VISIBLE);
-                                errorLayout.setVisibility(View.GONE);
-                            } else {
-                                Intent intent = new Intent(FilterCompanyActivity.this, LoginActivity.class);
-                                intent.putExtra("token_timeout", "登录超时");
-                                preferences.edit().putString("token", null).commit();
-                                startActivity(intent);
-                                ActivityCollector.finishAllActivity();
+                    if (type.equals("alarm")) {
+                        final FilterCompanyInfo info = Util.handleFilterCompanyInfo(content);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (info != null && info.getError() == null) {
+                                    parseInfo(info);
+                                    refreshLayout.setRefreshing(false);
+                                    recyclerView.setVisibility(View.VISIBLE);
+                                    errorLayout.setVisibility(View.GONE);
+                                } else {
+                                    Intent intent = new Intent(FilterCompanyActivity.this, LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        final FilterCompanyWorksheetInfo info = Util.handleFilterCompanyWorksheetInfo(content);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (info != null && info.getError() == null) {
+                                    parseInfoForWorksheet(info);
+                                    refreshLayout.setRefreshing(false);
+                                    recyclerView.setVisibility(View.VISIBLE);
+                                    errorLayout.setVisibility(View.GONE);
+                                } else {
+                                    Intent intent = new Intent(FilterCompanyActivity.this, LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
+                            }
+                        });
+                    }
 
                 }
             }
         });
+    }
+
+    private void parseInfoForWorksheet(FilterCompanyWorksheetInfo info) {
+        companyBeanList.clear();
+        if (info.getData() != null) {
+            for (FilterCompanyWorksheetInfo.DataBean dataBean : info.getData()) {
+                FilterCompanyBean companyBean = new FilterCompanyBean();
+                companyBean.setId(dataBean.getId());
+                companyBean.setName(dataBean.getName());
+                companyBean.setTotal(dataBean.getNum() + "");
+                companyBean.setType("worksheet");
+                companyBeanList.add(companyBean);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void parseInfo(FilterCompanyInfo info) {
@@ -128,6 +165,7 @@ public class FilterCompanyActivity extends AppCompatActivity implements View.OnC
                 companyBean.setName(dataBean.getName());
                 companyBean.setTotal(dataBean.getNum().getTotal());
                 companyBean.setUnderway(dataBean.getNum().getUnderway());
+                companyBean.setType("alarm");
                 companyBeanList.add(companyBean);
             }
         }

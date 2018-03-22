@@ -9,6 +9,7 @@ public class FilterCompanyBean {
     private String name;
     private String total;
     private String underway;
+    private String type;
 
     public FilterCompanyBean() {
         super();
@@ -44,5 +45,13 @@ public class FilterCompanyBean {
 
     public void setUnderway(String underway) {
         this.underway = underway;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

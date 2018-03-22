@@ -19,6 +19,7 @@ import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.DayRenewableInfo;
 import cn.com.larunda.monitor.gson.ElectricInfo;
 import cn.com.larunda.monitor.gson.FilterCompanyInfo;
+import cn.com.larunda.monitor.gson.FilterCompanyWorksheetInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.MaintenanceCompanyInfo;
@@ -30,6 +31,7 @@ import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.gson.UserToken;
 import cn.com.larunda.monitor.gson.WarningInfo;
 import cn.com.larunda.monitor.gson.WaterInfo;
+import cn.com.larunda.monitor.gson.WorksheetInfo;
 
 /**
  * Created by sddt on 18-3-14.
@@ -207,9 +209,21 @@ public class Util {
         return warningInfo;
     }
 
+    public static FilterCompanyWorksheetInfo handleFilterCompanyWorksheetInfo(String response) {
+        Gson gson = new Gson();
+        FilterCompanyWorksheetInfo info = gson.fromJson(response,FilterCompanyWorksheetInfo.class);
+        return info;
+    }
+
     public static FilterCompanyInfo handleFilterCompanyInfo(String response) {
         Gson gson = new Gson();
         FilterCompanyInfo info = gson.fromJson(response,FilterCompanyInfo.class);
         return info;
+    }
+
+    public static WorksheetInfo handleworksheetInfo(String response) {
+        Gson gson = new Gson();
+        WorksheetInfo worksheetInfo = gson.fromJson(response, WorksheetInfo.class);
+        return worksheetInfo;
     }
 }

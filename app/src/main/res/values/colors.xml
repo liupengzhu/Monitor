@@ -43,4 +43,8 @@
     <color name="type_yellow_color2">#1ff18e24</color>
     <color name="type_red_color1">#ee535a</color>
     <color name="type_red_color2">#1fee535a</color>
+    <color name="type_blue_color1">#1657b4</color>
+    <color name="type_blue_color2">#1f1657b4</color>
+    <color name="type_gray_color1">#999999</color>
+    <color name="type_gray_color2">#1f999999</color>
 </resources>

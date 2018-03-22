@@ -13,7 +13,6 @@ import com.google.gson.JsonParser;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 
-import cn.com.larunda.monitor.bean.MaintenanceCompany;
 import cn.com.larunda.monitor.gson.CarbonInfo;
 import cn.com.larunda.monitor.gson.CompanyInfo;
 import cn.com.larunda.monitor.gson.DayElectricInfo;

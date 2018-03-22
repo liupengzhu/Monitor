@@ -7,11 +7,10 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
-import com.google.gson.JsonParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -145,6 +144,7 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String content = response.body().string();
+                Log.d("main", content);
                 if (Util.isGoodJson(content)) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -178,7 +178,7 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
     private void parseInfo(CompanyInfo info) {
         companyList.clear();
         if (info.getData() != null) {
-            for (CompanyInfo.DataBean dataBean : info.getData()) {
+            for (CompanyInfo.DataBeanX dataBean : info.getData()) {
                 Company company = new Company();
                 List<String> typeList = new ArrayList<>();
                 List<String> deviceList = new ArrayList<>();
@@ -188,11 +188,11 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
                 int normal = dataBean.getDevice_data().getDevice_total()
                         - dataBean.getDevice_data().getError_total();
                 company.setAddress(dataBean.getCompany_address());
-                company.setAlarm(dataBean.getAlarm_data());
-                company.setId(dataBean.getCompany_id());
+                company.setAlarm(dataBean.getAlarm_data() + "");
+                company.setId(Integer.parseInt(dataBean.getCompany_id()));
                 company.setElectric(dataBean.getDevice_data().getMeter_total_num() + "");
                 company.setIndustry(dataBean.getCompany_industry());
-                company.setMaintenance(dataBean.getMaintenance_num());
+                company.setMaintenance(dataBean.getMaintenance_num() + "");
                 company.setName(dataBean.getCompany_name());
                 company.setTel(dataBean.getCompany_tel());
                 company.setTotal(normal + "");
@@ -200,50 +200,14 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
 
                     company.setAngle((float) normal / (float) dataBean.getDevice_data().getDevice_total() * 360);
                 }
-
                 if (dataBean.getMaintenance_type() != null) {
-                    for (CompanyInfo.DataBean.MaintenanceTypeBean typeBean : dataBean.getMaintenance_type()) {
+                    for (CompanyInfo.DataBeanX.MaintenanceTypeBean typeBean : dataBean.getMaintenance_type()) {
                         typeList.add(typeBean.getName());
                     }
                 }
-                if (dataBean.getDevice_data().getOther_device().getMonitor() != null) {
-                    if (dataBean.getDevice_data().getOther_device().getMonitor().getTotal() > 0) {
-                        deviceList.add("监控" + " " + dataBean.getDevice_data().getOther_device().getMonitor().getTotal());
-                    }
-                }
-                if (dataBean.getDevice_data().getOther_device().getAirConditioner() != null) {
-                    if (dataBean.getDevice_data().getOther_device().getAirConditioner().getTotal() > 0) {
-                        deviceList.add("空调" + " " + dataBean.getDevice_data().getOther_device().getAirConditioner().getTotal());
-                    }
-                }
-                if (dataBean.getDevice_data().getOther_device().getAirCompressor() != null) {
-                    if (dataBean.getDevice_data().getOther_device().getAirCompressor().getTotal() > 0) {
-                        deviceList.add("空压机" + " " + dataBean.getDevice_data().getOther_device().getAirCompressor().getTotal());
-                    }
-                }
-                if (dataBean.getDevice_data().getOther_device().getBoiler() != null) {
-                    if (dataBean.getDevice_data().getOther_device().getBoiler().getTotal() > 0) {
-                        deviceList.add("锅炉" + " " + dataBean.getDevice_data().getOther_device().getBoiler().getTotal());
-                    }
-                }
-                if (dataBean.getDevice_data().getOther_device().getWaterPump() != null) {
-                    if (dataBean.getDevice_data().getOther_device().getWaterPump().getTotal() > 0) {
-                        deviceList.add("水泵" + " " + dataBean.getDevice_data().getOther_device().getWaterPump().getTotal());
-                    }
-                }
-                if (dataBean.getDevice_data().getOther_device().getIceMaker() != null) {
-                    if (dataBean.getDevice_data().getOther_device().getIceMaker().getTotal() > 0) {
-                        deviceList.add("冰机" + " " + dataBean.getDevice_data().getOther_device().getIceMaker().getTotal());
-                    }
-                }
-                if (dataBean.getDevice_data().getOther_device().getFan() != null) {
-                    if (dataBean.getDevice_data().getOther_device().getFan().getTotal() > 0) {
-                        deviceList.add("风机" + " " + dataBean.getDevice_data().getOther_device().getFan().getTotal());
-                    }
-                }
-                if (dataBean.getDevice_data().getOther_device().getLighting() != null) {
-                    if (dataBean.getDevice_data().getOther_device().getLighting().getTotal() > 0) {
-                        deviceList.add("照明" + " " + dataBean.getDevice_data().getOther_device().getLighting().getTotal());
+                if (dataBean.getDevice_data().getOther_device() != null) {
+                    for (CompanyInfo.DataBeanX.DeviceDataBean.OtherDeviceBean deviceBean : dataBean.getDevice_data().getOther_device()) {
+                        deviceList.add(deviceBean.getName() + " " + deviceBean.getData().getTotal());
                     }
                 }
                 company.setTypeList(typeList);

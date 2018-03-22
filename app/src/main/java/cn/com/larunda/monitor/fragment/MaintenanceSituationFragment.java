@@ -59,15 +59,16 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
         initData();
         initView(view);
         initEvent();
+        sendRequest();
+        recyclerView.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        sendRequest();
-        recyclerView.setVisibility(View.GONE);
-        errorLayout.setVisibility(View.GONE);
+
     }
 
     /**

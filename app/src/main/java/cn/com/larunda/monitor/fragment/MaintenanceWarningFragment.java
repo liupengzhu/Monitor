@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.larunda.dialog.DateDialog;
+import cn.com.larunda.monitor.FilterCompanyActivity;
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.adapter.WarningAdapter;
@@ -37,13 +38,15 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by sddt on 18-3-21.
  */
 
 public class MaintenanceWarningFragment extends Fragment implements View.OnClickListener {
     private static final String ALARM_URL = MyApplication.URL + "integrated_maint_company/alarm_lists" + MyApplication.TOKEN;
-
+    private static final int REQUEST_CODE = 11;
     private SharedPreferences preferences;
     private String token;
 
@@ -68,16 +71,17 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_maintenance_warning, container, false);
         initView(view);
         initEvent();
+        initType();
+        sendRequest();
+        recyclerView.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        initType();
-        sendRequest();
-        recyclerView.setVisibility(View.GONE);
-        errorLayout.setVisibility(View.GONE);
+
     }
 
     /**
@@ -172,6 +176,8 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                 dialog.cancel();
             }
         });
+
+        button.setOnClickListener(this);
     }
 
     /**
@@ -184,6 +190,11 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         switch (v.getId()) {
             case R.id.maintenance_warning_date_text:
                 dialog.show();
+                break;
+            case R.id.maintenance_warning_search_button:
+                Intent intent = new Intent(getContext(), FilterCompanyActivity.class);
+                intent.putExtra("type", "alarm");
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
         }
     }
@@ -211,6 +222,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
             companyData = "&company_id=" + company_id;
         }
         refreshLayout.setRefreshing(true);
+        recyclerView.scrollToPosition(0);
         HttpUtil.sendGetRequestWithHttp(ALARM_URL + token + timeData + statusData + companyData, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -286,4 +298,15 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         spinner.setSelection(0);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (resultCode == RESULT_OK && data != null) {
+                    company_id = data.getIntExtra("id", 0);
+                    sendRequest();
+                }
+                break;
+        }
+    }
 }

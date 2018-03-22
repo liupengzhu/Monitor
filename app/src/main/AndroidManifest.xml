@@ -26,7 +26,10 @@
         <activity android:name=".SteamActivity" />
         <activity android:name=".CarbonActivity" />
         <activity android:name=".RenewableActivity" />
-        <activity android:name=".CompanyListActivity"></activity>
+        <activity android:name=".CompanyListActivity" />
+        <activity android:name=".FilterCompanyActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            ></activity>
     </application>
 
 </manifest>

@@ -19,6 +19,7 @@ import cn.com.larunda.monitor.gson.CompanyInfo;
 import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.DayRenewableInfo;
 import cn.com.larunda.monitor.gson.ElectricInfo;
+import cn.com.larunda.monitor.gson.FilterCompanyInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.MaintenanceCompanyInfo;
@@ -205,5 +206,11 @@ public class Util {
         Gson gson = new Gson();
         WarningInfo warningInfo = gson.fromJson(response, WarningInfo.class);
         return warningInfo;
+    }
+
+    public static FilterCompanyInfo handleFilterCompanyInfo(String response) {
+        Gson gson = new Gson();
+        FilterCompanyInfo info = gson.fromJson(response,FilterCompanyInfo.class);
+        return info;
     }
 }

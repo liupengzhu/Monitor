@@ -39,4 +39,8 @@
     <color name="rank_color9">#75c2d2</color>
     <color name="rank_color10">#888fe6</color>
     <color name="rank_color11">#4c494d</color>
+    <color name="type_yellow_color1">#f18e24</color>
+    <color name="type_yellow_color2">#1ff18e24</color>
+    <color name="type_red_color1">#ee535a</color>
+    <color name="type_red_color2">#1fee535a</color>
 </resources>

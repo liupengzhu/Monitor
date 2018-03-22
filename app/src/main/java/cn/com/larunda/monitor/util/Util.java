@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 
 import cn.com.larunda.monitor.bean.MaintenanceCompany;
 import cn.com.larunda.monitor.gson.CarbonInfo;
+import cn.com.larunda.monitor.gson.CompanyInfo;
 import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.DayRenewableInfo;
 import cn.com.larunda.monitor.gson.ElectricInfo;
@@ -187,9 +188,15 @@ public class Util {
         return renewableRankInfo;
     }
 
-    public static MaintenanceCompanyInfo handleMaintenanceCompanyInfo(String response){
+    public static MaintenanceCompanyInfo handleMaintenanceCompanyInfo(String response) {
         Gson gson = new Gson();
-        MaintenanceCompanyInfo info = gson.fromJson(response,MaintenanceCompanyInfo.class);
+        MaintenanceCompanyInfo info = gson.fromJson(response, MaintenanceCompanyInfo.class);
+        return info;
+    }
+
+    public static CompanyInfo handleCompanyInfo(String response) {
+        Gson gson = new Gson();
+        CompanyInfo info = gson.fromJson(response, CompanyInfo.class);
         return info;
     }
 }

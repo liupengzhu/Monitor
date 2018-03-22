@@ -111,31 +111,41 @@ public class MaintenanceSituationAdapter extends RecyclerView.Adapter<Maintenanc
         holder.company.setText(company.getCompany() + "");
         if (company.getTypeList().size() >= 1) {
             holder.img1.setVisibility(View.VISIBLE);
-            holder.img1.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(0))));
+            if (iconList.get(company.getTypeList().get(0)) != null) {
+                holder.img1.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(0))));
+            }
         } else {
             holder.img1.setVisibility(View.GONE);
         }
         if (company.getTypeList().size() >= 2) {
             holder.img2.setVisibility(View.VISIBLE);
-            holder.img2.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(1))));
+            if (iconList.get(company.getTypeList().get(1)) != null) {
+                holder.img2.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(1))));
+            }
         } else {
             holder.img2.setVisibility(View.GONE);
         }
         if (company.getTypeList().size() >= 3) {
             holder.img3.setVisibility(View.VISIBLE);
-            holder.img3.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(2))));
+            if (iconList.get(company.getTypeList().get(2)) != null) {
+                holder.img3.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(2))));
+            }
         } else {
             holder.img3.setVisibility(View.GONE);
         }
         if (company.getTypeList().size() >= 4) {
             holder.img4.setVisibility(View.VISIBLE);
-            holder.img4.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(3))));
+            if (iconList.get(company.getTypeList().get(3)) != null) {
+                holder.img4.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(3))));
+            }
         } else {
             holder.img4.setVisibility(View.GONE);
         }
         if (company.getTypeList().size() >= 5) {
             holder.img5.setVisibility(View.VISIBLE);
-            holder.img5.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(4))));
+            if (iconList.get(company.getTypeList().get(4)) != null) {
+                holder.img5.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(4))));
+            }
         } else {
             holder.img5.setVisibility(View.GONE);
         }

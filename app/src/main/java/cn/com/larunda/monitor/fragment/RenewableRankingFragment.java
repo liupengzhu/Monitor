@@ -84,6 +84,7 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
     @Override
     public void onStart() {
         super.onStart();
+        page = 1;
         sendRequest();
         layout.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
@@ -113,6 +114,7 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                page = 1;
                 sendRequest();
             }
         });
@@ -210,7 +212,7 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
         String time = dateText.getText().toString().trim();
         refreshLayout.setRefreshing(true);
         HttpUtil.sendGetRequestWithHttp(RENEWABLE_RANK_URL + token + "&date_type=" + date_type
-                + "&time=" + time + "&page=" + (page + 1), new Callback() {
+                + "&time=" + time + "&page=" + page, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -254,7 +256,7 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
     }
 
     private void parseAddInfo(RenewableRankInfo renewableRankInfo) {
-        page = renewableRankInfo.getCurrent_page();
+        page = renewableRankInfo.getCurrent_page() + 1;
         maxPage = renewableRankInfo.getLast_page();
         if (renewableRankInfo.getData() != null) {
             for (RenewableRankInfo.DataBean bean : renewableRankInfo.getData()) {
@@ -333,7 +335,7 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
      * @param renewableRankInfo
      */
     private void parseInfo(RenewableRankInfo renewableRankInfo) {
-        page = renewableRankInfo.getCurrent_page();
+        page = renewableRankInfo.getCurrent_page() + 1;
         maxPage = renewableRankInfo.getLast_page();
         renewableRankingBeanList.clear();
         if (renewableRankInfo.getData() != null) {

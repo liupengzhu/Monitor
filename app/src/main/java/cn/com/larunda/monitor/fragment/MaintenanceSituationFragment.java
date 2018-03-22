@@ -80,6 +80,10 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
         iconList.put("空调", R.drawable.air_conditioner_icon);
         iconList.put("锅炉", R.drawable.boiler_icon);
         iconList.put("水泵", R.drawable.water_pump_icon);
+        iconList.put("冰机", R.drawable.ice_maker_icon);
+        iconList.put("风机", R.drawable.fan_icon);
+        iconList.put("照明", R.drawable.lighting_icon);
+        iconList.put("监控", R.drawable.monitor_icon);
     }
 
     /**

@@ -39,4 +39,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation project(':dialog')
+    implementation project(':circleview')
 }

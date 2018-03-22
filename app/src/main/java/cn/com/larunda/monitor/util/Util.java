@@ -28,6 +28,7 @@ import cn.com.larunda.monitor.gson.RenewableRankInfo;
 import cn.com.larunda.monitor.gson.SteamInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.gson.UserToken;
+import cn.com.larunda.monitor.gson.WarningInfo;
 import cn.com.larunda.monitor.gson.WaterInfo;
 
 /**
@@ -198,5 +199,11 @@ public class Util {
         Gson gson = new Gson();
         CompanyInfo info = gson.fromJson(response, CompanyInfo.class);
         return info;
+    }
+
+    public static WarningInfo handleWarningInfo(String response) {
+        Gson gson = new Gson();
+        WarningInfo warningInfo = gson.fromJson(response, WarningInfo.class);
+        return warningInfo;
     }
 }

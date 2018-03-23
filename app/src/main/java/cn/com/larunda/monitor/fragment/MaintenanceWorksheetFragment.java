@@ -261,7 +261,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                WorksheetInfo info = Util.handleworksheetInfo(content);
+                                WorksheetInfo info = Util.handleWorksheetInfo(content);
                                 if (info != null && info.getError() == null) {
                                     parseInfo(info);
                                     refreshLayout.setRefreshing(false);

@@ -23,6 +23,7 @@ import cn.com.larunda.monitor.gson.FilterCompanyWorksheetInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.MaintenanceCompanyInfo;
+import cn.com.larunda.monitor.gson.MessageInfo;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
 import cn.com.larunda.monitor.gson.RenewableInfo;
 import cn.com.larunda.monitor.gson.RenewableRankInfo;
@@ -221,9 +222,15 @@ public class Util {
         return info;
     }
 
-    public static WorksheetInfo handleworksheetInfo(String response) {
+    public static WorksheetInfo handleWorksheetInfo(String response) {
         Gson gson = new Gson();
         WorksheetInfo worksheetInfo = gson.fromJson(response, WorksheetInfo.class);
         return worksheetInfo;
+    }
+
+    public static MessageInfo handleMessageInfo(String response){
+        Gson gson = new Gson();
+        MessageInfo messageInfo = gson.fromJson(response,MessageInfo.class);
+        return messageInfo;
     }
 }

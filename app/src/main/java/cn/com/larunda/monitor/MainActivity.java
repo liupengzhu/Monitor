@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public static DrawerLayout drawerLayout;
 
     private Button cancelButton;
+    private Button rePasswordButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     private void initEvent() {
         cancelButton.setOnClickListener(this);
+        rePasswordButton.setOnClickListener(this);
     }
 
     @Override
@@ -130,6 +132,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         token = preferences.getString("token", null);
 
         cancelButton = findViewById(R.id.user_menu_cancel);
+        rePasswordButton = findViewById(R.id.user_menu_re_password);
     }
 
     /**
@@ -223,6 +226,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 editor.putString("token", null).commit();
                 finish();
+                break;
+            case R.id.user_menu_re_password:
+                Intent intent1 = new Intent(MainActivity.this, RePasswordActivity.class);
+                startActivity(intent1);
+                break;
+            default:
                 break;
         }
     }

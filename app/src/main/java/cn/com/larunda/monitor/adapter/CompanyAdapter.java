@@ -29,6 +29,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     private Context context;
     private List<Company> companyList = new ArrayList<>();
     private HashMap<String, Integer> iconList = new HashMap<>();
+    private AlarmOnClickListener alarmOnClickListener;
+    private MaintenanceOnClickListener maintenanceOnClickListener;
 
     public CompanyAdapter(Context context, List<Company> companyList, HashMap<String, Integer> iconList) {
         this.context = context;
@@ -84,7 +86,24 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_company_list, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
+        viewHolder.alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (alarmOnClickListener != null) {
+                    alarmOnClickListener.onClick(v, companyList.get(viewHolder.getAdapterPosition()).getId());
+                }
+            }
+        });
+
+        viewHolder.maintenance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (maintenanceOnClickListener != null) {
+                    maintenanceOnClickListener.onClick(v, companyList.get(viewHolder.getAdapterPosition()).getId());
+                }
+            }
+        });
         return viewHolder;
     }
 
@@ -194,5 +213,21 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     @Override
     public int getItemCount() {
         return companyList.size();
+    }
+
+    public interface AlarmOnClickListener {
+        void onClick(View v, int id);
+    }
+
+    public interface MaintenanceOnClickListener {
+        void onClick(View v, int id);
+    }
+
+    public void setAlarmOnClickListener(AlarmOnClickListener alarmOnClickListener) {
+        this.alarmOnClickListener = alarmOnClickListener;
+    }
+
+    public void setMaintenanceOnClickListener(MaintenanceOnClickListener maintenanceOnClickListener) {
+        this.maintenanceOnClickListener = maintenanceOnClickListener;
     }
 }

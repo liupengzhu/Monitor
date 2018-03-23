@@ -114,6 +114,21 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
      */
     private void initEvent() {
         backButton.setOnClickListener(this);
+        adapter.setAlarmOnClickListener(new CompanyAdapter.AlarmOnClickListener() {
+            @Override
+            public void onClick(View v, int id) {
+                Intent intent = new Intent(CompanyListActivity.this, AlarmActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
+        adapter.setMaintenanceOnClickListener(new CompanyAdapter.MaintenanceOnClickListener() {
+            @Override
+            public void onClick(View v, int id) {
+
+            }
+        });
     }
 
     @Override

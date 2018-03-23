@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.larunda.dialog.DateDialog;
+import cn.com.larunda.monitor.AlarmActivity;
 import cn.com.larunda.monitor.FilterCompanyActivity;
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
@@ -81,7 +82,12 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
     @Override
     public void onStart() {
         super.onStart();
-
+        if (getActivity() instanceof AlarmActivity) {
+            initType();
+            sendRequest();
+            recyclerView.setVisibility(View.GONE);
+            errorLayout.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -293,7 +299,13 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
      * 重置状态
      */
     private void initType() {
-        company_id = 0;
+        if (getActivity() instanceof AlarmActivity) {
+            company_id = AlarmActivity.id;
+            button.setVisibility(View.GONE);
+        } else {
+            company_id = 0;
+            button.setVisibility(View.VISIBLE);
+        }
         textView.setText("选择时间");
         spinner.setSelection(0);
     }

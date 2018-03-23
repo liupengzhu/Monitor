@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 
 import cn.com.larunda.monitor.gson.CarbonInfo;
 import cn.com.larunda.monitor.gson.CompanyInfo;
+import cn.com.larunda.monitor.gson.CompanyRankInfo;
 import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.DayRenewableInfo;
 import cn.com.larunda.monitor.gson.ElectricInfo;
@@ -24,6 +25,7 @@ import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.MaintenanceCompanyInfo;
 import cn.com.larunda.monitor.gson.MessageInfo;
+import cn.com.larunda.monitor.gson.PowerUsageInfo;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
 import cn.com.larunda.monitor.gson.RenewableInfo;
 import cn.com.larunda.monitor.gson.RenewableRankInfo;
@@ -212,13 +214,13 @@ public class Util {
 
     public static FilterCompanyWorksheetInfo handleFilterCompanyWorksheetInfo(String response) {
         Gson gson = new Gson();
-        FilterCompanyWorksheetInfo info = gson.fromJson(response,FilterCompanyWorksheetInfo.class);
+        FilterCompanyWorksheetInfo info = gson.fromJson(response, FilterCompanyWorksheetInfo.class);
         return info;
     }
 
     public static FilterCompanyInfo handleFilterCompanyInfo(String response) {
         Gson gson = new Gson();
-        FilterCompanyInfo info = gson.fromJson(response,FilterCompanyInfo.class);
+        FilterCompanyInfo info = gson.fromJson(response, FilterCompanyInfo.class);
         return info;
     }
 
@@ -228,9 +230,21 @@ public class Util {
         return worksheetInfo;
     }
 
-    public static MessageInfo handleMessageInfo(String response){
+    public static MessageInfo handleMessageInfo(String response) {
         Gson gson = new Gson();
-        MessageInfo messageInfo = gson.fromJson(response,MessageInfo.class);
+        MessageInfo messageInfo = gson.fromJson(response, MessageInfo.class);
         return messageInfo;
+    }
+
+    public static PowerUsageInfo handlePowerUsageInfo(String response) {
+        Gson gson = new Gson();
+        PowerUsageInfo info = gson.fromJson(response, PowerUsageInfo.class);
+        return info;
+    }
+
+    public static CompanyRankInfo handleCompanyRankInfo(String response) {
+        Gson gson = new Gson();
+        CompanyRankInfo info = gson.fromJson(response, CompanyRankInfo.class);
+        return info;
     }
 }

@@ -15,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
 
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.MainActivity;
+import cn.com.larunda.monitor.PowerActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
@@ -63,6 +65,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private LinearLayout errorLayout;
 
     private Button leftButton;
+
+    private RelativeLayout button;
 
     @Nullable
     @Override
@@ -112,6 +116,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
 
         leftButton = view.findViewById(R.id.home_left_button);
+
+        button = view.findViewById(R.id.home_button);
     }
 
     @Override
@@ -204,6 +210,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void initEvent() {
         leftButton.setOnClickListener(this);
+        button.setOnClickListener(this);
     }
 
     @Override
@@ -211,6 +218,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.home_left_button:
                 MainActivity.drawerLayout.openDrawer(Gravity.START);
+                break;
+            case R.id.home_button:
+                Intent intent = new Intent(getContext(), PowerActivity.class);
+                startActivity(intent);
+                break;
+            default:
                 break;
         }
     }

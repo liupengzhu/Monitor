@@ -30,7 +30,8 @@
         <activity
             android:name=".FilterCompanyActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".RePasswordActivity"></activity>
+        <activity android:name=".RePasswordActivity" />
+        <activity android:name=".PowerActivity"></activity>
     </application>
 
 </manifest>

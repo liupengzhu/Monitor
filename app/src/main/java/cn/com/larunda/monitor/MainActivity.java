@@ -1,5 +1,6 @@
 package cn.com.larunda.monitor;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +32,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
     private String[] titles = {"数据总览", "综合监控", "用能地图", "维保总览"};
@@ -45,6 +47,8 @@ public class MainActivity extends BaseActivity {
     private String unit;
     public static DrawerLayout drawerLayout;
 
+    private Button cancelButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +56,14 @@ public class MainActivity extends BaseActivity {
         initView();
         initTabs();
         unit = preferences.getString("unit", null);
+        initEvent();
+    }
+
+    /**
+     * 初始化点击事件
+     */
+    private void initEvent() {
+        cancelButton.setOnClickListener(this);
     }
 
     @Override
@@ -117,6 +129,7 @@ public class MainActivity extends BaseActivity {
         editor = preferences.edit();
         token = preferences.getString("token", null);
 
+        cancelButton = findViewById(R.id.user_menu_cancel);
     }
 
     /**
@@ -200,5 +213,17 @@ public class MainActivity extends BaseActivity {
         }
         return view;
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.user_menu_cancel:
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                editor.putString("token", null).commit();
+                finish();
+                break;
+        }
     }
 }

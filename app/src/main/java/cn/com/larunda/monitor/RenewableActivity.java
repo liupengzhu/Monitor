@@ -16,10 +16,11 @@ import cn.com.larunda.monitor.fragment.GasFragment;
 import cn.com.larunda.monitor.fragment.GasRankingFragment;
 import cn.com.larunda.monitor.fragment.RenewableFragment;
 import cn.com.larunda.monitor.fragment.RenewableRankingFragment;
+import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.CustomViewPager;
 import cn.com.larunda.monitor.util.Util;
 
-public class RenewableActivity extends AppCompatActivity implements View.OnClickListener {
+public class RenewableActivity extends BaseActivity implements View.OnClickListener {
     private TabLayout tabLayout;
     private CustomViewPager viewPager;
     private List<Fragment> fragmentList = new ArrayList<>();

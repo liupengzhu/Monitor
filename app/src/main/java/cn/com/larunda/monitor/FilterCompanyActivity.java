@@ -25,6 +25,7 @@ import cn.com.larunda.monitor.bean.FilterCompanyBean;
 import cn.com.larunda.monitor.gson.FilterCompanyInfo;
 import cn.com.larunda.monitor.gson.FilterCompanyWorksheetInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
+import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
@@ -32,7 +33,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class FilterCompanyActivity extends AppCompatActivity implements View.OnClickListener {
+public class FilterCompanyActivity extends BaseActivity implements View.OnClickListener {
     private static final String COMPANY_URL = MyApplication.URL + "company/lists" + MyApplication.TOKEN;
     private Button backButton;
     private String type;

@@ -38,7 +38,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="企业名称:"
+                    android:text="企业:"
                     android:textColor="@color/home_text_l" />
 
                 <TextView
@@ -46,7 +46,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="沙发斯蒂芬"
                     android:textColor="@color/tab_text_color2" />
             </LinearLayout>
 
@@ -67,7 +66,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="张工"
                     android:textColor="@color/tab_text_color2" />
             </LinearLayout>
 
@@ -88,7 +86,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="18546123133"
+                    android:textColor="@color/tab_text_color2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="地址:"
+                    android:textColor="@color/home_text_l" />
+
+                <TextView
+                    android:id="@+id/company_list_item_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="江苏省常州市溧阳市天目湖"
                     android:textColor="@color/tab_text_color2" />
             </LinearLayout>
 
@@ -145,26 +163,7 @@
                     android:src="@drawable/electric_icon" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="地址:"
-                    android:textColor="@color/home_text_l" />
-
-                <TextView
-                    android:id="@+id/company_list_item_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="江苏省常州市溧阳市天目湖"
-                    android:textColor="@color/tab_text_color2" />
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

@@ -3,6 +3,8 @@ package cn.com.larunda.monitor.util;
 import android.app.Application;
 import android.content.Context;
 
+import com.baidu.mapapi.SDKInitializer;
+
 import org.litepal.LitePal;
 
 
@@ -20,6 +22,7 @@ public class MyApplication extends Application {
 
         context = getApplicationContext();
         LitePal.initialize(context);
+        SDKInitializer.initialize(context);
 
     }
 

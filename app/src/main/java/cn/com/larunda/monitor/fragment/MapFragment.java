@@ -9,6 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapView;
+
 import cn.com.larunda.monitor.MainActivity;
 import cn.com.larunda.monitor.R;
 
@@ -19,10 +25,19 @@ import cn.com.larunda.monitor.R;
 public class MapFragment extends Fragment implements View.OnClickListener {
     private Button leftButton;
 
+    public LocationClient mLocationClient = null;
+    private MyLocationListener myListener = new MyLocationListener();
+    private MapView mMapView;
+    private BaiduMap mBaiduMap;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+        mLocationClient = new LocationClient(getContext().getApplicationContext());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);
+        //注册监听函数
         initView(view);
         initEvent();
         return view;
@@ -35,6 +50,9 @@ public class MapFragment extends Fragment implements View.OnClickListener {
      */
     private void initView(View view) {
         leftButton = view.findViewById(R.id.map_left_button);
+
+        mMapView = view.findViewById(R.id.map_mapView);
+        mBaiduMap = mMapView.getMap();
     }
 
     /*
@@ -53,5 +71,31 @@ public class MapFragment extends Fragment implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    private class MyLocationListener extends BDAbstractLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
     }
 }

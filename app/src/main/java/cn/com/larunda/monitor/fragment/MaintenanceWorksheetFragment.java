@@ -27,6 +27,7 @@ import cn.com.larunda.dialog.DateDialog;
 import cn.com.larunda.monitor.FilterCompanyActivity;
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
+import cn.com.larunda.monitor.WorksheetActivity;
 import cn.com.larunda.monitor.adapter.WorksheetAdapter;
 import cn.com.larunda.monitor.bean.WarningBean;
 import cn.com.larunda.monitor.bean.WorksheetBean;
@@ -79,6 +80,17 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         recyclerView.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getActivity() instanceof WorksheetActivity) {
+            initType();
+            sendRequest();
+            recyclerView.setVisibility(View.GONE);
+            errorLayout.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -209,7 +221,13 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
      * 重置状态
      */
     private void initType() {
-        company_id = 0;
+        if (getActivity() instanceof WorksheetActivity) {
+            company_id = WorksheetActivity.id;
+            button.setVisibility(View.GONE);
+        } else {
+            company_id = 0;
+            button.setVisibility(View.VISIBLE);
+        }
         textView.setText("选择时间");
         spinner.setSelection(0);
     }

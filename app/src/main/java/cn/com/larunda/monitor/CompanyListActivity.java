@@ -126,7 +126,9 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
         adapter.setMaintenanceOnClickListener(new CompanyAdapter.MaintenanceOnClickListener() {
             @Override
             public void onClick(View v, int id) {
-
+                Intent intent = new Intent(CompanyListActivity.this, WorksheetActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
     }

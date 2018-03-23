@@ -32,7 +32,8 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".RePasswordActivity" />
         <activity android:name=".PowerActivity" />
-        <activity android:name=".AlarmActivity"></activity>
+        <activity android:name=".AlarmActivity" />
+        <activity android:name=".WorksheetActivity"></activity>
     </application>
 
 </manifest>

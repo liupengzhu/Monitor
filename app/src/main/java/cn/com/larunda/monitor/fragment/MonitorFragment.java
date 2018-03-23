@@ -5,15 +5,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import cn.com.larunda.monitor.CarbonActivity;
 import cn.com.larunda.monitor.ElectricActivity;
 import cn.com.larunda.monitor.GasActivity;
+import cn.com.larunda.monitor.MainActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.RenewableActivity;
 import cn.com.larunda.monitor.SteamActivity;
@@ -31,6 +34,8 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
     LinearLayout steamButton;
     LinearLayout carbonButton;
     LinearLayout renewableButton;
+
+    Button leftButton;
 
     @Nullable
     @Override
@@ -55,6 +60,8 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
         renewableButton = view.findViewById(R.id.monitor_button5);
         carbonButton = view.findViewById(R.id.monitor_button6);
 
+        leftButton = view.findViewById(R.id.monitor_left_button);
+
     }
 
     /**
@@ -67,6 +74,7 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
         steamButton.setOnClickListener(this);
         renewableButton.setOnClickListener(this);
         carbonButton.setOnClickListener(this);
+        leftButton.setOnClickListener(this);
     }
 
     /**
@@ -100,6 +108,9 @@ public class MonitorFragment extends Fragment implements View.OnClickListener {
             case R.id.monitor_button6:
                 Intent carbonIntent = new Intent(getContext(), CarbonActivity.class);
                 startActivity(carbonIntent);
+                break;
+            case R.id.monitor_left_button:
+                MainActivity.drawerLayout.openDrawer(Gravity.START);
                 break;
             default:
                 break;

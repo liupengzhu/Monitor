@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -42,6 +43,7 @@ public class MainActivity extends BaseActivity {
     private final String UNIT_URL = MyApplication.URL + "config/unit";
     public static String token;
     private String unit;
+    public static DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class MainActivity extends BaseActivity {
                 editor.putString("gas_unit", info.getGas_usage()).commit();
                 editor.putString("energy_unit", info.getEnergy_usage()).commit();
                 editor.putString("carbon_unit", info.getCarbon_emissions()).commit();
-                editor.putString("installed_capacity_unit",info.getInstalled_capacity()).commit();
+                editor.putString("installed_capacity_unit", info.getInstalled_capacity()).commit();
             }
         }
     }
@@ -90,7 +92,7 @@ public class MainActivity extends BaseActivity {
                     editor.putString("gas_unit", info.getGas_usage()).commit();
                     editor.putString("energy_unit", info.getEnergy_usage()).commit();
                     editor.putString("carbon_unit", info.getCarbon_emissions()).commit();
-                    editor.putString("installed_capacity_unit",info.getInstalled_capacity()).commit();
+                    editor.putString("installed_capacity_unit", info.getInstalled_capacity()).commit();
                 }
             }
         });
@@ -100,6 +102,8 @@ public class MainActivity extends BaseActivity {
      * 初始化view
      */
     private void initView() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
         fragments.add(new HomeFragment());

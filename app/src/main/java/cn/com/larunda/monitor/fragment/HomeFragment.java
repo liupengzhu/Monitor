@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,7 +36,7 @@ import okhttp3.Response;
  * Created by sddt on 18-3-13.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     private final String HOME_URL = MyApplication.URL + "home/data_screen" + MyApplication.TOKEN;
     private SharedPreferences preferences;
     private String token;
@@ -59,11 +62,14 @@ public class HomeFragment extends Fragment {
     private LinearLayout layout;
     private LinearLayout errorLayout;
 
+    private Button leftButton;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
+        initEvent();
         return view;
     }
 
@@ -105,7 +111,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-
+        leftButton = view.findViewById(R.id.home_left_button);
     }
 
     @Override
@@ -194,5 +200,18 @@ public class HomeFragment extends Fragment {
 
         }
 
+    }
+
+    private void initEvent() {
+        leftButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.home_left_button:
+                MainActivity.drawerLayout.openDrawer(Gravity.START);
+                break;
+        }
     }
 }

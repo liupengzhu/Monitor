@@ -24,6 +24,7 @@ import cn.com.larunda.monitor.gson.FilterCompanyWorksheetInfo;
 import cn.com.larunda.monitor.gson.GasInfo;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.MaintenanceCompanyInfo;
+import cn.com.larunda.monitor.gson.MapInfo;
 import cn.com.larunda.monitor.gson.MessageInfo;
 import cn.com.larunda.monitor.gson.PowerUsageInfo;
 import cn.com.larunda.monitor.gson.RankCompanyInfo;
@@ -245,6 +246,12 @@ public class Util {
     public static CompanyRankInfo handleCompanyRankInfo(String response) {
         Gson gson = new Gson();
         CompanyRankInfo info = gson.fromJson(response, CompanyRankInfo.class);
+        return info;
+    }
+
+    public static MapInfo handleMapInfo(String response) {
+        Gson gson = new Gson();
+        MapInfo info = gson.fromJson(response, MapInfo.class);
         return info;
     }
 }

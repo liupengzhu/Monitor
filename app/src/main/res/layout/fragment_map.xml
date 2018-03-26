@@ -134,9 +134,9 @@
             <LinearLayout
                 android:id="@+id/map_up_layout"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="230dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="-220dp"
+                android:layout_marginBottom="-175dp"
                 android:background="@color/white"
                 android:clickable="true"
                 android:orientation="vertical">
@@ -150,8 +150,9 @@
                     android:src="@drawable/up_icon" />
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/map_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                 </android.support.v7.widget.RecyclerView>
 

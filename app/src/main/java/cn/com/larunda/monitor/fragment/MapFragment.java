@@ -2,6 +2,7 @@ package cn.com.larunda.monitor.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -27,12 +28,17 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.HeatMap;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.Stroke;
+import com.baidu.mapapi.map.WeightedLatLng;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.search.core.SearchResult;
@@ -92,6 +98,22 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     private MapAdapter adapter;
     private GridLayoutManager manager;
     private List<PointBean> pointBeanList = new ArrayList<>();
+    private List<LatLng> latLngList = new ArrayList<>();
+    private List<WeightedLatLng> weightedLatLngList = new ArrayList<>();
+    private BitmapDescriptor bitmap1;
+    private BitmapDescriptor bitmap2;
+    private BitmapDescriptor bitmap3;
+    private BitmapDescriptor bitmap4;
+    private BitmapDescriptor bitmap5;
+    private BitmapDescriptor bitmap6;
+    private BitmapDescriptor bitmap7;
+    private BitmapDescriptor bitmap8;
+    private BitmapDescriptor bitmap9;
+    private BitmapDescriptor bitmap10;
+    private BitmapDescriptor bitmap11;
+    private List<BitmapDescriptor> list = new ArrayList<>();
+    private HeatMap heatmap;
+
 
     @Nullable
     @Override
@@ -102,7 +124,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         initView(view);
         initEvent();
         //drawBackground();
-        mDistrictSearch.searchDistrict(new DistrictSearchOption().cityName("苏州").districtName("昆山"));
         sendRequest();
         return view;
     }
@@ -141,6 +162,30 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         manager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        //构建Marker图标
+        bitmap1 = BitmapDescriptorFactory.fromResource(R.mipmap.point1);
+        bitmap2 = BitmapDescriptorFactory.fromResource(R.mipmap.point2);
+        bitmap3 = BitmapDescriptorFactory.fromResource(R.mipmap.point3);
+        bitmap4 = BitmapDescriptorFactory.fromResource(R.mipmap.point4);
+        bitmap5 = BitmapDescriptorFactory.fromResource(R.mipmap.point5);
+        bitmap6 = BitmapDescriptorFactory.fromResource(R.mipmap.point6);
+        bitmap7 = BitmapDescriptorFactory.fromResource(R.mipmap.point7);
+        bitmap8 = BitmapDescriptorFactory.fromResource(R.mipmap.point8);
+        bitmap9 = BitmapDescriptorFactory.fromResource(R.mipmap.point9);
+        bitmap10 = BitmapDescriptorFactory.fromResource(R.mipmap.point10);
+        bitmap11 = BitmapDescriptorFactory.fromResource(R.mipmap.point11);
+        list.add(bitmap1);
+        list.add(bitmap2);
+        list.add(bitmap3);
+        list.add(bitmap4);
+        list.add(bitmap5);
+        list.add(bitmap6);
+        list.add(bitmap7);
+        list.add(bitmap8);
+        list.add(bitmap9);
+        list.add(bitmap10);
+        list.add(bitmap11);
     }
 
     /*
@@ -248,6 +293,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         if (mMapView != null) {
             mMapView.onDestroy();
         }
+        for (BitmapDescriptor descriptor : list) {
+            if (descriptor != null) {
+                descriptor.recycle();
+                descriptor = null;
+            }
+        }
+        list.clear();
+
+
     }
 
     private void changeMarginUp() {
@@ -278,9 +332,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String content = response.body().string();
-                Log.d("main", content);
                 if (Util.isGoodJson(content)) {
-                    MapInfo info = Util.handleMapInfo(content);
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -310,7 +362,11 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
      * @param info
      */
     private void parseInfo(MapInfo info) {
+        mBaiduMap.clear();
+        mDistrictSearch.searchDistrict(new DistrictSearchOption().cityName("苏州").districtName("昆山"));
         pointBeanList.clear();
+        latLngList.clear();
+        weightedLatLngList.clear();
         if (info.getData() != null) {
             for (int i = 0; i < info.getData().size(); i++) {
                 if (i < 10) {
@@ -319,9 +375,31 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
                     pointBean.setRank(info.getData().get(i).getTop_ten() + "");
                     pointBeanList.add(pointBean);
                 }
+                LatLng latLng = new LatLng(Double.valueOf(info.getData().get(i).getLat()),
+                        Double.valueOf(info.getData().get(i).getLng()));
+                latLngList.add(latLng);
+                WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, info.getData().get(i).getCount());
+                weightedLatLngList.add(weightedLatLng);
             }
         }
         adapter.notifyDataSetChanged();
+        for (int i = 0; i < latLngList.size(); i++) {
+            //构建MarkerOption，用于在地图上添加Marker
+            OverlayOptions option;
+            if (i < 11) {
+                option = new MarkerOptions()
+                        .position(latLngList.get(i))
+                        .icon(list.get(i));
+            } else {
+                option = new MarkerOptions()
+                        .position(latLngList.get(i))
+                        .icon(bitmap1);
+            }
+            //在地图上添加Marker，并显示
+            mBaiduMap.addOverlay(option);
+        }
+        heatmap = new HeatMap.Builder().weightedData(weightedLatLngList).radius(30).build();
+        mBaiduMap.addHeatMap(heatmap);
     }
 
     /**

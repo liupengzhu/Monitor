@@ -71,7 +71,7 @@ public class MaintenanceFragment extends Fragment implements View.OnClickListene
         toolbar = view.findViewById(R.id.maintenance_toolbar);
         tabLayout = view.findViewById(R.id.maintenance_tabLayout);
         viewPager = view.findViewById(R.id.maintenance_viewPager);
-        adapter = new MaintenanceFragmentAdapter(getActivity().getSupportFragmentManager(), fragmentList, titleList);
+        adapter = new MaintenanceFragmentAdapter(getChildFragmentManager(), fragmentList, titleList);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         //设置下划线长度

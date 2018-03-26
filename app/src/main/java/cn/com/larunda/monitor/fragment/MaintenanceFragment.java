@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,18 +28,18 @@ import cn.com.larunda.monitor.util.Util;
 public class MaintenanceFragment extends Fragment implements View.OnClickListener {
     Toolbar toolbar;
     private TabLayout tabLayout;
-    private CustomViewPager viewPager;
+    private ViewPager viewPager;
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<String> titleList = new ArrayList<>();
     private MaintenanceFragmentAdapter adapter;
 
     private Button leftButton;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //保存view布局
-        View view;
         if (container.getTag(R.id.tag_first) == null) {
             view = inflater.inflate(R.layout.fragment_maintenance, container, false);
             init();
@@ -48,6 +49,7 @@ public class MaintenanceFragment extends Fragment implements View.OnClickListene
         } else {
             view = (View) container.getTag(R.id.tag_first);
         }
+
         return view;
     }
 

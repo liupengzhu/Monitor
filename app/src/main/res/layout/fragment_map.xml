@@ -41,6 +41,124 @@
             android:layout_height="match_parent">
 
         </com.baidu.mapapi.map.MapView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp">
+
+                <RadioGroup
+                    android:id="@+id/map_radio_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/map_radio1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/map_button"
+                        android:button="@null"
+                        android:checked="true"
+                        android:drawablePadding="-25dp"
+                        android:drawableTop="@mipmap/map_icon1"
+                        android:gravity="center"
+                        android:text="总量"
+                        android:textColor="@color/white"
+                        android:textSize="10sp" />
+
+                    <RadioButton
+                        android:id="@+id/map_radio2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/map_button"
+                        android:button="@null"
+                        android:drawablePadding="-25dp"
+                        android:drawableTop="@mipmap/map_icon2"
+                        android:gravity="center"
+                        android:text="用电"
+                        android:textColor="@color/white"
+                        android:textSize="10sp" />
+
+                    <RadioButton
+                        android:id="@+id/map_radio3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/map_button"
+                        android:button="@null"
+                        android:drawablePadding="-25dp"
+                        android:drawableTop="@mipmap/map_icon3"
+                        android:gravity="center"
+                        android:text="用水"
+                        android:textColor="@color/white"
+                        android:textSize="10sp" />
+
+                    <RadioButton
+                        android:id="@+id/map_radio4"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/map_button"
+                        android:button="@null"
+                        android:drawablePadding="-25dp"
+                        android:drawableTop="@mipmap/map_icon4"
+                        android:gravity="center"
+                        android:text="蒸汽"
+                        android:textColor="@color/white"
+                        android:textSize="10sp" />
+
+                    <RadioButton
+                        android:id="@+id/map_radio5"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/map_button"
+                        android:button="@null"
+                        android:drawablePadding="-25dp"
+                        android:drawableTop="@mipmap/map_icon5"
+                        android:gravity="center"
+                        android:text="天然气"
+                        android:textColor="@color/white"
+                        android:textSize="10sp" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/map_up_layout"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="-220dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/map_up_view"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/up_icon" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
     </FrameLayout>
 
 </LinearLayout>

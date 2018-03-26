@@ -62,5 +62,6 @@
     <color name="company_color8">#fdb3a0</color>
     <color name="company_color9">#fec7b8</color>
     <color name="company_color10">#fedcd3</color>
-
+    <color name="map_button_color">#4d000000</color>
+    <color name="map_button_color2">#1657b4</color>
 </resources>

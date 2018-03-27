@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -31,8 +33,10 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.HeatMap;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolygonOptions;
@@ -55,6 +59,8 @@ import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.MainActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.adapter.MapAdapter;
+import cn.com.larunda.monitor.adapter.MapCompanyAdapter;
+import cn.com.larunda.monitor.bean.MapCompanyBean;
 import cn.com.larunda.monitor.bean.PointBean;
 import cn.com.larunda.monitor.gson.MapInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
@@ -113,7 +119,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     private BitmapDescriptor bitmap11;
     private List<BitmapDescriptor> list = new ArrayList<>();
     private HeatMap heatmap;
+    private List<MapInfo.DataBeanX> dadas = new ArrayList<>();
+    private InfoWindow mInfoWindow;
 
+    private TextView textView;
+    private View markerView;
+    private RecyclerView markerRecycler;
+    private MapCompanyAdapter markerAdapter;
+    private List<MapCompanyBean> mapCompanyBeanList = new ArrayList<>();
+    private LinearLayoutManager linearLayoutManager;
 
     @Nullable
     @Override
@@ -134,6 +148,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
      * @param view
      */
     private void initView(View view) {
+        markerView = LayoutInflater.from(getContext()).inflate(R.layout.map_layout, null);
+        markerView.setMinimumWidth(1000);
+        textView = markerView.findViewById(R.id.map_marker_text);
+        markerRecycler = markerView.findViewById(R.id.map_marker_recycler);
+        markerAdapter = new MapCompanyAdapter(getContext(), mapCompanyBeanList);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        markerRecycler.setAdapter(markerAdapter);
+        markerRecycler.setLayoutManager(linearLayoutManager);
+
         isUp = false;
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
@@ -156,6 +179,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         radioButton3 = view.findViewById(R.id.map_radio3);
         radioButton4 = view.findViewById(R.id.map_radio4);
         radioButton5 = view.findViewById(R.id.map_radio5);
+
 
         recyclerView = view.findViewById(R.id.map_recycler);
         adapter = new MapAdapter(getContext(), pointBeanList);
@@ -201,6 +225,22 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         radioButton3.setOnClickListener(this);
         radioButton4.setOnClickListener(this);
         radioButton5.setOnClickListener(this);
+
+        mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(final Marker marker) {
+                int point = Integer.parseInt(marker.getTitle());
+                if (point < dadas.size()) {
+                    textView.setText(dadas.get(point).getName() + "");
+                    getMapCompanyBeanList(point);
+                    markerAdapter.notifyDataSetChanged();
+                }
+                LatLng ll = marker.getPosition();
+                mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(markerView), ll, -47, null);
+                mBaiduMap.showInfoWindow(mInfoWindow);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -270,7 +310,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         }
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -278,6 +317,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
             mMapView.onResume();
         }
     }
+
 
     @Override
     public void onPause() {
@@ -367,6 +407,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         pointBeanList.clear();
         latLngList.clear();
         weightedLatLngList.clear();
+        dadas = info.getData();
         if (info.getData() != null) {
             for (int i = 0; i < info.getData().size(); i++) {
                 if (i < 10) {
@@ -389,12 +430,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
             if (i < 11) {
                 option = new MarkerOptions()
                         .position(latLngList.get(i))
-                        .icon(list.get(i));
+                        .icon(list.get(i))
+                        .title(i + "");
             } else {
                 option = new MarkerOptions()
                         .position(latLngList.get(i))
-                        .icon(bitmap1);
+                        .icon(bitmap1)
+                        .title(i + "");
             }
+
             //在地图上添加Marker，并显示
             mBaiduMap.addOverlay(option);
         }
@@ -406,6 +450,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
      * 获取按钮组状态
      */
     private void getType() {
+
         if (radioGroup.getCheckedRadioButtonId() == R.id.map_radio5) {
             type = "gas";
         } else if (radioGroup.getCheckedRadioButtonId() == R.id.map_radio2) {
@@ -419,20 +464,37 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         }
     }
 
-    private void drawBackground() {
-        mBaiduMap.clear();
-        // 添加多边形
-        LatLng pt1 = new LatLng(59.0, 73.0);
-        LatLng pt2 = new LatLng(59.0, 136.0);
-        LatLng pt3 = new LatLng(3.0, 136.0);
-        LatLng pt4 = new LatLng(3.0, 73.0);
-        List<LatLng> pts = new ArrayList<LatLng>();
-        pts.add(pt1);
-        pts.add(pt2);
-        pts.add(pt3);
-        pts.add(pt4);
-        OverlayOptions ooPolygon = new PolygonOptions().points(pts)
-                .fillColor(Color.argb(20, 0, 0, 0));
-        mBaiduMap.addOverlay(ooPolygon);
+    private void getMapCompanyBeanList(int point) {
+        mapCompanyBeanList.clear();
+        MapCompanyBean bean1 = new MapCompanyBean();
+        bean1.setData(dadas.get(point).getData().getPower() + "tce");
+        bean1.setOriginal(dadas.get(point).getOriginal_data().getPower() + "k"
+                + preferences.getString("power_unit", null));
+        bean1.setType("电");
+        MapCompanyBean bean2 = new MapCompanyBean();
+        bean2.setData(dadas.get(point).getData().getWater() + "tce");
+        bean2.setOriginal(dadas.get(point).getOriginal_data().getWater() + ""
+                + preferences.getString("water_unit", null));
+        bean2.setType("水");
+        MapCompanyBean bean3 = new MapCompanyBean();
+        bean3.setData(dadas.get(point).getData().getSteam() + "tce");
+        bean3.setOriginal(dadas.get(point).getOriginal_data().getSteam() + ""
+                + preferences.getString("steam_unit", null));
+        bean3.setType("蒸汽");
+        MapCompanyBean bean4 = new MapCompanyBean();
+        bean4.setData(dadas.get(point).getData().getGas() + "tce");
+        bean4.setOriginal(dadas.get(point).getOriginal_data().getGas() + ""
+                + preferences.getString("gas_unit", null));
+        bean4.setType("天然气");
+        MapCompanyBean bean5 = new MapCompanyBean();
+        bean5.setData(dadas.get(point).getData().getTotal() + "tce");
+        bean5.setType("总量");
+        mapCompanyBeanList.add(bean1);
+        mapCompanyBeanList.add(bean2);
+        mapCompanyBeanList.add(bean3);
+        mapCompanyBeanList.add(bean4);
+        mapCompanyBeanList.add(bean5);
+
     }
+
 }

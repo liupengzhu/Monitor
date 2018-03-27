@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="类型:"
+        android:textColor="@color/text_n"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/map_item_type"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="电"
+        android:textColor="@color/text_h"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/map_item_original_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="原始数据:"
+        android:textColor="@color/text_n"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/map_item_original"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:gravity="right"
+        android:text="16223.11"
+        android:textColor="@color/text_h"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="等价折标:"
+        android:textColor="@color/text_n"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/map_item_data"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:gravity="right"
+        android:text="1122"
+        android:textColor="@color/text_h"
+        android:textSize="12sp" />
+
+</LinearLayout>

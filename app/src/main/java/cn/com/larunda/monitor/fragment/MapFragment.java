@@ -128,15 +128,22 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     private MapCompanyAdapter markerAdapter;
     private List<MapCompanyBean> mapCompanyBeanList = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
-        mLocationClient = new LocationClient(getContext().getApplicationContext());
-        //注册监听函数
-        initView(view);
-        initEvent();
+        //保存view布局
+        if (container.getTag(R.id.tag_second) == null) {
+            view = inflater.inflate(R.layout.fragment_map, container, false);
+            mLocationClient = new LocationClient(getContext().getApplicationContext());
+            //注册监听函数
+            initView(view);
+            initEvent();
+            container.setTag(R.id.tag_second, view);
+        } else {
+            view = (View) container.getTag(R.id.tag_second);
+        }
         //drawBackground();
         sendRequest();
         return view;
@@ -179,7 +186,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         radioButton3 = view.findViewById(R.id.map_radio3);
         radioButton4 = view.findViewById(R.id.map_radio4);
         radioButton5 = view.findViewById(R.id.map_radio5);
-
+        radioGroup.check(radioButton1.getId());
 
         recyclerView = view.findViewById(R.id.map_recycler);
         adapter = new MapAdapter(getContext(), pointBeanList);

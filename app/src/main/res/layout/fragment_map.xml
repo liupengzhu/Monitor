@@ -64,7 +64,6 @@
                         android:layout_height="40dp"
                         android:background="@drawable/map_button"
                         android:button="@null"
-                        android:checked="true"
                         android:drawablePadding="-25dp"
                         android:drawableTop="@mipmap/map_icon1"
                         android:gravity="center"

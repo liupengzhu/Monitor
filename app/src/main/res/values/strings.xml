@@ -28,6 +28,7 @@
     <string name="发电详情">发电详情</string>
     <string name="维保总览">维保总览</string>
     <item name="tag_first" type="id"></item>
+    <item name="tag_second" type="id"></item>
     <string name="全部接入企业">全部接入企业</string>
     <string name="企业列表">企业列表</string>
 

@@ -47,4 +47,5 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation project(':dialog')
     implementation project(':circleview')
+    compile 'com.github.devlight.shadowlayout:library:1.0.2'
 }

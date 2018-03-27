@@ -42,6 +42,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.Stroke;
+import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.map.WeightedLatLng;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
@@ -83,7 +84,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
 
     private Button leftButton;
     public LocationClient mLocationClient = null;
-    private MapView mMapView;
+    private TextureMapView mMapView;
     private BaiduMap mBaiduMap;
     private DistrictSearch mDistrictSearch;
 

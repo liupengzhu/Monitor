@@ -284,7 +284,7 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
         String time = dateText.getText().toString().trim();
         refreshLayout.setRefreshing(true);
         HttpUtil.sendGetRequestWithHttp(RENEWABLE_RANK_URL + token + "&date_type=" + date_type
-                + "&time=" + time + "&page=" + page, new Callback() {
+                + "&time=" + time + "&page=" + 1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 if (getActivity() != null) {

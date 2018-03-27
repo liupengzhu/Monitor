@@ -131,6 +131,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     private MapCompanyAdapter markerAdapter;
     private List<MapCompanyBean> mapCompanyBeanList = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
+
     private View view;
 
     @Nullable
@@ -252,6 +253,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
                 showPopWindow(position, latLng);
             }
         });
+
+
     }
 
     @Override
@@ -494,7 +497,14 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         //改变地图状态
         mBaiduMap.animateMapStatus(mMapStatusUpdate);
-        mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(markerView), ll, -47, null);
+        InfoWindow.OnInfoWindowClickListener listener = null;
+        listener = new InfoWindow.OnInfoWindowClickListener() {
+            public void onInfoWindowClick() {
+                mBaiduMap.hideInfoWindow();
+            }
+        };
+
+        mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(markerView), ll, -47, listener);
         mBaiduMap.showInfoWindow(mInfoWindow);
     }
 

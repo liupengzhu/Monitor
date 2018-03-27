@@ -33,7 +33,7 @@
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="15dp"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/home_energy_consumption_icon" />
 
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:text="446"
                     android:textColor="@color/home_color5"
-                    android:textSize="20sp" />
+                    android:textSize="17sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="15dp"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/home_carbon_emission_icon" />
 
@@ -123,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:text="446"
                     android:textColor="@color/home_color6"
-                    android:textSize="20sp" />
+                    android:textSize="17sp" />
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -34,6 +34,8 @@ import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.HeatMap;
 import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
@@ -238,15 +240,16 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
             @Override
             public boolean onMarkerClick(final Marker marker) {
                 int point = Integer.parseInt(marker.getTitle());
-                if (point < dadas.size()) {
-                    textView.setText(dadas.get(point).getName() + "");
-                    getMapCompanyBeanList(point);
-                    markerAdapter.notifyDataSetChanged();
-                }
                 LatLng ll = marker.getPosition();
-                mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(markerView), ll, -47, null);
-                mBaiduMap.showInfoWindow(mInfoWindow);
+                showPopWindow(point, ll);
                 return false;
+            }
+        });
+
+        adapter.setMapOnClickListener(new MapAdapter.MapOnClickListener() {
+            @Override
+            public void onClick(View view, int position, LatLng latLng) {
+                showPopWindow(position, latLng);
             }
         });
     }
@@ -318,40 +321,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mMapView != null) {
-            mMapView.onResume();
-        }
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mMapView != null) {
-            mMapView.onPause();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mMapView != null) {
-            mMapView.onDestroy();
-        }
-        for (BitmapDescriptor descriptor : list) {
-            if (descriptor != null) {
-                descriptor.recycle();
-                descriptor = null;
-            }
-        }
-        list.clear();
-
-
-    }
-
     private void changeMarginUp() {
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mapUpLayout.getLayoutParams();
         params.bottomMargin = 0;
@@ -418,14 +387,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         dadas = info.getData();
         if (info.getData() != null) {
             for (int i = 0; i < info.getData().size(); i++) {
+                LatLng latLng = new LatLng(Double.valueOf(info.getData().get(i).getLat()),
+                        Double.valueOf(info.getData().get(i).getLng()));
                 if (i < 10) {
                     PointBean pointBean = new PointBean();
                     pointBean.setName(info.getData().get(i).getName() + "");
                     pointBean.setRank(info.getData().get(i).getTop_ten() + "");
+                    pointBean.setLatLng(latLng);
                     pointBeanList.add(pointBean);
                 }
-                LatLng latLng = new LatLng(Double.valueOf(info.getData().get(i).getLat()),
-                        Double.valueOf(info.getData().get(i).getLng()));
                 latLngList.add(latLng);
                 WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, info.getData().get(i).getCount());
                 weightedLatLngList.add(weightedLatLng);
@@ -502,6 +472,63 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         mapCompanyBeanList.add(bean3);
         mapCompanyBeanList.add(bean4);
         mapCompanyBeanList.add(bean5);
+
+    }
+
+    /**
+     * 显示弹窗
+     *
+     * @param position
+     * @param ll
+     */
+    private void showPopWindow(int position, LatLng ll) {
+        if (position < dadas.size()) {
+            textView.setText(dadas.get(position).getName() + "");
+            getMapCompanyBeanList(position);
+            markerAdapter.notifyDataSetChanged();
+        }
+        MapStatus mMapStatus = new MapStatus.Builder()
+                .target(ll)
+                .build();
+        //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        //改变地图状态
+        mBaiduMap.animateMapStatus(mMapStatusUpdate);
+        mInfoWindow = new InfoWindow(BitmapDescriptorFactory.fromView(markerView), ll, -47, null);
+        mBaiduMap.showInfoWindow(mInfoWindow);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mMapView != null) {
+            mMapView.onResume();
+        }
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mMapView != null) {
+            mMapView.onPause();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mMapView != null) {
+            mMapView.onDestroy();
+        }
+        for (BitmapDescriptor descriptor : list) {
+            if (descriptor != null) {
+                descriptor.recycle();
+                descriptor = null;
+            }
+        }
+        list.clear();
+
 
     }
 

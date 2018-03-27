@@ -1,5 +1,7 @@
 package cn.com.larunda.monitor.bean;
 
+import com.baidu.mapapi.model.LatLng;
+
 /**
  * Created by sddt on 18-3-26.
  */
@@ -7,6 +9,7 @@ package cn.com.larunda.monitor.bean;
 public class PointBean {
     private String name;
     private String rank;
+    private LatLng latLng;
 
     public String getName() {
         return name;
@@ -22,5 +25,13 @@ public class PointBean {
 
     public void setRank(String rank) {
         this.rank = rank;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
     }
 }

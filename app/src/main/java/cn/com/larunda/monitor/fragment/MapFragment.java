@@ -45,6 +45,7 @@ import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.map.TextureMapView;
+import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.map.WeightedLatLng;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
@@ -88,6 +89,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     public LocationClient mLocationClient = null;
     private TextureMapView mMapView;
     private BaiduMap mBaiduMap;
+    private UiSettings mUiSettings;
     private DistrictSearch mDistrictSearch;
 
 
@@ -133,6 +135,12 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     private LinearLayoutManager linearLayoutManager;
 
     private View view;
+    private LatLng pNW;
+    private LatLng pNE;
+    private LatLng pSE;
+    private LatLng pSW;
+    private LatLng pNW2;
+
 
     @Nullable
     @Override
@@ -183,6 +191,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         Point point1 = new Point(0, 0);
         mMapView.setScaleControlPosition(point1);
         mMapView.showZoomControls(false);
+        mUiSettings = mBaiduMap.getUiSettings();
+        mUiSettings.setOverlookingGesturesEnabled(false);
 
         radioGroup = view.findViewById(R.id.map_radio_group);
         radioButton1 = view.findViewById(R.id.map_radio1);
@@ -221,6 +231,11 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         list.add(bitmap9);
         list.add(bitmap10);
         list.add(bitmap11);
+        pNW = new LatLng(59.0, 73.0);
+        pNE = new LatLng(59.0, 136.0);
+        pSE = new LatLng(3.0, 136.0);
+        pSW = new LatLng(3.0, 73.0);
+        pNW2 = new LatLng(59.0, 73.0);
     }
 
     /*
@@ -311,8 +326,15 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
             }
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (List<LatLng> polyline : polyLines) {
-                OverlayOptions ooPolygon = new PolygonOptions().points(polyline)
-                        .fillColor(Color.argb(30, 0, 0, 0));
+                List<LatLng> points = new ArrayList<>();
+                points.addAll(polyline);
+                points.add(pNW);
+                points.add(pNE);
+                points.add(pSE);
+                points.add(pSW);
+                points.add(pNW2);
+                OverlayOptions ooPolygon = new PolygonOptions().points(points)
+                        .fillColor(Color.argb(78, 0, 0, 0));
                 mBaiduMap.addOverlay(ooPolygon);
                 for (LatLng latLng : polyline) {
                     builder.include(latLng);

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group>
+        <item
+            android:id="@+id/gas_menu_electric"
+            android:icon="@mipmap/electric_icon"
+            android:title="@string/用电"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/gas_menu_water"
+            android:icon="@mipmap/water_icon"
+            android:title="@string/用水"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/gas_menu_gas"
+            android:icon="@mipmap/gas_icon"
+            android:title="@string/天然气"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/gas_menu_steam"
+            android:icon="@mipmap/steam_icon"
+            android:title="@string/蒸汽"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/gas_menu_renewable"
+            android:icon="@mipmap/renewable_icon"
+            android:title="@string/可再生能源"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/gas_menu_carbon"
+            android:icon="@mipmap/carbon_icon"
+            android:title="@string/碳排放量"
+            app:showAsAction="never" />
+    </group>
+
+
+</menu>

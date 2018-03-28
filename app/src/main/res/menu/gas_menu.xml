@@ -13,11 +13,7 @@
             android:icon="@mipmap/water_icon"
             android:title="@string/用水"
             app:showAsAction="never" />
-        <item
-            android:id="@+id/gas_menu_gas"
-            android:icon="@mipmap/gas_icon"
-            android:title="@string/天然气"
-            app:showAsAction="never" />
+   
         <item
             android:id="@+id/gas_menu_steam"
             android:icon="@mipmap/steam_icon"

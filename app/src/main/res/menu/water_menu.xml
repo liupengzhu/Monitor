@@ -9,11 +9,6 @@
             android:title="@string/用电"
             app:showAsAction="never" />
         <item
-            android:id="@+id/water_menu_water"
-            android:icon="@mipmap/water_icon"
-            android:title="@string/用水"
-            app:showAsAction="never" />
-        <item
             android:id="@+id/water_menu_gas"
             android:icon="@mipmap/gas_icon"
             android:title="@string/天然气"

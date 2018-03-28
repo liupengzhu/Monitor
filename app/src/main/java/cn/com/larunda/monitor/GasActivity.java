@@ -120,11 +120,6 @@ public class GasActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(steamIntent);
                 finish();
                 break;
-            case R.id.gas_menu_gas:
-                Intent gasIntent = new Intent(this, GasActivity.class);
-                startActivity(gasIntent);
-                finish();
-                break;
             case R.id.gas_menu_renewable:
                 Intent renewableIntent = new Intent(this, RenewableActivity.class);
                 startActivity(renewableIntent);

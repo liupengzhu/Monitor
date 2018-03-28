@@ -112,11 +112,6 @@ public class WaterActivity extends BaseActivity implements View.OnClickListener 
                 startActivity(electricIntent);
                 finish();
                 break;
-            case R.id.water_menu_water:
-                Intent waterIntent = new Intent(this, WaterActivity.class);
-                startActivity(waterIntent);
-                finish();
-                break;
             case R.id.water_menu_steam:
                 Intent steamIntent = new Intent(this, SteamActivity.class);
                 startActivity(steamIntent);

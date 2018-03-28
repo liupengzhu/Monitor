@@ -128,11 +128,6 @@ public class RenewableActivity extends BaseActivity implements View.OnClickListe
                 startActivity(gasIntent);
                 finish();
                 break;
-            case R.id.renewable_menu_renewable:
-                Intent renewableIntent = new Intent(this, RenewableActivity.class);
-                startActivity(renewableIntent);
-                finish();
-                break;
             case R.id.renewable_menu_carbon:
                 Intent carbonIntent = new Intent(this, CarbonActivity.class);
                 startActivity(carbonIntent);

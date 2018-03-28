@@ -110,11 +110,7 @@ public class ElectricActivity extends BaseActivity implements View.OnClickListen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.electric_menu_electric:
-                Intent electricIntent = new Intent(this, ElectricActivity.class);
-                startActivity(electricIntent);
-                finish();
-                break;
+
             case R.id.electric_menu_water:
                 Intent waterIntent = new Intent(this, WaterActivity.class);
                 startActivity(waterIntent);

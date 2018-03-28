@@ -18,11 +18,7 @@
             android:icon="@mipmap/gas_icon"
             android:title="@string/天然气"
             app:showAsAction="never" />
-        <item
-            android:id="@+id/steam_menu_steam"
-            android:icon="@mipmap/steam_icon"
-            android:title="@string/蒸汽"
-            app:showAsAction="never" />
+
         <item
             android:id="@+id/steam_menu_renewable"
             android:icon="@mipmap/renewable_icon"

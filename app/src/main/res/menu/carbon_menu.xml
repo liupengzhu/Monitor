@@ -28,11 +28,6 @@
             android:icon="@mipmap/renewable_icon"
             android:title="@string/可再生能源"
             app:showAsAction="never" />
-        <item
-            android:id="@+id/carbon_menu_carbon"
-            android:icon="@mipmap/carbon_icon"
-            android:title="@string/碳排放量"
-            app:showAsAction="never" />
     </group>
 
 

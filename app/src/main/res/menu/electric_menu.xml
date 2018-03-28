@@ -3,11 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group>
-        <item
-            android:id="@+id/electric_menu_electric"
-            android:icon="@mipmap/electric_icon"
-            android:title="@string/用电"
-            app:showAsAction="never" />
+  
         <item
             android:id="@+id/electric_menu_water"
             android:icon="@mipmap/water_icon"

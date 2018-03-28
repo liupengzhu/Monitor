@@ -133,11 +133,6 @@ public class CarbonActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(renewableIntent);
                 finish();
                 break;
-            case R.id.carbon_menu_carbon:
-                Intent carbonIntent = new Intent(this, CarbonActivity.class);
-                startActivity(carbonIntent);
-                finish();
-                break;
             default:
                 break;
         }

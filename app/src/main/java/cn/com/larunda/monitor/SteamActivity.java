@@ -118,11 +118,6 @@ public class SteamActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(waterIntent);
                 finish();
                 break;
-            case R.id.steam_menu_steam:
-                Intent steamIntent = new Intent(this, SteamActivity.class);
-                startActivity(steamIntent);
-                finish();
-                break;
             case R.id.steam_menu_gas:
                 Intent gasIntent = new Intent(this, GasActivity.class);
                 startActivity(gasIntent);

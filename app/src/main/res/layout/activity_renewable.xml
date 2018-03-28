@@ -14,7 +14,7 @@
         android:background="@drawable/tool_bar_color"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/OverflowMenuStyle">
 
         <Button
             android:id="@+id/renewable_back_button"

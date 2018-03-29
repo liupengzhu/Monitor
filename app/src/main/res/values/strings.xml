@@ -20,7 +20,7 @@
     <string name="碳排放量">碳排放量</string>
     <string name="请输入用户名">请输入用户名</string>
     <string name="请输入密码">请输入密码</string>
-    <string name="网络错误">网络错误</string>
+    <string name="网络错误">网络链接失败，点击重试</string>
     <string name="用电详情">用电详情</string>
     <string name="用水详情">用水详情</string>
     <string name="用气详情">用气详情</string>

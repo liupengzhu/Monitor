@@ -1,1 +1,1 @@
-include ':app', ':dialog', ':circleview'
+include ':app', ':dialog', ':circleview', ':recycler'

@@ -5,12 +5,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +24,9 @@ import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.recycler.OnLoadListener;
+import cn.com.larunda.recycler.PTLLinearLayoutManager;
+import cn.com.larunda.recycler.PullToLoadRecyclerView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -39,15 +41,16 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
     private HashMap<String, Integer> iconList = new HashMap<>();
 
     private List<Company> companyList = new ArrayList<>();
-    private RecyclerView recyclerView;
+    private PullToLoadRecyclerView recyclerView;
     private CompanyAdapter adapter;
-    private LinearLayoutManager manager;
+    private PTLLinearLayoutManager manager;
 
     private int page = 1;
     private int maxPage;
 
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout errorLayout;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +60,11 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
         initData();
         initView();
         initEvent();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        page = 1;
+        setSupportActionBar(toolbar);
         sendRequest();
-        recyclerView.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
     }
+
 
     private void initData() {
         iconList.clear();
@@ -89,12 +87,15 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
         token = preferences.getString("token", null);
 
         backButton = findViewById(R.id.company_list_back);
+        toolbar = findViewById(R.id.company_list_toolbar);
+        toolbar.setTitle("");
 
         recyclerView = findViewById(R.id.company_list_recycler);
-        manager = new LinearLayoutManager(this);
+        manager = new PTLLinearLayoutManager();
         adapter = new CompanyAdapter(this, companyList, iconList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(manager);
+        recyclerView.setRefreshEnable(false);
 
         errorLayout = findViewById(R.id.company_list_error_layout);
 
@@ -103,7 +104,6 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page = 1;
                 sendRequest();
             }
         });
@@ -131,6 +131,18 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent);
             }
         });
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
+        recyclerView.setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onStartLoading(int skip) {
+                sendLoadRequest();
+            }
+        });
     }
 
     @Override
@@ -142,17 +154,19 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * 发送网络请求
+     */
     private void sendRequest() {
         refreshLayout.setRefreshing(true);
         HttpUtil.sendGetRequestWithHttp(COMPANY_URL + token + "&maintenance_company_id=" + id
-                + "&page=" + page, new Callback() {
+                + "&page=" + 1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         refreshLayout.setRefreshing(false);
-                        recyclerView.setVisibility(View.GONE);
                         errorLayout.setVisibility(View.VISIBLE);
                     }
                 });
@@ -161,7 +175,6 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String content = response.body().string();
-                Log.d("main", content);
                 if (Util.isGoodJson(content)) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -170,7 +183,6 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
                             if (info != null && info.getError() == null) {
                                 parseInfo(info);
                                 refreshLayout.setRefreshing(false);
-                                recyclerView.setVisibility(View.VISIBLE);
                                 errorLayout.setVisibility(View.GONE);
                             } else {
                                 Intent intent = new Intent(CompanyListActivity.this, LoginActivity.class);
@@ -193,6 +205,13 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
      */
 
     private void parseInfo(CompanyInfo info) {
+        page = info.getCurrent_page() + 1;
+        maxPage = info.getLast_page();
+        if (page > maxPage) {
+            recyclerView.setNoMore(true);
+        } else {
+            recyclerView.setNoMore(false);
+        }
         companyList.clear();
         if (info.getData() != null) {
             for (CompanyInfo.DataBeanX dataBean : info.getData()) {
@@ -233,6 +252,109 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
 
             }
         }
-        adapter.notifyDataSetChanged();
+        /*adapter.notifyDataSetChanged();*/
+        recyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+
+    /**
+     * 发送网络请求
+     */
+    private void sendLoadRequest() {
+        refreshLayout.setRefreshing(true);
+        HttpUtil.sendGetRequestWithHttp(COMPANY_URL + token + "&maintenance_company_id=" + id
+                + "&page=" + page, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        errorLayout.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String content = response.body().string();
+                if (Util.isGoodJson(content)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            CompanyInfo info = Util.handleCompanyInfo(content);
+                            if (info != null && info.getError() == null) {
+                                parseLoadInfo(info);
+                                refreshLayout.setRefreshing(false);
+                                errorLayout.setVisibility(View.GONE);
+                            } else {
+                                Intent intent = new Intent(CompanyListActivity.this, LoginActivity.class);
+                                intent.putExtra("token_timeout", "登录超时");
+                                preferences.edit().putString("token", null).commit();
+                                startActivity(intent);
+                                ActivityCollector.finishAllActivity();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * 解析服务器返回数据
+     *
+     * @param info
+     */
+
+    private void parseLoadInfo(CompanyInfo info) {
+        page = info.getCurrent_page() + 1;
+        maxPage = info.getLast_page();
+        if (page > maxPage) {
+            recyclerView.setNoMore(true);
+        } else {
+            recyclerView.setNoMore(false);
+        }
+        if (info.getData() != null) {
+            for (CompanyInfo.DataBeanX dataBean : info.getData()) {
+                Company company = new Company();
+                List<String> typeList = new ArrayList<>();
+                List<String> deviceList = new ArrayList<>();
+                if (dataBean.getCompany_pic() != null) {
+                    company.setImg(MyApplication.IMG_URL + dataBean.getCompany_pic());
+                }
+                int normal = dataBean.getDevice_data().getDevice_total()
+                        - dataBean.getDevice_data().getError_total();
+                company.setAddress(dataBean.getCompany_address());
+                company.setAlarm(dataBean.getAlarm_data() + "");
+                company.setId(Integer.parseInt(dataBean.getCompany_id()));
+                company.setElectric(dataBean.getDevice_data().getMeter_total_num() + "");
+                company.setIndustry(dataBean.getCompany_industry());
+                company.setMaintenance(dataBean.getMaintenance_num() + "");
+                company.setName(dataBean.getCompany_name());
+                company.setTel(dataBean.getCompany_tel());
+                company.setTotal(normal + "");
+                if (dataBean.getDevice_data().getDevice_total() != 0) {
+
+                    company.setAngle((float) normal / (float) dataBean.getDevice_data().getDevice_total() * 360);
+                }
+                if (dataBean.getMaintenance_type() != null) {
+                    for (CompanyInfo.DataBeanX.MaintenanceTypeBean typeBean : dataBean.getMaintenance_type()) {
+                        typeList.add(typeBean.getName());
+                    }
+                }
+                if (dataBean.getDevice_data().getOther_device() != null) {
+                    for (CompanyInfo.DataBeanX.DeviceDataBean.OtherDeviceBean deviceBean : dataBean.getDevice_data().getOther_device()) {
+                        deviceList.add(deviceBean.getName() + " " + deviceBean.getData().getTotal());
+                    }
+                }
+                company.setTypeList(typeList);
+                company.setDeviceList(deviceList);
+                companyList.add(company);
+
+            }
+        }
+        /*adapter.notifyDataSetChanged();*/
+        recyclerView.completeLoad(0);
     }
 }

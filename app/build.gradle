@@ -48,4 +48,5 @@ dependencies {
     implementation project(':dialog')
     implementation project(':circleview')
     implementation 'com.github.devlight.shadowlayout:library:1.0.2'
+    implementation project(':recycler')
 }

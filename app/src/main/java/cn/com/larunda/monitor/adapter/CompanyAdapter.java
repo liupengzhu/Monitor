@@ -3,6 +3,7 @@ package cn.com.larunda.monitor.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,28 +88,29 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_company_list, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
-        viewHolder.alarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (alarmOnClickListener != null) {
-                    alarmOnClickListener.onClick(v, companyList.get(viewHolder.getAdapterPosition()).getId());
-                }
-            }
-        });
 
-        viewHolder.maintenance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (maintenanceOnClickListener != null) {
-                    maintenanceOnClickListener.onClick(v, companyList.get(viewHolder.getAdapterPosition()).getId());
-                }
-            }
-        });
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        holder.alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (alarmOnClickListener != null) {
+                    alarmOnClickListener.onClick(v, companyList.get(position).getId());
+                }
+            }
+        });
+
+        holder.maintenance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (maintenanceOnClickListener != null) {
+                    maintenanceOnClickListener.onClick(v, companyList.get(position).getId());
+                }
+            }
+        });
         Company company = companyList.get(position);
         if (company.getImg() != null) {
             Glide.with(context).load(company.getImg())

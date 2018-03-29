@@ -35,44 +35,50 @@
         android:layout_height="0.5dp"
         android:background="@color/line" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/maintenance_situation_swipe"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/maintenance_situation_swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/maintenance_situation_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-
             <LinearLayout
-                android:id="@+id/maintenance_situation_error_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_height="match_parent">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="100dp"
-                    android:src="@drawable/no_network" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/网络错误"
-                    android:textColor="@color/home_text_l"
-                    android:textSize="18sp" />
+                <cn.com.larunda.recycler.PullToLoadRecyclerView
+                    android:id="@+id/maintenance_situation_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></cn.com.larunda.recycler.PullToLoadRecyclerView>
             </LinearLayout>
-        </FrameLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
+        <LinearLayout
+            android:id="@+id/maintenance_situation_error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:src="@drawable/no_network" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="@string/网络错误"
+                android:textColor="@color/home_text_l"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

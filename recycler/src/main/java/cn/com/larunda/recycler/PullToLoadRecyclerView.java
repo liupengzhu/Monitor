@@ -79,6 +79,13 @@ public class PullToLoadRecyclerView extends PullToRefreshRecyclerView {
             mAdapter.setLoadView(mLoadView);
             mAdapter.setBottomView(bottomView);
         }
+        if (mLoadView != null && mLoadViewHeight == 0) {
+            mLoadView.measure(0, 0);
+            mLoadViewHeight = mLoadView.getLayoutParams().height;
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) getLayoutParams();
+            marginLayoutParams.setMargins(marginLayoutParams.leftMargin, marginLayoutParams.topMargin, marginLayoutParams.rightMargin, marginLayoutParams.bottomMargin - mLoadViewHeight - 1);
+            setLayoutParams(marginLayoutParams);
+        }
     }
 
     private void init(Context context) {
@@ -95,13 +102,7 @@ public class PullToLoadRecyclerView extends PullToRefreshRecyclerView {
 
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
-        if (mLoadView != null && mLoadViewHeight == 0) {
-            mLoadView.measure(0, 0);
-            mLoadViewHeight = mLoadView.getLayoutParams().height;
-            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) getLayoutParams();
-            marginLayoutParams.setMargins(marginLayoutParams.leftMargin, marginLayoutParams.topMargin, marginLayoutParams.rightMargin, marginLayoutParams.bottomMargin - mLoadViewHeight - 1);
-            setLayoutParams(marginLayoutParams);
-        }
+
         super.onMeasure(widthSpec, heightSpec);
     }
 

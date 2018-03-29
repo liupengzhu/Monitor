@@ -90,13 +90,6 @@ public class PullToRefreshRecyclerView extends HeaderAndFooterRecyclerView {
             addHeaderView(topView);
             addHeaderView(mRefreshView);
         }
-    }
-
-    /**
-     * 在measure的时候，隐藏刷新头部
-     */
-    @Override
-    protected void onMeasure(int widthSpec, int heightSpec) {
         if (mRefreshView != null && mRefreshViewHeight == 0) {
             mRefreshView.measure(0, 0);
             mRefreshViewHeight = mRefreshView.getLayoutParams().height;
@@ -104,6 +97,15 @@ public class PullToRefreshRecyclerView extends HeaderAndFooterRecyclerView {
             marginLayoutParams.setMargins(marginLayoutParams.leftMargin, marginLayoutParams.topMargin - mRefreshViewHeight - 1, marginLayoutParams.rightMargin, marginLayoutParams.bottomMargin);
             setLayoutParams(marginLayoutParams);
         }
+    }
+
+
+    /**
+     * 在measure的时候，隐藏刷新头部
+     */
+    @Override
+    protected void onMeasure(int widthSpec, int heightSpec) {
+
         super.onMeasure(widthSpec, heightSpec);
     }
 

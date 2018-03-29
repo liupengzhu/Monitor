@@ -85,7 +85,7 @@ public class DefaultLoadFooterCreator extends LoadFooterCreator {
         if (mNoMoreView == null) {
             mNoMoreView = LayoutInflater.from(context).inflate(R.layout.layout_ptr_ptl,recyclerView,false);
             mNoMoreView.findViewById(R.id.iv).setVisibility(View.GONE);
-            ((TextView) mNoMoreView.findViewById(R.id.tv)).setText("没有更多了哦");
+            ((TextView) mNoMoreView.findViewById(R.id.tv)).setText("- 我是有底线的 -");
         }
         return mNoMoreView;
     }

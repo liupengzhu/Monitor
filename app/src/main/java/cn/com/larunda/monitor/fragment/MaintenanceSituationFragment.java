@@ -31,6 +31,8 @@ import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.recycler.PTLLinearLayoutManager;
+import cn.com.larunda.recycler.PullToLoadRecyclerView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -43,9 +45,9 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
     private static final String COMPANY_URL = MyApplication.URL + "integrated_maint_company/lists" + MyApplication.TOKEN;
     private HashMap<String, Integer> iconList = new HashMap<>();
     private List<MaintenanceCompany> companyList = new ArrayList<>();
-    private RecyclerView recyclerView;
+    private PullToLoadRecyclerView recyclerView;
     private MaintenanceSituationAdapter adapter;
-    private LinearLayoutManager manager;
+    private PTLLinearLayoutManager manager;
     private SharedPreferences preferences;
     private String token;
     private SwipeRefreshLayout refreshLayout;
@@ -60,7 +62,6 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
         initView(view);
         initEvent();
         sendRequest();
-        recyclerView.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         return view;
     }
@@ -68,7 +69,6 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     /**
@@ -98,10 +98,12 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
         token = preferences.getString("token", null);
 
         recyclerView = view.findViewById(R.id.maintenance_situation_recycler);
-        manager = new LinearLayoutManager(getContext());
+        manager = new PTLLinearLayoutManager();
         adapter = new MaintenanceSituationAdapter(getContext(), companyList, iconList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(manager);
+        recyclerView.setRefreshEnable(false);
+
 
         errorLayout = view.findViewById(R.id.maintenance_situation_error_layout);
 
@@ -130,6 +132,12 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
             }
         });
         button.setOnClickListener(this);
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
     }
 
     /**
@@ -145,7 +153,6 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
                         @Override
                         public void run() {
                             refreshLayout.setRefreshing(false);
-                            recyclerView.setVisibility(View.GONE);
                             errorLayout.setVisibility(View.VISIBLE);
                         }
                     });
@@ -164,7 +171,6 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
                                 if (info != null && info.getError() == null) {
                                     parseInfo(info);
                                     refreshLayout.setRefreshing(false);
-                                    recyclerView.setVisibility(View.VISIBLE);
                                     errorLayout.setVisibility(View.GONE);
                                 } else {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -189,6 +195,7 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
      */
     private void parseInfo(MaintenanceCompanyInfo info) {
         companyList.clear();
+        recyclerView.setNoMore(true);
         if (info.getData() != null) {
             for (MaintenanceCompanyInfo.DataBean dataBean : info.getData()) {
                 MaintenanceCompany company = new MaintenanceCompany();

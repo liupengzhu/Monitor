@@ -79,20 +79,22 @@ public class MaintenanceSituationAdapter extends RecyclerView.Adapter<Maintenanc
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_maintenance_situation, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
-        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+
+        holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = viewHolder.getAdapterPosition();
                 if (onClickListener != null) {
                     onClickListener.onClick(v, companyList.get(position).getId());
                 }
             }
         });
-        return viewHolder;
-    }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
         MaintenanceCompany company = companyList.get(position);
         holder.name.setText(company.getName() + "");
         holder.tel.setText(company.getTel() + "");

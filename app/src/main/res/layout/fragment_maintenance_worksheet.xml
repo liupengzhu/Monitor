@@ -71,45 +71,52 @@
 
     </RelativeLayout>
 
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/maintenance_worksheet_swipe"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/maintenance_worksheet_swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/maintenance_worksheet_recycler"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/maintenance_worksheet_error_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone">
+                <cn.com.larunda.recycler.PullToLoadRecyclerView
+                    android:id="@+id/maintenance_worksheet_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></cn.com.larunda.recycler.PullToLoadRecyclerView>
+            </FrameLayout>
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="100dp"
-                    android:src="@drawable/no_network" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/网络错误"
-                    android:textColor="@color/home_text_l"
-                    android:textSize="18sp" />
-            </LinearLayout>
-        </FrameLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <LinearLayout
+            android:id="@+id/maintenance_worksheet_error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tab_background"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:src="@drawable/no_network" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="@string/网络错误"
+                android:textColor="@color/home_text_l"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

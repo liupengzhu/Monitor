@@ -37,6 +37,9 @@ import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.recycler.OnLoadListener;
+import cn.com.larunda.recycler.PTLLinearLayoutManager;
+import cn.com.larunda.recycler.PullToLoadRecyclerView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -61,13 +64,16 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
     private int company_id;
     private int status;
 
-    private RecyclerView recyclerView;
+    private PullToLoadRecyclerView recyclerView;
     private WorksheetAdapter adapter;
-    private LinearLayoutManager manager;
+    private PTLLinearLayoutManager manager;
     private List<WorksheetBean> worksheetBeanList = new ArrayList<>();
 
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout errorLayout;
+
+    private int page;
+    private int maxPage;
 
     @Nullable
     @Override
@@ -77,7 +83,6 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         initEvent();
         initType();
         sendRequest();
-        recyclerView.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         return view;
     }
@@ -88,7 +93,6 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         if (getActivity() instanceof WorksheetActivity) {
             initType();
             sendRequest();
-            recyclerView.setVisibility(View.GONE);
             errorLayout.setVisibility(View.GONE);
         }
     }
@@ -117,9 +121,10 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
 
         recyclerView = view.findViewById(R.id.maintenance_worksheet_recycler);
         adapter = new WorksheetAdapter(getContext(), worksheetBeanList);
-        manager = new LinearLayoutManager(getContext());
+        manager = new PTLLinearLayoutManager();
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+        recyclerView.setRefreshEnable(false);
 
         textView = view.findViewById(R.id.maintenance_worksheet_date_text);
         button = view.findViewById(R.id.maintenance_worksheet_search_button);
@@ -195,6 +200,18 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         });
 
         button.setOnClickListener(this);
+        recyclerView.setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onStartLoading(int skip) {
+                sendLoadRequest();
+            }
+        });
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
     }
 
     /**
@@ -255,8 +272,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
             companyData = "&company_id=" + company_id;
         }
         refreshLayout.setRefreshing(true);
-        recyclerView.scrollToPosition(0);
-        HttpUtil.sendGetRequestWithHttp(WORKSHEET_URL + token + timeData + statusData + companyData, new Callback() {
+        HttpUtil.sendGetRequestWithHttp(WORKSHEET_URL + token + timeData + statusData + companyData + "&page=" + 1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 if (getActivity() != null) {
@@ -264,7 +280,6 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
                         @Override
                         public void run() {
                             refreshLayout.setRefreshing(false);
-                            recyclerView.setVisibility(View.GONE);
                             errorLayout.setVisibility(View.VISIBLE);
                         }
                     });
@@ -283,7 +298,6 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
                                 if (info != null && info.getError() == null) {
                                     parseInfo(info);
                                     refreshLayout.setRefreshing(false);
-                                    recyclerView.setVisibility(View.VISIBLE);
                                     errorLayout.setVisibility(View.GONE);
                                 } else {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -308,6 +322,13 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
      */
     private void parseInfo(WorksheetInfo info) {
         worksheetBeanList.clear();
+        page = info.getCurrent_page() + 1;
+        maxPage = info.getLast_page();
+        if (page > maxPage) {
+            recyclerView.setNoMore(true);
+        } else {
+            recyclerView.setNoMore(false);
+        }
         if (info.getData() != null) {
             for (WorksheetInfo.DataBean dataBean : info.getData()) {
                 WorksheetBean bean = new WorksheetBean();
@@ -319,7 +340,103 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
                 worksheetBeanList.add(bean);
             }
         }
-        adapter.notifyDataSetChanged();
+        recyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+
+    /**
+     * 发送网络请求
+     */
+    private void sendLoadRequest() {
+        final String companyData;
+        String statusData;
+        String timeData;
+        if (textView.getText().equals("选择时间")) {
+            timeData = "";
+        } else {
+            timeData = "&time=" + textView.getText().toString();
+        }
+        if (status == 0) {
+            statusData = "";
+        } else {
+            statusData = "&status=" + (status - 1);
+        }
+        if (company_id == 0) {
+            companyData = "";
+        } else {
+            companyData = "&company_id=" + company_id;
+        }
+        refreshLayout.setRefreshing(true);
+        HttpUtil.sendGetRequestWithHttp(WORKSHEET_URL + token + timeData + statusData + companyData + "&page=" + page, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            errorLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String content = response.body().string();
+                if (Util.isGoodJson(content)) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                WorksheetInfo info = Util.handleWorksheetInfo(content);
+                                if (info != null && info.getError() == null) {
+                                    parseLoadInfo(info);
+                                    refreshLayout.setRefreshing(false);
+                                    errorLayout.setVisibility(View.GONE);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
+
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 解析服务器返回数据
+     *
+     * @param info
+     */
+    private void parseLoadInfo(WorksheetInfo info) {
+        page = info.getCurrent_page() + 1;
+        maxPage = info.getLast_page();
+        if (page > maxPage) {
+            recyclerView.setNoMore(true);
+        } else {
+            recyclerView.setNoMore(false);
+        }
+        if (info.getData() != null) {
+            for (WorksheetInfo.DataBean dataBean : info.getData()) {
+                WorksheetBean bean = new WorksheetBean();
+                bean.setData(dataBean.getTitle());
+                bean.setName(dataBean.getCompany_name());
+                bean.setTime(dataBean.getCreated_at());
+                bean.setTitle(dataBean.getWorksheet_number());
+                bean.setType(dataBean.getStatus());
+                worksheetBeanList.add(bean);
+            }
+
+        }
+        recyclerView.completeLoad(0);
+
     }
 
     @Override

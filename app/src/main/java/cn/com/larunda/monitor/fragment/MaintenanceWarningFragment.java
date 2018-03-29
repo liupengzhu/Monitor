@@ -246,7 +246,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
             companyData = "&company_id=" + company_id;
         }
         refreshLayout.setRefreshing(true);
-        recyclerView.scrollToPosition(0);
         HttpUtil.sendGetRequestWithHttp(ALARM_URL + token + timeData + statusData + companyData + "&page=" + 1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -342,7 +341,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
             companyData = "&company_id=" + company_id;
         }
         refreshLayout.setRefreshing(true);
-        recyclerView.scrollToPosition(0);
         HttpUtil.sendGetRequestWithHttp(ALARM_URL + token + timeData + statusData + companyData + "&page=" + page, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

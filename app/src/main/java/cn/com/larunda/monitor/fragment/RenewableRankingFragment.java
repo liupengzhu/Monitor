@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -36,6 +37,9 @@ import cn.com.larunda.monitor.util.BarChartViewPager;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.recycler.OnLoadListener;
+import cn.com.larunda.recycler.PTLLinearLayoutManager;
+import cn.com.larunda.recycler.PullToLoadRecyclerView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -46,7 +50,7 @@ import okhttp3.Response;
 
 public class RenewableRankingFragment extends Fragment implements View.OnClickListener {
 
-    private int page = 1;
+
     private static final String RENEWABLE_RANK_URL = MyApplication.URL + "renewable/rank_lists" + MyApplication.TOKEN;
     private String date_type = "month";
 
@@ -61,15 +65,15 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
     private RadioGroup timeGroup;
 
     private SwipeRefreshLayout refreshLayout;
-    private LinearLayout layout;
+    private FrameLayout layout;
     private LinearLayout errorLayout;
 
-    private RecyclerView recyclerView;
+    private PullToLoadRecyclerView recyclerView;
     private RenewableRankingRecyclerAdapter adapter;
-    private LinearLayoutManager manager;
+    private PTLLinearLayoutManager manager;
     private List<RenewableRankingBean> renewableRankingBeanList = new ArrayList<>();
     private int maxPage;
-    private int lastVisibleItem;
+    private int page;
 
     @Nullable
     @Override
@@ -121,9 +125,10 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
 
         recyclerView = view.findViewById(R.id.renewable_ranking_fragment_recyclerView);
         adapter = new RenewableRankingRecyclerAdapter(getContext(), renewableRankingBeanList);
-        manager = new LinearLayoutManager(getContext());
+        manager = new PTLLinearLayoutManager();
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+        recyclerView.setRefreshEnable(false);
     }
 
     /**
@@ -183,23 +188,16 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
                 monthDialog.cancel();
             }
         });
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.setOnLoadListener(new OnLoadListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (page < maxPage) {
-                    //在newState为滑到底部时
-                    if (lastVisibleItem + 1 == adapter.getItemCount()) {
-                        sendAddRequest();
-                    }
-                }
+            public void onStartLoading(int skip) {
+                sendAddRequest();
             }
-
+        });
+        errorLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem = manager.findLastVisibleItemPosition();
+            public void onClick(View v) {
+                sendRequest();
             }
         });
     }
@@ -210,7 +208,6 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
     private void sendAddRequest() {
         getType();
         String time = dateText.getText().toString().trim();
-        refreshLayout.setRefreshing(true);
         HttpUtil.sendGetRequestWithHttp(RENEWABLE_RANK_URL + token + "&date_type=" + date_type
                 + "&time=" + time + "&page=" + page, new Callback() {
             @Override
@@ -258,6 +255,11 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
     private void parseAddInfo(RenewableRankInfo renewableRankInfo) {
         page = renewableRankInfo.getCurrent_page() + 1;
         maxPage = renewableRankInfo.getLast_page();
+        if (page > maxPage) {
+            recyclerView.setNoMore(true);
+        } else {
+            recyclerView.setNoMore(false);
+        }
         if (renewableRankInfo.getData() != null) {
             for (RenewableRankInfo.DataBean bean : renewableRankInfo.getData()) {
                 RenewableRankingBean renewableRankingBean = new RenewableRankingBean();
@@ -272,7 +274,7 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
                 renewableRankingBeanList.add(renewableRankingBean);
             }
         }
-        adapter.notifyDataSetChanged();
+        recyclerView.completeLoad(0);
     }
 
     /**
@@ -337,6 +339,11 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
     private void parseInfo(RenewableRankInfo renewableRankInfo) {
         page = renewableRankInfo.getCurrent_page() + 1;
         maxPage = renewableRankInfo.getLast_page();
+        if (page > maxPage) {
+            recyclerView.setNoMore(true);
+        } else {
+            recyclerView.setNoMore(false);
+        }
         renewableRankingBeanList.clear();
         if (renewableRankInfo.getData() != null) {
             for (RenewableRankInfo.DataBean bean : renewableRankInfo.getData()) {
@@ -352,7 +359,7 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
                 renewableRankingBeanList.add(renewableRankingBean);
             }
         }
-        adapter.notifyDataSetChanged();
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     /**

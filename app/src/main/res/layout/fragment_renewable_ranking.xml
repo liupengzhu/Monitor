@@ -66,56 +66,60 @@
             android:textSize="12sp" />
     </RelativeLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/renewable_ranking_fragment_swipe"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
 
-        <FrameLayout
-            android:layout_marginTop="10dp"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/renewable_ranking_fragment_swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+
+            <FrameLayout
                 android:id="@+id/renewable_ranking_fragment_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
+                <cn.com.larunda.recycler.PullToLoadRecyclerView
                     android:id="@+id/renewable_ranking_fragment_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                </android.support.v7.widget.RecyclerView>
+                </cn.com.larunda.recycler.PullToLoadRecyclerView>
 
-            </LinearLayout>
+            </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/renewable_ranking_fragment_error_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="100dp"
-                    android:src="@drawable/no_network" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/网络错误"
-                    android:textColor="@color/home_text_l"
-                    android:textSize="18sp" />
-            </LinearLayout>
-        </FrameLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <LinearLayout
+            android:id="@+id/renewable_ranking_fragment_error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tab_background"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:src="@drawable/no_network" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="@string/网络错误"
+                android:textColor="@color/home_text_l"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

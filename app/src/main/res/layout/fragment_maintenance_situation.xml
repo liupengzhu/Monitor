@@ -44,7 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/maintenance_situation_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -52,7 +53,7 @@
                     android:id="@+id/maintenance_situation_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"></cn.com.larunda.recycler.PullToLoadRecyclerView>
-            </LinearLayout>
+            </FrameLayout>
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <LinearLayout

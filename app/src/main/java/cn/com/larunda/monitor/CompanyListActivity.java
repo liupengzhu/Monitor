@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 
@@ -50,6 +51,7 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
 
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout errorLayout;
+    private FrameLayout layout;
     private Toolbar toolbar;
 
     @Override
@@ -63,6 +65,7 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
         setSupportActionBar(toolbar);
         sendRequest();
         errorLayout.setVisibility(View.GONE);
+        layout.setVisibility(View.GONE);
     }
 
 
@@ -98,6 +101,7 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
         recyclerView.setRefreshEnable(false);
 
         errorLayout = findViewById(R.id.company_list_error_layout);
+        layout = findViewById(R.id.company_list_layout);
 
         refreshLayout = findViewById(R.id.company_list_swipe);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -168,6 +172,7 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
                     public void run() {
                         refreshLayout.setRefreshing(false);
                         errorLayout.setVisibility(View.VISIBLE);
+                        layout.setVisibility(View.GONE);
                     }
                 });
             }
@@ -184,6 +189,7 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
                                 parseInfo(info);
                                 refreshLayout.setRefreshing(false);
                                 errorLayout.setVisibility(View.GONE);
+                                layout.setVisibility(View.VISIBLE);
                             } else {
                                 Intent intent = new Intent(CompanyListActivity.this, LoginActivity.class);
                                 intent.putExtra("token_timeout", "登录超时");
@@ -261,7 +267,6 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
      * 发送网络请求
      */
     private void sendLoadRequest() {
-        refreshLayout.setRefreshing(true);
         HttpUtil.sendGetRequestWithHttp(COMPANY_URL + token + "&maintenance_company_id=" + id
                 + "&page=" + page, new Callback() {
             @Override

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
 
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout errorLayout;
+    private FrameLayout layout;
 
     private int page;
     private int maxPage;
@@ -81,6 +83,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         initType();
         sendRequest();
         errorLayout.setVisibility(View.GONE);
+        layout.setVisibility(View.GONE);
         return view;
     }
 
@@ -91,6 +94,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
             initType();
             sendRequest();
             errorLayout.setVisibility(View.GONE);
+            layout.setVisibility(View.GONE);
         }
     }
 
@@ -105,6 +109,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         token = preferences.getString("token", null);
 
         errorLayout = view.findViewById(R.id.maintenance_warning_error_layout);
+        layout = view.findViewById(R.id.maintenance_warning_layout);
 
         refreshLayout = view.findViewById(R.id.maintenance_warning_swipe);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -255,6 +260,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                         public void run() {
                             refreshLayout.setRefreshing(false);
                             errorLayout.setVisibility(View.VISIBLE);
+                            layout.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -273,6 +279,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                                     parseInfo(info);
                                     refreshLayout.setRefreshing(false);
                                     errorLayout.setVisibility(View.GONE);
+                                    layout.setVisibility(View.VISIBLE);
                                 } else {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                                     intent.putExtra("token_timeout", "登录超时");
@@ -340,7 +347,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         } else {
             companyData = "&company_id=" + company_id;
         }
-        refreshLayout.setRefreshing(true);
         HttpUtil.sendGetRequestWithHttp(ALARM_URL + token + timeData + statusData + companyData + "&page=" + page, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,6 +75,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
 
     private int page;
     private int maxPage;
+    private FrameLayout layout;
 
     @Nullable
     @Override
@@ -84,6 +86,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         initType();
         sendRequest();
         errorLayout.setVisibility(View.GONE);
+        layout.setVisibility(View.GONE);
         return view;
     }
 
@@ -94,6 +97,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
             initType();
             sendRequest();
             errorLayout.setVisibility(View.GONE);
+            layout.setVisibility(View.GONE);
         }
     }
 
@@ -108,6 +112,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         token = preferences.getString("token", null);
 
         errorLayout = view.findViewById(R.id.maintenance_worksheet_error_layout);
+        layout = view.findViewById(R.id.maintenance_worksheet_layout);
 
         refreshLayout = view.findViewById(R.id.maintenance_worksheet_swipe);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -281,6 +286,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
                         public void run() {
                             refreshLayout.setRefreshing(false);
                             errorLayout.setVisibility(View.VISIBLE);
+                            layout.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -299,6 +305,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
                                     parseInfo(info);
                                     refreshLayout.setRefreshing(false);
                                     errorLayout.setVisibility(View.GONE);
+                                    layout.setVisibility(View.VISIBLE);
                                 } else {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                                     intent.putExtra("token_timeout", "登录超时");
@@ -366,7 +373,6 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         } else {
             companyData = "&company_id=" + company_id;
         }
-        refreshLayout.setRefreshing(true);
         HttpUtil.sendGetRequestWithHttp(WORKSHEET_URL + token + timeData + statusData + companyData + "&page=" + page, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

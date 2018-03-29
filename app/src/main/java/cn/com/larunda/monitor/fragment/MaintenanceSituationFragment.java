@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -52,6 +53,7 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
     private String token;
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout errorLayout;
+    private FrameLayout layout;
     private RelativeLayout button;
 
     @Nullable
@@ -63,6 +65,7 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
         initEvent();
         sendRequest();
         errorLayout.setVisibility(View.GONE);
+        layout.setVisibility(View.GONE);
         return view;
     }
 
@@ -106,6 +109,7 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
 
 
         errorLayout = view.findViewById(R.id.maintenance_situation_error_layout);
+        layout = view.findViewById(R.id.maintenance_situation_layout);
 
         refreshLayout = view.findViewById(R.id.maintenance_situation_swipe);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -154,6 +158,7 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
                         public void run() {
                             refreshLayout.setRefreshing(false);
                             errorLayout.setVisibility(View.VISIBLE);
+                            layout.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -172,6 +177,7 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
                                     parseInfo(info);
                                     refreshLayout.setRefreshing(false);
                                     errorLayout.setVisibility(View.GONE);
+                                    layout.setVisibility(View.VISIBLE);
                                 } else {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                                     intent.putExtra("token_timeout", "登录超时");

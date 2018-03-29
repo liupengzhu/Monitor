@@ -45,7 +45,7 @@ public class CompanyListActivity extends BaseActivity implements View.OnClickLis
     private CompanyAdapter adapter;
     private PTLLinearLayoutManager manager;
 
-    private int page = 1;
+    private int page;
     private int maxPage;
 
     private SwipeRefreshLayout refreshLayout;

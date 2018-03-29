@@ -35,6 +35,9 @@ import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
+import cn.com.larunda.recycler.OnLoadListener;
+import cn.com.larunda.recycler.PTLLinearLayoutManager;
+import cn.com.larunda.recycler.PullToLoadRecyclerView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -58,13 +61,16 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
     private int company_id;
     private int status;
 
-    private RecyclerView recyclerView;
+    private PullToLoadRecyclerView recyclerView;
     private WarningAdapter adapter;
-    private LinearLayoutManager manager;
+    private PTLLinearLayoutManager manager;
     private List<WarningBean> warningBeanList = new ArrayList<>();
 
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout errorLayout;
+
+    private int page;
+    private int maxPage;
 
     @Nullable
     @Override
@@ -74,7 +80,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         initEvent();
         initType();
         sendRequest();
-        recyclerView.setVisibility(View.GONE);
         errorLayout.setVisibility(View.GONE);
         return view;
     }
@@ -85,7 +90,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         if (getActivity() instanceof AlarmActivity) {
             initType();
             sendRequest();
-            recyclerView.setVisibility(View.GONE);
             errorLayout.setVisibility(View.GONE);
         }
     }
@@ -114,9 +118,10 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
 
         recyclerView = view.findViewById(R.id.maintenance_warning_recycler);
         adapter = new WarningAdapter(getContext(), warningBeanList);
-        manager = new LinearLayoutManager(getContext());
+        manager = new PTLLinearLayoutManager();
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+        recyclerView.setRefreshEnable(false);
 
         textView = view.findViewById(R.id.maintenance_warning_date_text);
         button = view.findViewById(R.id.maintenance_warning_search_button);
@@ -184,6 +189,19 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         });
 
         button.setOnClickListener(this);
+
+        recyclerView.setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onStartLoading(int skip) {
+                sendLoadRequest();
+            }
+        });
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
     }
 
     /**
@@ -229,7 +247,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         }
         refreshLayout.setRefreshing(true);
         recyclerView.scrollToPosition(0);
-        HttpUtil.sendGetRequestWithHttp(ALARM_URL + token + timeData + statusData + companyData, new Callback() {
+        HttpUtil.sendGetRequestWithHttp(ALARM_URL + token + timeData + statusData + companyData + "&page=" + 1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 if (getActivity() != null) {
@@ -237,7 +255,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                         @Override
                         public void run() {
                             refreshLayout.setRefreshing(false);
-                            recyclerView.setVisibility(View.GONE);
                             errorLayout.setVisibility(View.VISIBLE);
                         }
                     });
@@ -256,7 +273,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                                 if (info != null && info.getError() == null) {
                                     parseInfo(info);
                                     refreshLayout.setRefreshing(false);
-                                    recyclerView.setVisibility(View.VISIBLE);
                                     errorLayout.setVisibility(View.GONE);
                                 } else {
                                     Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -281,6 +297,13 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
      */
     private void parseInfo(WarningInfo info) {
         warningBeanList.clear();
+        page = info.getCurrent_page() + 1;
+        maxPage = info.getLast_page();
+        if (page > maxPage) {
+            recyclerView.setNoMore(true);
+        } else {
+            recyclerView.setNoMore(false);
+        }
         if (info.getData() != null) {
             for (WarningInfo.DataBean dataBean : info.getData()) {
                 WarningBean bean = new WarningBean();
@@ -292,7 +315,102 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                 warningBeanList.add(bean);
             }
         }
-        adapter.notifyDataSetChanged();
+        recyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+
+    /**
+     * 发送网络请求
+     */
+    private void sendLoadRequest() {
+        final String companyData;
+        String statusData;
+        String timeData;
+        if (textView.getText().equals("选择时间")) {
+            timeData = "";
+        } else {
+            timeData = "&time=" + textView.getText().toString();
+        }
+        if (status == 0) {
+            statusData = "";
+        } else {
+            statusData = "&status=" + status;
+        }
+        if (company_id == 0) {
+            companyData = "";
+        } else {
+            companyData = "&company_id=" + company_id;
+        }
+        refreshLayout.setRefreshing(true);
+        recyclerView.scrollToPosition(0);
+        HttpUtil.sendGetRequestWithHttp(ALARM_URL + token + timeData + statusData + companyData + "&page=" + page, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            errorLayout.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String content = response.body().string();
+                if (Util.isGoodJson(content)) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                WarningInfo info = Util.handleWarningInfo(content);
+                                if (info != null && info.getError() == null) {
+                                    parseLoadInfo(info);
+                                    refreshLayout.setRefreshing(false);
+                                    errorLayout.setVisibility(View.GONE);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    intent.putExtra("token_timeout", "登录超时");
+                                    preferences.edit().putString("token", null).commit();
+                                    startActivity(intent);
+                                    ActivityCollector.finishAllActivity();
+                                }
+
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 解析服务器返回数据
+     *
+     * @param info
+     */
+    private void parseLoadInfo(WarningInfo info) {
+        page = info.getCurrent_page() + 1;
+        maxPage = info.getLast_page();
+        if (page > maxPage) {
+            recyclerView.setNoMore(true);
+        } else {
+            recyclerView.setNoMore(false);
+        }
+        if (info.getData() != null) {
+            for (WarningInfo.DataBean dataBean : info.getData()) {
+                WarningBean bean = new WarningBean();
+                bean.setData(dataBean.getContent());
+                bean.setName(dataBean.getCompany_name());
+                bean.setTime(dataBean.getCreated_at());
+                bean.setTitle(dataBean.getType());
+                bean.setType(dataBean.getStatus());
+                warningBeanList.add(bean);
+            }
+        }
+        recyclerView.completeLoad(0);
     }
 
     /**

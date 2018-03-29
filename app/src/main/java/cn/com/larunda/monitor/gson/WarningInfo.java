@@ -10,6 +10,33 @@ public class WarningInfo {
 
     private List<DataBean> data;
     private String error;
+    private int current_page;
+    private int from;
+    private int last_page;
+
+    public int getCurrent_page() {
+        return current_page;
+    }
+
+    public void setCurrent_page(int current_page) {
+        this.current_page = current_page;
+    }
+
+    public int getFrom() {
+        return from;
+    }
+
+    public void setFrom(int from) {
+        this.from = from;
+    }
+
+    public int getLast_page() {
+        return last_page;
+    }
+
+    public void setLast_page(int last_page) {
+        this.last_page = last_page;
+    }
 
     public String getError() {
         return error;

@@ -220,7 +220,7 @@ public class MaintenanceSituationFragment extends Fragment implements View.OnCli
                 companyList.add(company);
             }
         }
-        adapter.notifyDataSetChanged();
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     /**

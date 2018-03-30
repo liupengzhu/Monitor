@@ -236,6 +236,13 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                 ((TextView) v).setText(content.toString());
             }
         });
+
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
     }
 
     /**

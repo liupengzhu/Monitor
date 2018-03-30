@@ -255,6 +255,12 @@ public class GasRankingFragment extends Fragment implements View.OnClickListener
                 ((TextView) v).setText(content.toString());
             }
         });
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
     }
 
     /**

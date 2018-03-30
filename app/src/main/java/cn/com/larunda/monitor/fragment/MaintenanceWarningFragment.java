@@ -87,17 +87,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (getActivity() instanceof AlarmActivity) {
-            initType();
-            sendRequest();
-            errorLayout.setVisibility(View.GONE);
-            layout.setVisibility(View.GONE);
-        }
-    }
-
     /**
      * 初始化view
      *
@@ -421,13 +410,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
      * 重置状态
      */
     private void initType() {
-        if (getActivity() instanceof AlarmActivity) {
-            company_id = AlarmActivity.id;
-            button.setVisibility(View.GONE);
-        } else {
-            company_id = 0;
-            button.setVisibility(View.VISIBLE);
-        }
+        company_id = 0;
         textView.setText("选择时间");
         spinner.setSelection(0);
     }

@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import cn.com.larunda.monitor.gson.MessageInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
+import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
@@ -25,7 +26,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class RePasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class RePasswordActivity extends BaseActivity implements View.OnClickListener {
     private static final String PWD_URL = MyApplication.URL + "change_pwd" + MyApplication.TOKEN;
     private SharedPreferences preferences;
     private String token;

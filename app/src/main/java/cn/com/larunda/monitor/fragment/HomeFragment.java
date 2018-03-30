@@ -74,6 +74,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
         initEvent();
+        sendRequest();
+        layout.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.GONE);
         return view;
     }
 
@@ -120,13 +123,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         button = view.findViewById(R.id.home_button);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        sendRequest();
-        layout.setVisibility(View.GONE);
-        errorLayout.setVisibility(View.GONE);
-    }
 
     /**
      * 发送数据请求
@@ -211,6 +207,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void initEvent() {
         leftButton.setOnClickListener(this);
         button.setOnClickListener(this);
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
     }
 
     @Override

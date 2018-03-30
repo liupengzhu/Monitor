@@ -23,10 +23,11 @@ import cn.com.larunda.monitor.fragment.GasFragment;
 import cn.com.larunda.monitor.fragment.GasRankingFragment;
 import cn.com.larunda.monitor.fragment.SteamFragment;
 import cn.com.larunda.monitor.fragment.SteamRankingFragment;
+import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.CustomViewPager;
 import cn.com.larunda.monitor.util.Util;
 
-public class SteamActivity extends AppCompatActivity implements View.OnClickListener {
+public class SteamActivity extends BaseActivity implements View.OnClickListener {
 
     private TabLayout tabLayout;
     private CustomViewPager viewPager;

@@ -74,9 +74,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initView(view);
         initEvent();
-        sendRequest();
-        layout.setVisibility(View.GONE);
-        errorLayout.setVisibility(View.GONE);
+        String content = preferences.getString("home_info", null);
+        if (content != null) {
+            HomeInfo homeInfo = Util.handleHomeInfo(content);
+            parseHomeInfo(homeInfo);
+        } else {
+            sendRequest();
+            layout.setVisibility(View.GONE);
+            errorLayout.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -146,7 +152,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String content = response.body().string();
+                final String content = response.body().string();
                 if (Util.isGoodJson(content)) {
                     final HomeInfo homeInfo = Util.handleHomeInfo(content);
                     if (getActivity() != null) {
@@ -155,6 +161,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             public void run() {
                                 if (homeInfo != null && homeInfo.getError() == null) {
                                     parseHomeInfo(homeInfo);
+                                    preferences.edit().putString("home_info", content).commit();
                                     refreshLayout.setRefreshing(false);
                                     layout.setVisibility(View.VISIBLE);
                                     errorLayout.setVisibility(View.GONE);

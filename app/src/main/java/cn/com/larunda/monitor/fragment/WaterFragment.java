@@ -260,6 +260,13 @@ public class WaterFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
     }
 
     /**

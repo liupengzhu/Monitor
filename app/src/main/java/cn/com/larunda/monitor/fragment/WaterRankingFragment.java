@@ -253,6 +253,13 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
                 ((TextView) v).setText(content.toString());
             }
         });
+
+        errorLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendRequest();
+            }
+        });
     }
 
     /**

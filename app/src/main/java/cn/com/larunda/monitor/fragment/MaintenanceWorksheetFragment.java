@@ -90,16 +90,6 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (getActivity() instanceof WorksheetActivity) {
-            initType();
-            sendRequest();
-            errorLayout.setVisibility(View.GONE);
-            layout.setVisibility(View.GONE);
-        }
-    }
 
     /**
      * 初始化view
@@ -243,13 +233,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
      * 重置状态
      */
     private void initType() {
-        if (getActivity() instanceof WorksheetActivity) {
-            company_id = WorksheetActivity.id;
-            button.setVisibility(View.GONE);
-        } else {
-            company_id = 0;
-            button.setVisibility(View.VISIBLE);
-        }
+        company_id = 0;
         textView.setText("选择时间");
         spinner.setSelection(0);
     }

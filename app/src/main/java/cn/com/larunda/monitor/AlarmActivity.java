@@ -69,6 +69,10 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
         company_id = getIntent().getIntExtra("id", 0);
         initView();
         initEvent();
+        initType();
+        sendRequest();
+        errorLayout.setVisibility(View.GONE);
+        layout.setVisibility(View.GONE);
     }
 
 
@@ -400,15 +404,5 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
         spinner.setSelection(0);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (resultCode == RESULT_OK && data != null) {
-                    company_id = data.getIntExtra("id", 0);
-                    sendRequest();
-                }
-                break;
-        }
-    }
+
 }

@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.bean.RenewableRankingBean;
+import cn.com.larunda.monitor.util.Util;
 
 /**
  * Created by sddt on 18-3-20.
@@ -79,18 +80,35 @@ public class RenewableRankingRecyclerAdapter extends RecyclerView.Adapter<Renewa
         }
         holder.textView.setText("发电排行" + renewableRankingBean.getRank());
         holder.name.setText(renewableRankingBean.getName() + "");
-
-        holder.installedCapacity.setText(renewableRankingBean.getInstalledCapacity() + "");
+        if (renewableRankingBean.getInstalledCapacity() != null) {
+            if (renewableRankingBean.getInstalledCapacity().equals("/")) {
+                holder.installedCapacity.setText("-");
+            } else {
+                holder.installedCapacity.setText(Util.formatNum(Float.valueOf(renewableRankingBean.getInstalledCapacity())) + "");
+            }
+        }
         holder.installedCapacityUnit.setText("装机容量(" + renewableRankingBean.getInstalledCapacityRatio() + ")");
-        holder.total.setText(renewableRankingBean.getTotal() + "");
-        holder.history_average.setText(renewableRankingBean.getHistory_average() + "");
+        if (renewableRankingBean.getTotal() != null) {
+            if (renewableRankingBean.getTotal().equals("/")) {
+                holder.total.setText("-");
+            } else {
+                holder.total.setText(Util.formatNum(Float.valueOf(renewableRankingBean.getTotal())) + "");
+            }
+        }
+        if (renewableRankingBean.getHistory_average() != null) {
+            if (renewableRankingBean.getHistory_average().equals("/")) {
+                holder.history_average.setText("-");
+            } else {
+                holder.history_average.setText(Util.formatNum(Float.valueOf(renewableRankingBean.getHistory_average())) + "");
+            }
+        }
         holder.totalUnit.setText("实际发电量(" + renewableRankingBean.getRatio() + ")");
         holder.history_averageUnit.setText("历史同期发电量(" + renewableRankingBean.getRatio() + ")");
-        if (renewableRankingBean.getRange().equals("/")) {
+        if (renewableRankingBean.getRange() != null && renewableRankingBean.getRange().equals("/")) {
             holder.range.setText("-");
             holder.rangeImg.setImageResource(R.drawable.none);
-        } else {
-            holder.range.setText(renewableRankingBean.getRange() + "");
+        } else if (renewableRankingBean.getRange() != null) {
+            holder.range.setText(Util.formatNum(Float.valueOf(renewableRankingBean.getRange())) + "");
             float range = Float.valueOf(renewableRankingBean.getRange());
             if (range > 0) {
                 holder.rangeImg.setImageResource(R.drawable.rise);

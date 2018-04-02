@@ -14,6 +14,7 @@ import java.util.List;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.bean.GasRankingBean;
 import cn.com.larunda.monitor.bean.WaterRankingBean;
+import cn.com.larunda.monitor.util.Util;
 
 /**
  * Created by sddt on 18-3-19.
@@ -81,8 +82,8 @@ public class GasRankingRecyclerAdapter extends RecyclerView.Adapter<GasRankingRe
         }
         holder.textView.setText("耗气排行" + (position + 1));
         holder.nameText.setText(bean.getName());
-        holder.dataText.setText(bean.getData() + bean.getRatio());
-        holder.percentText.setText(bean.getPercent() + "%");
+        holder.dataText.setText(Util.formatNum(Float.valueOf(bean.getData())) + bean.getRatio());
+        holder.percentText.setText(Util.formatNum(Float.valueOf(bean.getPercent())) + "%");
     }
 
     @Override

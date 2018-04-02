@@ -241,15 +241,15 @@ public class GasRankingFragment extends Fragment implements View.OnClickListener
                 StringBuffer content = new StringBuffer();
                 if (date_type.equals("date")) {
                     if (type.equals("original")) {
-                        content.append("当日能耗:" + e.getY() + gasUnit);
+                        content.append("当日能耗:" + Util.formatNum(e.getY()) + gasUnit);
                     } else {
-                        content.append("当日能耗:" + e.getY() + "tce");
+                        content.append("当日能耗:" + Util.formatNum(e.getY()) + "tce");
                     }
                 } else {
                     if (type.equals("original")) {
-                        content.append("当月能耗:" + e.getY() + gasUnit);
+                        content.append("当月能耗:" + Util.formatNum(e.getY()) + gasUnit);
                     } else {
-                        content.append("当月能耗:" + e.getY() + "tce");
+                        content.append("当月能耗:" + Util.formatNum(e.getY()) + "tce");
                     }
                 }
                 ((TextView) v).setText(content.toString());

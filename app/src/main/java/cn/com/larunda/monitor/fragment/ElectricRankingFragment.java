@@ -245,15 +245,15 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
                 StringBuffer content = new StringBuffer();
                 if (date_type.equals("date")) {
                     if (type.equals("original")) {
-                        content.append("当日能耗:" + e.getY() + ratio + powerUnit);
+                        content.append("当日能耗:" + Util.formatNum(e.getY()) + ratio + powerUnit);
                     } else {
-                        content.append("当日能耗:" + e.getY() + "tce");
+                        content.append("当日能耗:" + Util.formatNum(e.getY()) + "tce");
                     }
                 } else {
                     if (type.equals("original")) {
-                        content.append("当月能耗:" + e.getY() + ratio + powerUnit);
+                        content.append("当月能耗:" + Util.formatNum(e.getY()) + ratio + powerUnit);
                     } else {
-                        content.append("当月能耗:" + e.getY() + "tce");
+                        content.append("当月能耗:" + Util.formatNum(e.getY()) + "tce");
                     }
                 }
                 ((TextView) v).setText(content.toString());

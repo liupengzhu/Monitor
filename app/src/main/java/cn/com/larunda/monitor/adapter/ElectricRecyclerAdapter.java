@@ -14,6 +14,7 @@ import java.util.List;
 
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.bean.ElectricBean;
+import cn.com.larunda.monitor.util.Util;
 
 /**
  * Created by sddt on 18-3-15.
@@ -99,51 +100,82 @@ public class ElectricRecyclerAdapter extends RecyclerView.Adapter<ElectricRecycl
         holder.totalUnit.setText("区间用电量 (" + bean.getRatio() + ")");
         holder.history_averageUnit.setText("同期历史值 (" + bean.getRatio() + ")");
         holder.time.setText(bean.getTime() + "");
-        holder.total.setText(bean.getTotal() + "");
+        if (bean.getTotal() != null) {
+            if (holder.total.equals("/")) {
+                holder.total.setText("-");
+            } else {
+                holder.total.setText(Util.formatNum(Float.valueOf(bean.getTotal())) );
+            }
+        }
         if (bean.getRush() != null) {
             holder.rushLayout.setVisibility(View.VISIBLE);
-            holder.rush.setText(bean.getRush());
+            if (bean.getRush().equals("/")) {
+                holder.rush.setText("-");
+            } else {
+                holder.rush.setText(Util.formatNum(Float.valueOf(bean.getRush())));
+            }
         } else {
             holder.rushLayout.setVisibility(View.GONE);
         }
 
         if (bean.getPeak() != null) {
             holder.peakLayout.setVisibility(View.VISIBLE);
-            holder.peak.setText(bean.getPeak());
+            if (bean.getPeak().equals("/")) {
+                holder.peak.setText("-");
+            } else {
+                holder.peak.setText(Util.formatNum(Float.valueOf(bean.getPeak())));
+            }
         } else {
             holder.peakLayout.setVisibility(View.GONE);
         }
 
         if (bean.getNormal() != null) {
             holder.normalLayout.setVisibility(View.VISIBLE);
-            holder.normal.setText(bean.getNormal());
+            if (bean.getNormal().equals("/")) {
+                holder.normal.setText("-");
+            } else {
+                holder.normal.setText(Util.formatNum(Float.valueOf(bean.getNormal())));
+            }
         } else {
             holder.normalLayout.setVisibility(View.GONE);
         }
 
         if (bean.getValley() != null) {
             holder.valleyLayout.setVisibility(View.VISIBLE);
-            holder.valley.setText(bean.getValley());
+            if (bean.getValley().equals("/")) {
+
+            } else {
+                holder.valley.setText(Util.formatNum(Float.valueOf(bean.getValley())));
+            }
         } else {
             holder.valleyLayout.setVisibility(View.GONE);
         }
         if (bean.getHistory_average() != null) {
             holder.history_averageLayout.setVisibility(View.VISIBLE);
-            holder.history_average.setText(bean.getHistory_average());
+            if (bean.getHistory_average().equals("/")) {
+                holder.history_average.setText("-");
+            } else {
+                holder.history_average.setText(Util.formatNum(Float.valueOf(bean.getHistory_average())));
+            }
         } else {
             holder.history_averageLayout.setVisibility(View.GONE);
         }
 
         if (bean.getRange() != null) {
             holder.rangeLayout.setVisibility(View.VISIBLE);
-            holder.range.setText(bean.getRange());
-            float range = Float.valueOf(bean.getRange());
-            if (range > 0) {
-                holder.rangeImg.setImageResource(R.drawable.rise);
-            } else if (range < 0) {
-                holder.rangeImg.setImageResource(R.drawable.decline);
-            } else {
+            if (bean.getRange().equals("/")) {
+                holder.range.setText("-");
                 holder.rangeImg.setImageResource(R.drawable.none);
+            } else {
+                holder.range.setText(Util.formatNum(Float.valueOf(bean.getRange())));
+                float range = Float.valueOf(bean.getRange());
+                if (range > 0) {
+                    holder.rangeImg.setImageResource(R.drawable.rise);
+                } else if (range < 0) {
+                    holder.rangeImg.setImageResource(R.drawable.decline);
+                } else {
+                    holder.rangeImg.setImageResource(R.drawable.none);
+                }
             }
         } else {
             holder.rangeLayout.setVisibility(View.GONE);

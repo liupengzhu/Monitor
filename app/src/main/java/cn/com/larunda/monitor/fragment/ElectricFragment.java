@@ -346,32 +346,32 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                     }
                     if (type.equals("original")) {
                         if (rush.get(position) != null) {
-                            content.append("尖:" + rush.get(position) + ratio + powerUnit + "\r\n");
+                            content.append("尖:" + Util.formatNum(Float.valueOf(rush.get(position))) + ratio + powerUnit + "\r\n");
                         }
                         if (peak.get(position) != null) {
-                            content.append("峰:" + peak.get(position) + ratio + powerUnit + "\r\n");
+                            content.append("峰:" + Util.formatNum(Float.valueOf(peak.get(position))) + ratio + powerUnit + "\r\n");
                         }
                         if (normal.get(position) != null) {
-                            content.append("平:" + normal.get(position) + ratio + powerUnit + "\r\n");
+                            content.append("平:" + Util.formatNum(Float.valueOf(normal.get(position))) + ratio + powerUnit + "\r\n");
                         }
                         if (valley.get(position) != null) {
-                            content.append("谷:" + valley.get(position) + ratio + powerUnit + "\r\n");
+                            content.append("谷:" + Util.formatNum(Float.valueOf(valley.get(position))) + ratio + powerUnit + "\r\n");
                         }
-                        content.append("总量:" + e.getY() + ratio + powerUnit);
+                        content.append("总量:" + Util.formatNum(e.getY()) + ratio + powerUnit);
                     } else {
                         if (rush.get(position) != null) {
-                            content.append("尖:" + rush.get(position) + "tce" + "\r\n");
+                            content.append("尖:" + Util.formatNum(Float.valueOf(rush.get(position))) + "tce" + "\r\n");
                         }
                         if (peak.get(position) != null) {
-                            content.append("峰:" + peak.get(position) + "tce" + "\r\n");
+                            content.append("峰:" + Util.formatNum(Float.valueOf(peak.get(position))) + "tce" + "\r\n");
                         }
                         if (normal.get(position) != null) {
-                            content.append("平:" + normal.get(position) + "tce" + "\r\n");
+                            content.append("平:" + Util.formatNum(Float.valueOf(normal.get(position))) + "tce" + "\r\n");
                         }
                         if (valley.get(position) != null) {
-                            content.append("谷:" + valley.get(position) + "tce" + "\r\n");
+                            content.append("谷:" + Util.formatNum(Float.valueOf(valley.get(position))) + "tce" + "\r\n");
                         }
-                        content.append("总量:" + e.getY() + "tce");
+                        content.append("总量:" + Util.formatNum(e.getY()) + "tce");
                     }
 
                     ((TextView) v).setText(content.toString());
@@ -394,11 +394,11 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                 }
                 if (type.equals("original")) {
                     if (electricList.size() == 288 && electricList.get(position) != null) {
-                        content.append("电量:" + electricList.get(position) + ratio + powerUnit);
+                        content.append("电量:" + Util.formatNum(Float.valueOf(electricList.get(position))) + ratio + powerUnit);
                     }
                 } else {
                     if (electricList.size() == 288 && electricList.get(position) != null) {
-                        content.append("电量:" + electricList.get(position) + "tce");
+                        content.append("电量:" + Util.formatNum(Float.valueOf(electricList.get(position))) + "tce");
                     }
                 }
                 ((TextView) v).setText(content.toString());
@@ -410,9 +410,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             public void onClick(Entry e, Highlight highlight, View v) {
                 StringBuffer content = new StringBuffer();
                 if (type.equals("original")) {
-                    content.append("当日能耗:" + e.getY() + pieRatio + powerUnit);
+                    content.append("当日能耗:" + Util.formatNum(e.getY()) + pieRatio + powerUnit);
                 } else {
-                    content.append("当日能耗:" + e.getY() + "tce");
+                    content.append("当日能耗:" + Util.formatNum(e.getY()) + "tce");
                 }
                 ((TextView) v).setText(content.toString());
             }

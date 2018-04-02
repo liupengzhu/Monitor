@@ -470,27 +470,27 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     private void getMapCompanyBeanList(int point) {
         mapCompanyBeanList.clear();
         MapCompanyBean bean1 = new MapCompanyBean();
-        bean1.setData(dadas.get(point).getData().getPower() + "tce");
-        bean1.setOriginal(dadas.get(point).getOriginal_data().getPower() + "k"
+        bean1.setData(Util.formatNum(dadas.get(point).getData().getPower()) + "tce");
+        bean1.setOriginal(Util.formatNum(dadas.get(point).getOriginal_data().getPower()) + "k"
                 + preferences.getString("power_unit", null));
         bean1.setType("电");
         MapCompanyBean bean2 = new MapCompanyBean();
-        bean2.setData(dadas.get(point).getData().getWater() + "tce");
-        bean2.setOriginal(dadas.get(point).getOriginal_data().getWater() + ""
+        bean2.setData(Util.formatNum(dadas.get(point).getData().getWater()) + "tce");
+        bean2.setOriginal(Util.formatNum(dadas.get(point).getOriginal_data().getWater()) + ""
                 + preferences.getString("water_unit", null));
         bean2.setType("水");
         MapCompanyBean bean3 = new MapCompanyBean();
-        bean3.setData(dadas.get(point).getData().getSteam() + "tce");
-        bean3.setOriginal(dadas.get(point).getOriginal_data().getSteam() + ""
+        bean3.setData(Util.formatNum(dadas.get(point).getData().getSteam()) + "tce");
+        bean3.setOriginal(Util.formatNum(dadas.get(point).getOriginal_data().getSteam()) + ""
                 + preferences.getString("steam_unit", null));
         bean3.setType("蒸汽");
         MapCompanyBean bean4 = new MapCompanyBean();
-        bean4.setData(dadas.get(point).getData().getGas() + "tce");
-        bean4.setOriginal(dadas.get(point).getOriginal_data().getGas() + ""
+        bean4.setData(Util.formatNum(dadas.get(point).getData().getGas()) + "tce");
+        bean4.setOriginal(Util.formatNum(dadas.get(point).getOriginal_data().getGas()) + ""
                 + preferences.getString("gas_unit", null));
         bean4.setType("天然气");
         MapCompanyBean bean5 = new MapCompanyBean();
-        bean5.setData(dadas.get(point).getData().getTotal() + "tce");
+        bean5.setData(Util.formatNum(dadas.get(point).getData().getTotal()) + "tce");
         bean5.setType("总量");
         mapCompanyBeanList.add(bean1);
         mapCompanyBeanList.add(bean2);

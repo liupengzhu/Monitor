@@ -51,7 +51,9 @@ public class MapCompanyAdapter extends RecyclerView.Adapter<MapCompanyAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         MapCompanyBean companyBean = mapCompanyBeanList.get(position);
         holder.type.setText(companyBean.getType() + "");
-        holder.data.setText(companyBean.getData() + "");
+        if (companyBean.getData() != null) {
+            holder.data.setText(companyBean.getData() + "");
+        }
         if (companyBean.getOriginal() == null) {
             holder.originalText.setVisibility(View.INVISIBLE);
             holder.original.setVisibility(View.INVISIBLE);

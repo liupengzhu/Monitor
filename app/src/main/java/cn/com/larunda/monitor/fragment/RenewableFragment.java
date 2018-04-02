@@ -309,7 +309,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
                     } else {
                         content.append("时间:" + dateText.getText().toString() + "-" + (int) e.getX() + "\r\n");
                     }
-                    content.append("发电量:" + e.getY() + ratio + powerUnit + "");
+                    content.append("发电量:" + Util.formatNum(e.getY()) + ratio + powerUnit + "");
                     ((TextView) v).setText(content.toString());
                 }
             }
@@ -328,7 +328,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
                 if (dateXList != null && dateXList.size() == 288) {
                     content.append("时间:" + dateXList.get(position) + "\r\n");
                 }
-                content.append("发电量:" + e.getY() + ratio + powerUnit + "");
+                content.append("发电量:" + Util.formatNum(e.getY()) + ratio + powerUnit + "");
                 ((TextView) v).setText(content.toString());
             }
         });
@@ -337,7 +337,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onClick(Entry e, Highlight highlight, View v) {
                 StringBuffer content = new StringBuffer();
-                content.append("当日发电量:" + e.getY() + pieRatio + powerUnit);
+                content.append("当日发电量:" + Util.formatNum(e.getY()) + pieRatio + powerUnit);
                 ((TextView) v).setText(content.toString());
             }
         });

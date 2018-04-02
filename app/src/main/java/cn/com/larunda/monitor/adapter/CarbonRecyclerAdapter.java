@@ -15,6 +15,7 @@ import java.util.List;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.bean.CarbonBean;
 import cn.com.larunda.monitor.bean.GasBean;
+import cn.com.larunda.monitor.util.Util;
 
 
 /**
@@ -70,25 +71,39 @@ public class CarbonRecyclerAdapter extends RecyclerView.Adapter<CarbonRecyclerAd
         holder.totalUnit.setText("排放量 (" + bean.getRatio() + ")");
         holder.history_averageUnit.setText("同期历史值 (" + bean.getRatio() + ")");
         holder.time.setText(bean.getTime() + "");
-        holder.total.setText(bean.getTotal() + "");
-
+        if (bean.getTotal() != null) {
+            if (bean.getTotal().equals("/")) {
+                holder.total.setText("-");
+            } else {
+                holder.total.setText(Util.formatNum(Float.valueOf(bean.getTotal())));
+            }
+        }
         if (bean.getHistory_average() != null) {
             holder.history_averageLayout.setVisibility(View.VISIBLE);
-            holder.history_average.setText(bean.getHistory_average());
+            if (bean.getHistory_average().equals("/")) {
+                holder.history_average.setText("-");
+            } else {
+                holder.history_average.setText(Util.formatNum(Float.valueOf(bean.getHistory_average())));
+            }
         } else {
             holder.history_averageLayout.setVisibility(View.GONE);
         }
 
         if (bean.getRange() != null) {
             holder.rangeLayout.setVisibility(View.VISIBLE);
-            holder.range.setText(bean.getRange());
-            float range = Float.valueOf(bean.getRange());
-            if (range > 0) {
-                holder.rangeImg.setImageResource(R.drawable.rise);
-            } else if (range < 0) {
-                holder.rangeImg.setImageResource(R.drawable.decline);
-            } else {
+            if (bean.getRange().equals("/")) {
+                holder.range.setText("-");
                 holder.rangeImg.setImageResource(R.drawable.none);
+            } else {
+                holder.range.setText(Util.formatNum(Float.valueOf(bean.getRange())));
+                float range = Float.valueOf(bean.getRange());
+                if (range > 0) {
+                    holder.rangeImg.setImageResource(R.drawable.rise);
+                } else if (range < 0) {
+                    holder.rangeImg.setImageResource(R.drawable.decline);
+                } else {
+                    holder.rangeImg.setImageResource(R.drawable.none);
+                }
             }
         } else {
             holder.rangeLayout.setVisibility(View.GONE);

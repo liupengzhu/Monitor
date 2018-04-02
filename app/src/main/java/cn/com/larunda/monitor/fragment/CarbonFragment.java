@@ -231,7 +231,7 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
                     } else {
                         content.append("时间:" + dateText.getText().toString() + "-" + (int) e.getX() + "\r\n");
                     }
-                    content.append("排放量:" + e.getY() + preferences.getString("carbon_unit", null) + "");
+                    content.append("排放量:" + Util.formatNum(e.getY()) + preferences.getString("carbon_unit", null) + "");
 
                     ((TextView) v).setText(content.toString());
                 }

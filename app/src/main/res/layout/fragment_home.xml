@@ -44,17 +44,17 @@
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/home_swipe"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:id="@+id/home_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <View
@@ -115,7 +115,6 @@
 
                     </RelativeLayout>
 
-
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
 
@@ -125,8 +124,8 @@
             android:id="@+id/home_error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <ImageView

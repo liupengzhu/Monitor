@@ -239,15 +239,15 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
                 StringBuffer content = new StringBuffer();
                 if (date_type.equals("date")) {
                     if (type.equals("original")) {
-                        content.append("当日能耗:" + e.getY() + waterUnit);
+                        content.append("当日能耗:" + Util.formatNum(e.getY()) + waterUnit);
                     } else {
-                        content.append("当日能耗:" + e.getY() + "tce");
+                        content.append("当日能耗:" + Util.formatNum(e.getY()) + "tce");
                     }
                 } else {
                     if (type.equals("original")) {
-                        content.append("当月能耗:" + e.getY() + waterUnit);
+                        content.append("当月能耗:" + Util.formatNum(e.getY()) + waterUnit);
                     } else {
-                        content.append("当月能耗:" + e.getY() + "tce");
+                        content.append("当月能耗:" + Util.formatNum(e.getY()) + "tce");
                     }
                 }
                 ((TextView) v).setText(content.toString());

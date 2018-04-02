@@ -251,9 +251,9 @@ public class WaterFragment extends Fragment implements View.OnClickListener {
                     }
                     if (type.equals("original")) {
 
-                        content.append("用水量:" + e.getY() + preferences.getString("water_unit", null) + "");
+                        content.append("用水量:" + Util.formatNum(e.getY()) + preferences.getString("water_unit", null) + "");
                     } else {
-                        content.append("用水量:" + e.getY() + "tce");
+                        content.append("用水量:" + Util.formatNum(e.getY()) + "tce");
                     }
 
                     ((TextView) v).setText(content.toString());

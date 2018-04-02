@@ -248,9 +248,9 @@ public class SteamFragment extends Fragment implements View.OnClickListener {
                     }
                     if (type.equals("original")) {
 
-                        content.append("用汽量:" + e.getY() + preferences.getString("steam_unit", null) + "");
+                        content.append("用汽量:" + Util.formatNum(e.getY()) + preferences.getString("steam_unit", null) + "");
                     } else {
-                        content.append("用汽量:" + e.getY() + "tce");
+                        content.append("用汽量:" + Util.formatNum(e.getY()) + "tce");
                     }
 
                     ((TextView) v).setText(content.toString());

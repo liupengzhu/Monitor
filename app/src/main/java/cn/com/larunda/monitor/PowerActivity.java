@@ -147,7 +147,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
         barChartManager.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) Math.ceil(value) + "";
+                return Util.formatNum(value) + "";
             }
         });
         barMarkerView = new XYMarkerView(this);
@@ -166,7 +166,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
         steamBarChartManager.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) Math.ceil(value) + "";
+                return Util.formatNum(value) + "";
             }
         });
         steamBarMarkerView = new XYMarkerView(this);
@@ -185,7 +185,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
         gasBarChartManager.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) Math.ceil(value) + "";
+                return Util.formatNum(value) + "";
             }
         });
         gasBarMarkerView = new XYMarkerView(this);
@@ -204,7 +204,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
         renewableBarChartManager.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) Math.ceil(value) + "";
+                return Util.formatNum(value) + "";
             }
         });
         renewableBarMarkerView = new XYMarkerView(this);
@@ -236,7 +236,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
         lineChartManager.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) Math.ceil(value) + " ";
+                return Util.formatNum(value) + " ";
             }
         });
 

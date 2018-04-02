@@ -253,7 +253,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
                 if (dateXList != null && dateXList.size() == 288) {
                     content.append("时间:" + date + " " + dateXList.get(position) + "\r\n");
                 }
-                content.append("用电负荷:" + e.getY() + "kW");
+                content.append("用电负荷:" + Util.formatNum(e.getY()) + "kW");
                 ((TextView) v).setText(content.toString());
             }
         });
@@ -273,7 +273,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
                     } else {
                         content.append("时间:" + date2 + "-" + (int) e.getX() + "\r\n");
                     }
-                    content.append("用水量:" + e.getY() + "m³");
+                    content.append("用水量:" + Util.formatNum(e.getY()) + "m³");
                     ((TextView) v).setText(content.toString());
                 }
             }
@@ -294,7 +294,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
                     } else {
                         content.append("时间:" + date2 + "-" + (int) e.getX() + "\r\n");
                     }
-                    content.append("用蒸汽量:" + e.getY() + "kg");
+                    content.append("用蒸汽量:" + Util.formatNum(e.getY()) + "kg");
                     ((TextView) v).setText(content.toString());
                 }
             }
@@ -315,7 +315,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
                     } else {
                         content.append("时间:" + date2 + "-" + (int) e.getX() + "\r\n");
                     }
-                    content.append("用天然气量:" + e.getY() + "m³");
+                    content.append("用天然气量:" + Util.formatNum(e.getY()) + "m³");
                     ((TextView) v).setText(content.toString());
                 }
             }
@@ -336,7 +336,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
                     } else {
                         content.append("时间:" + date2 + "-" + (int) e.getX() + "\r\n");
                     }
-                    content.append("发电量:" + e.getY() + ratio + powerUnit);
+                    content.append("发电量:" + Util.formatNum(e.getY()) + ratio + powerUnit);
                     ((TextView) v).setText(content.toString());
                 }
             }
@@ -348,9 +348,9 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
                 if (v instanceof TextView) {
                     StringBuffer content = new StringBuffer();
                     if (names.size() == 10) {
-                        content.append("企业名称:" + names.get(((int) e.getX()-1)) + "\r\n");
+                        content.append("企业名称:" + names.get(((int) e.getX() - 1)) + "\r\n");
                     }
-                    content.append("企业能耗:" + e.getY() + "tce");
+                    content.append("企业能耗:" + Util.formatNum(e.getY()) + "tce");
                     ((TextView) v).setText(content.toString());
                 }
             }

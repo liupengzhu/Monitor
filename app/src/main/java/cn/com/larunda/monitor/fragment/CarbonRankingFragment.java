@@ -229,9 +229,9 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
             public void onClick(Entry e, Highlight highlight, View v) {
                 StringBuffer content = new StringBuffer();
                 if (date_type.equals("date")) {
-                    content.append("当日排放:" + e.getY() + carbonUnit);
+                    content.append("当日排放:" + Util.formatNum(e.getY()) + carbonUnit);
                 } else {
-                    content.append("当月排放:" + e.getY() + carbonUnit);
+                    content.append("当月排放:" + Util.formatNum(e.getY()) + carbonUnit);
                 }
                 ((TextView) v).setText(content.toString());
             }

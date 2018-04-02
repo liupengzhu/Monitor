@@ -126,6 +126,16 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         holder.alarm.setText("警报数量: " + company.getAlarm() + "个");
         holder.maintenance.setText("最近维护: " + company.getMaintenance() + "次");
         holder.circleTextView.setNumber(company.getTotal());
+        if (company.getAngle() > 240) {
+            holder.circleTextView.setCircleColor(context.getResources().getColor(R.color.circle_color1));
+            holder.circleTextView.setNumberColor(context.getResources().getColor(R.color.circle_color1));
+        } else if (company.getAngle() > 120) {
+            holder.circleTextView.setCircleColor(context.getResources().getColor(R.color.circle_color2));
+            holder.circleTextView.setNumberColor(context.getResources().getColor(R.color.circle_color2));
+        } else {
+            holder.circleTextView.setCircleColor(context.getResources().getColor(R.color.circle_color3));
+            holder.circleTextView.setNumberColor(context.getResources().getColor(R.color.circle_color3));
+        }
         holder.circleTextView.setCircleAngle(company.getAngle());
         String electricText = "<font color='#999999'>安全用电:</font>" + " " + "<font color='#d94a2b'>"
                 + company.getElectric() + "</font>" + "<font color='#333333'>台</font>";

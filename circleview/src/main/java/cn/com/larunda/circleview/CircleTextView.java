@@ -202,6 +202,8 @@ public class CircleTextView extends View {
 
     public void setCircleColor(int circleColor) {
         this.circleColor = circleColor;
+        circlePaint.setColor(circleColor);
+        invalidate();
     }
 
     public float getCircleRadius() {
@@ -210,6 +212,7 @@ public class CircleTextView extends View {
 
     public void setCircleRadius(float circleRadius) {
         this.circleRadius = circleRadius;
+        invalidate();
     }
 
     public float getCircleStroke() {
@@ -226,6 +229,8 @@ public class CircleTextView extends View {
 
     public void setNumberColor(int numberColor) {
         this.numberColor = numberColor;
+        numberPaint.setColor(numberColor);
+        invalidate();
     }
 
     public int getTextColor() {
@@ -234,6 +239,8 @@ public class CircleTextView extends View {
 
     public void setTextColor(int textColor) {
         this.textColor = textColor;
+        textPaint.setColor(textColor);
+        invalidate();
     }
 
     public float getNumberSize() {

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="类型:"
         android:textColor="@color/text_n"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/map_item_type"
@@ -19,7 +19,7 @@
         android:layout_marginLeft="5dp"
         android:text="电"
         android:textColor="@color/text_h"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/map_item_original_text"
@@ -28,7 +28,7 @@
         android:layout_marginLeft="10dp"
         android:text="原始数据:"
         android:textColor="@color/text_n"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/map_item_original"
@@ -38,7 +38,7 @@
         android:gravity="right"
         android:text="16223.11"
         android:textColor="@color/text_h"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
         android:layout_marginLeft="10dp"
         android:text="等价折标:"
         android:textColor="@color/text_n"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/map_item_data"
@@ -56,6 +56,6 @@
         android:gravity="right"
         android:text="1122"
         android:textColor="@color/text_h"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
 </LinearLayout>

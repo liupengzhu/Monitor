@@ -2,6 +2,7 @@ package cn.com.larunda.monitor.util;
 
 import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,6 +12,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import cn.com.larunda.monitor.gson.CarbonInfo;
@@ -56,6 +58,12 @@ public class Util {
         } catch (JsonParseException e) {
             return false;
         }
+    }
+
+    public static String formatNum(Object num) {
+        DecimalFormat format = new DecimalFormat("0.00");
+        String newNum = format.format(num);
+        return newNum;
     }
 
     /**

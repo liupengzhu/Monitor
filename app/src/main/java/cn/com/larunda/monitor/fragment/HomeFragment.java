@@ -187,13 +187,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * @param homeInfo
      */
     private void parseHomeInfo(HomeInfo homeInfo) {
-        powerText.setText(homeInfo.getPower().getData() + "");
-        waterText.setText(homeInfo.getWater() + "");
-        steamText.setText(homeInfo.getSteam() + "");
-        gasText.setText(homeInfo.getGas() + "");
-        energyText.setText(homeInfo.getEnergy() + "");
-        carbonText.setText(homeInfo.getCarbon() + "");
-        powerGeneratedText.setText(homeInfo.getPower_generated().getData() + "");
+        powerText.setText(Util.formatNum(homeInfo.getPower().getData()) + "");
+        waterText.setText(Util.formatNum(homeInfo.getWater()) + "");
+        steamText.setText(Util.formatNum(homeInfo.getSteam()) + "");
+        gasText.setText(Util.formatNum(homeInfo.getGas()) + "");
+        energyText.setText(Util.formatNum(homeInfo.getEnergy()) + "");
+        carbonText.setText(Util.formatNum(homeInfo.getCarbon()) + "");
+        powerGeneratedText.setText(Util.formatNum(homeInfo.getPower_generated().getData()) + "");
         safeDayText.setText(homeInfo.getSafe_day() + "");
 
         if (unit != null && Util.isGoodJson(unit)) {

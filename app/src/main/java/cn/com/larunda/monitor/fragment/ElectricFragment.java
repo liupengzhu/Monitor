@@ -199,9 +199,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 if (type.equals("original")) {
-                    return (int) Math.ceil(value) + " " + ratio + powerUnit;
+                    return Util.formatNum(value) + " " + ratio + powerUnit;
                 } else {
-                    return (int) Math.ceil(value) + " tce";
+                    return Util.formatNum(value) + " tce";
                 }
 
             }
@@ -224,9 +224,9 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 if (type.equals("original")) {
-                    return (int) Math.ceil(value) + " " + ratio + powerUnit;
+                    return Util.formatNum(value) + " " + ratio + powerUnit;
                 } else {
-                    return (int) Math.ceil(value) + " tce";
+                    return Util.formatNum(value) + " tce";
                 }
 
             }

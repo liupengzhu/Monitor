@@ -149,7 +149,7 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
         barManager.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) Math.ceil(value) + " " + preferences.getString("carbon_unit", null) + "";
+                return Util.formatNum(value) + " " + preferences.getString("carbon_unit", null) + "";
             }
         });
 

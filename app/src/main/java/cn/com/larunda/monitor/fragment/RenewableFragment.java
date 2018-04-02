@@ -179,7 +179,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
         barChartManager.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) Math.ceil(value) + " " + ratio + powerUnit;
+                return Util.formatNum(value) + " " + ratio + powerUnit;
             }
         });
 
@@ -199,7 +199,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
         lineChartManager.setyValueFormatter(new YValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return (int) Math.ceil(value) + " " + ratio + powerUnit;
+                return Util.formatNum(value) + " " + ratio + powerUnit;
             }
         });
 

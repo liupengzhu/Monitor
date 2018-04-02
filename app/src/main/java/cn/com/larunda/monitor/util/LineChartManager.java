@@ -85,6 +85,7 @@ public class LineChartManager {
 
         //保证Y轴从0开始，不然会上移一点
         leftAxis.setAxisMinimum(0f);
+        leftAxis.setGranularity(0.01f);
         rightAxis.setAxisMinimum(0f);
         leftAxis.setDrawGridLines(false);
         rightAxis.setDrawGridLines(false);

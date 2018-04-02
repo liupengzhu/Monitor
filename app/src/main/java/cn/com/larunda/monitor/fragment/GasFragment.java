@@ -158,9 +158,9 @@ public class GasFragment extends Fragment implements View.OnClickListener {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 if (type.equals("original")) {
-                    return (int) Math.ceil(value) + " " + preferences.getString("gas_unit", null) + "";
+                    return Util.formatNum(value) + " " + preferences.getString("gas_unit", null) + "";
                 } else {
-                    return (int) Math.ceil(value) + " tce";
+                    return Util.formatNum(value) + " tce";
                 }
 
             }

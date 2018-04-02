@@ -80,6 +80,8 @@ public class BarChartManager {
         xAxis.setGranularity(1f);
         //保证Y轴从0开始，不然会上移一点
         leftAxis.setAxisMinimum(0f);
+        leftAxis.setLabelCount(5, false);
+        leftAxis.setGranularity(0.01f);
         rightAxis.setAxisMinimum(0f);
         leftAxis.setDrawGridLines(false);
         rightAxis.setDrawGridLines(false);

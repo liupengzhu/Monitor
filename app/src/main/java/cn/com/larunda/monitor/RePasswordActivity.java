@@ -132,6 +132,7 @@ public class RePasswordActivity extends BaseActivity implements View.OnClickList
     private void parseContent(String content) {
         if (content.equals("true")) {
             finish();
+            Toast.makeText(this, "密码修改成功", Toast.LENGTH_SHORT).show();
         } else if (content.equals("false")) {
 
         } else {

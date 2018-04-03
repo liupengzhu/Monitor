@@ -6,4 +6,5 @@
     android:background="@color/white"
     android:layout_gravity="center"
     android:singleLine="true"
+    android:textSize="12sp"
     android:textColor="@color/tab_text_color2" />

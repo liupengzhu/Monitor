@@ -17,6 +17,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sddt on 18-3-13.
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 
 public class HBarChartManager {
 
-    private HorizontalBarChart mBarChart;
+    private HLineChartText mBarChart;
 
     private YAxis leftAxis;
     private YAxis rightAxis;
@@ -34,7 +35,7 @@ public class HBarChartManager {
     private YValueFormatter yValueFormatter;
     private Legend legend;
 
-    public HBarChartManager(HorizontalBarChart barChart) {
+    public HBarChartManager(HLineChartText barChart) {
         this.mBarChart = barChart;
         leftAxis = mBarChart.getAxisLeft();
         rightAxis = mBarChart.getAxisRight();
@@ -227,6 +228,10 @@ public class HBarChartManager {
         description.setText(str);
         mBarChart.setDescription(description);
         mBarChart.invalidate();
+    }
+
+    public void setContent(List<String> textList) {
+        mBarChart.setTextList(textList);
     }
 
     public void setxValueFormatter(XValueFormatter xValueFormatter) {

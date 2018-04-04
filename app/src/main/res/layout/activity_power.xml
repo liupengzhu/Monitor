@@ -240,10 +240,10 @@
                 android:background="@color/white"
                 android:padding="10dp">
 
-                <com.github.mikephil.charting.charts.HorizontalBarChart
+                <cn.com.larunda.monitor.util.HLineChartText
                     android:id="@+id/power_bar_rank"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"></com.github.mikephil.charting.charts.HorizontalBarChart>
+                    android:layout_height="250dp"></cn.com.larunda.monitor.util.HLineChartText>
             </RelativeLayout>
 
 

@@ -30,6 +30,7 @@ import cn.com.larunda.monitor.util.BarChartViewPager;
 import cn.com.larunda.monitor.util.BarOnClickListener;
 import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.HBarChartManager;
+import cn.com.larunda.monitor.util.HLineChartText;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.LineChartManager;
 import cn.com.larunda.monitor.util.LineChartViewPager;
@@ -93,7 +94,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
     private String ratio;
     private String powerUnit;
 
-    private HorizontalBarChart companyBarChart;
+    private HLineChartText companyBarChart;
     private HBarChartManager companyBarChartManager;
     private List<String> names;
     private XYMarkerView companyBarMarkerView;
@@ -557,6 +558,7 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
                 }
             }
             companyBarChartManager.showBarChart(values, "", colors);
+            companyBarChartManager.setContent(names);
         }
     }
 

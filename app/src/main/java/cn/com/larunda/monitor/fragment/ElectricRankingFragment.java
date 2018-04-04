@@ -243,6 +243,8 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
             @Override
             public void onClick(Entry e, Highlight highlight, View v) {
                 StringBuffer content = new StringBuffer();
+                PieEntry pieEntry = (PieEntry) e;
+                content.append("企业名称:" + pieEntry.getLabel() + "\r\n");
                 if (date_type.equals("date")) {
                     if (type.equals("original")) {
                         content.append("当日能耗:" + Util.formatNum(e.getY()) + ratio + powerUnit);

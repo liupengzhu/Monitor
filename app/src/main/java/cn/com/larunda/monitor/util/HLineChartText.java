@@ -24,6 +24,7 @@ public class HLineChartText extends HorizontalBarChart {
     private int bottom;
     private int top;
     private Paint textPaint;
+    private Paint bPaint;
     private int barHeight;
     private List<String> textList = new ArrayList<>();
 
@@ -51,6 +52,11 @@ public class HLineChartText extends HorizontalBarChart {
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(40);
+        bPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        bPaint.setColor(Color.WHITE);
+        bPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        bPaint.setStrokeWidth(1);
+        bPaint.setTextSize(40);
     }
 
     @Override
@@ -60,14 +66,15 @@ public class HLineChartText extends HorizontalBarChart {
         height = getHeight();
         bottom = getBottom();
         top = getTop();
-        barHeight = height - 90;
+        barHeight = height - 80;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         for (int i = 0; i < textList.size(); i++) {
-            canvas.drawText(textList.get(i), 65, height - 62 - i * (barHeight / textList.size()), textPaint);
+            canvas.drawText(textList.get(i), 65, height - 60 - i * (barHeight / textList.size()), bPaint);
+            canvas.drawText(textList.get(i), 65, height - 60 - i * (barHeight / textList.size()), textPaint);
         }
     }
 

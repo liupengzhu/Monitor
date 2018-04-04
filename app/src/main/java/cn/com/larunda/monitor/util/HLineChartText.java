@@ -55,7 +55,7 @@ public class HLineChartText extends HorizontalBarChart {
         bPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         bPaint.setColor(Color.WHITE);
         bPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        bPaint.setStrokeWidth(1);
+        bPaint.setStrokeWidth(3);
         bPaint.setTextSize(40);
     }
 

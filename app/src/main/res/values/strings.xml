@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Monitor</string>
+    <string name="app_name">德园监管</string>
     <string name="home_title">昆山张浦德国工业园智慧能源示范园区云平台</string>
     <string name="home_total">当月综合数据</string>
     <string name="home_detail">详细信息</string>
@@ -26,7 +26,7 @@
     <string name="用气详情">用气详情</string>
     <string name="用汽详情">用汽详情</string>
     <string name="发电详情">发电详情</string>
-    <string name="维保总览">维保总览</string>
+    <string name="维保总览">事件总览</string>
     <item name="tag_first" type="id"></item>
     <item name="tag_second" type="id"></item>
     <string name="全部接入企业">全部接入企业</string>

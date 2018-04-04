@@ -35,7 +35,7 @@ import okhttp3.Response;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
-    private String[] titles = {"数据总览", "综合监控", "用能地图", "维保总览"};
+    private String[] titles = {"数据总览", "综合监控", "用能地图", "事件总览"};
     private int[] icons = {R.drawable.home_icon2, R.drawable.monitor_icon2, R.drawable.map_icon2,
             R.drawable.maintenance_icon2};
     private HomeAdapter homeAdapter;

@@ -348,9 +348,6 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
             public void onClick(Entry e, Highlight highlight, View v) {
                 if (v instanceof TextView) {
                     StringBuffer content = new StringBuffer();
-                    if (names.size() == 10) {
-                        content.append("企业名称:" + names.get(((int) e.getX() - 1)) + "\r\n");
-                    }
                     content.append("企业能耗:" + Util.formatNum(e.getY()) + "tce");
                     ((TextView) v).setText(content.toString());
                 }

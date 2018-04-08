@@ -168,7 +168,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
      */
     private void initView(View view) {
         markerView = LayoutInflater.from(getContext()).inflate(R.layout.map_layout, null);
-        markerView.setMinimumWidth(1000);
+        markerView.setMinimumWidth(600);
         textView = markerView.findViewById(R.id.map_marker_text);
         markerRecycler = markerView.findViewById(R.id.map_marker_recycler);
         markerAdapter = new MapCompanyAdapter(getContext(), mapCompanyBeanList);

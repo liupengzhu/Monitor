@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ public class MapCompanyAdapter extends RecyclerView.Adapter<MapCompanyAdapter.Vi
         TextView originalText;
         TextView original;
         TextView data;
+        View line;
+        LinearLayout originalLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -38,6 +41,8 @@ public class MapCompanyAdapter extends RecyclerView.Adapter<MapCompanyAdapter.Vi
             originalText = itemView.findViewById(R.id.map_item_original_text);
             original = itemView.findViewById(R.id.map_item_original);
             data = itemView.findViewById(R.id.map_item_data);
+            line = itemView.findViewById(R.id.map_item_line);
+            originalLayout = itemView.findViewById(R.id.map_item_original_layout);
         }
     }
 
@@ -55,11 +60,15 @@ public class MapCompanyAdapter extends RecyclerView.Adapter<MapCompanyAdapter.Vi
             holder.data.setText(companyBean.getData() + "");
         }
         if (companyBean.getOriginal() == null) {
-            holder.originalText.setVisibility(View.INVISIBLE);
-            holder.original.setVisibility(View.INVISIBLE);
+            holder.originalText.setVisibility(View.GONE);
+            holder.original.setVisibility(View.GONE);
+            holder.line.setVisibility(View.GONE);
+            holder.originalLayout.setVisibility(View.GONE);
         } else {
             holder.originalText.setVisibility(View.VISIBLE);
             holder.original.setVisibility(View.VISIBLE);
+            holder.line.setVisibility(View.VISIBLE);
+            holder.originalLayout.setVisibility(View.VISIBLE);
             holder.original.setText(companyBean.getOriginal());
         }
 

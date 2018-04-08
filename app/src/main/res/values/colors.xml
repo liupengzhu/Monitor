@@ -67,4 +67,10 @@
     <color name="circle_color3">#d94821</color>
     <color name="circle_color1">#3cc500</color>
     <color name="circle_color2">#ff8705</color>
+    <color name="demo_color1">#1668c1</color>
+    <color name="demo_color2">#1578ce</color>
+    <color name="login_button_color1">#cbdef6</color>
+    <color name="login_button_color2">#e7f2ff</color>
+    <color name="login_color">#33000000</color>
+    <color name="login_white1">#66ffffff</color>
 </resources>

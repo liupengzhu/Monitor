@@ -33,7 +33,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class CompanyListActivity extends BaseActivity implements View.OnClickListener {
-    private static final String COMPANY_URL = MyApplication.URL + "integrated_maint_company/detail" + MyApplication.TOKEN;
+    private final String COMPANY_URL = MyApplication.URL + "integrated_maint_company/detail" + MyApplication.TOKEN;
     private SharedPreferences preferences;
     private String token;
     private int id;

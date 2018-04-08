@@ -51,7 +51,7 @@ import okhttp3.Response;
 public class RenewableRankingFragment extends Fragment implements View.OnClickListener {
 
 
-    private static final String RENEWABLE_RANK_URL = MyApplication.URL + "renewable/rank_lists" + MyApplication.TOKEN;
+    private final String RENEWABLE_RANK_URL = MyApplication.URL + "renewable/rank_lists" + MyApplication.TOKEN;
     private String date_type = "month";
 
     private SharedPreferences preferences;

@@ -7,5 +7,11 @@ package cn.com.larunda.monitor.gson;
 public class UserToken {
     public String token;
     public String message;
+    public UnitInfo unit;
+    public ConnectInfo connect_info;
 
+    public class ConnectInfo {
+        public String user;
+        public String phone;
+    }
 }

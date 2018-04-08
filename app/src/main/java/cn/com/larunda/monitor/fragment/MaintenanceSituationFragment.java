@@ -43,7 +43,7 @@ import okhttp3.Response;
  */
 
 public class MaintenanceSituationFragment extends Fragment implements View.OnClickListener {
-    private static final String COMPANY_URL = MyApplication.URL + "integrated_maint_company/lists" + MyApplication.TOKEN;
+    private final String COMPANY_URL = MyApplication.URL + "integrated_maint_company/lists" + MyApplication.TOKEN;
     private HashMap<String, Integer> iconList = new HashMap<>();
     private List<MaintenanceCompany> companyList = new ArrayList<>();
     private PullToLoadRecyclerView recyclerView;

@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -86,10 +87,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         telButton2.setOnClickListener(this);
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
-        if (unit == null) {
+        *//*if (unit == null) {
             sendRequest();
         } else {
             if (Util.isGoodJson(unit)) {
@@ -102,10 +103,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 editor.putString("carbon_unit", info.getCarbon_emissions()).commit();
                 editor.putString("installed_capacity_unit", info.getInstalled_capacity()).commit();
             }
-        }
+        }*//*
     }
-
-    private void sendRequest() {
+*/
+    /*private void sendRequest() {
         HttpUtil.sendGetRequestWithHttp(UNIT_URL, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -129,7 +130,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
-
+*/
     /**
      * 初始化view
      */
@@ -303,5 +304,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        preferences.edit().putString("home_info", null).commit();
+        super.onDestroy();
     }
 }

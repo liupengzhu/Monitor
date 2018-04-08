@@ -55,12 +55,12 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
             MyApplication.getContext().getResources().getColor(R.color.company_color3),
             MyApplication.getContext().getResources().getColor(R.color.company_color2),
             MyApplication.getContext().getResources().getColor(R.color.company_color1)};
-    private static final String USAGE_URL = MyApplication.URL + "home/load_usage" + MyApplication.TOKEN;
-    private static final String WATER_URL = MyApplication.URL + "home/water_usage" + MyApplication.TOKEN;
-    private static final String STEAM_URL = MyApplication.URL + "home/steam_usage" + MyApplication.TOKEN;
-    private static final String GAS_URL = MyApplication.URL + "home/gas_usage" + MyApplication.TOKEN;
-    private static final String RENEWABLE_URL = MyApplication.URL + "home/load_generated" + MyApplication.TOKEN;
-    private static final String COMPANY_URL = MyApplication.URL + "home/company_energy" + MyApplication.TOKEN;
+    private final String USAGE_URL = MyApplication.URL + "home/load_usage" + MyApplication.TOKEN;
+    private final String WATER_URL = MyApplication.URL + "home/water_usage" + MyApplication.TOKEN;
+    private final String STEAM_URL = MyApplication.URL + "home/steam_usage" + MyApplication.TOKEN;
+    private final String GAS_URL = MyApplication.URL + "home/gas_usage" + MyApplication.TOKEN;
+    private final String RENEWABLE_URL = MyApplication.URL + "home/load_generated" + MyApplication.TOKEN;
+    private final String COMPANY_URL = MyApplication.URL + "home/company_energy" + MyApplication.TOKEN;
     private Button backButton;
 
     private String date;

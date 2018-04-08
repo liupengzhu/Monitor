@@ -53,7 +53,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class MaintenanceWorksheetFragment extends Fragment implements View.OnClickListener {
 
-    private static final String WORKSHEET_URL = MyApplication.URL + "integrated_maint_company/worksheet_lists" + MyApplication.TOKEN;
+    private final String WORKSHEET_URL = MyApplication.URL + "integrated_maint_company/worksheet_lists" + MyApplication.TOKEN;
     private static final int REQUEST_CODE = 12;
     private SharedPreferences preferences;
     private String token;

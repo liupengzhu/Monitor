@@ -34,7 +34,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class FilterCompanyActivity extends BaseActivity implements View.OnClickListener {
-    private static final String COMPANY_URL = MyApplication.URL + "company/lists" + MyApplication.TOKEN;
+    private final String COMPANY_URL = MyApplication.URL + "company/lists" + MyApplication.TOKEN;
     private Button backButton;
     private String type;
 

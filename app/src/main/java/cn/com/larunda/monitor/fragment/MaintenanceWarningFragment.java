@@ -50,7 +50,7 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class MaintenanceWarningFragment extends Fragment implements View.OnClickListener {
-    private static final String ALARM_URL = MyApplication.URL + "integrated_maint_company/alarm_lists" + MyApplication.TOKEN;
+    private final String ALARM_URL = MyApplication.URL + "integrated_maint_company/alarm_lists" + MyApplication.TOKEN;
     private static final int REQUEST_CODE = 11;
     private SharedPreferences preferences;
     private String token;

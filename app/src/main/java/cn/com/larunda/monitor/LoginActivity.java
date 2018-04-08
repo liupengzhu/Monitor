@@ -2,6 +2,7 @@ package cn.com.larunda.monitor;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,13 +13,18 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.gson.UserToken;
 import cn.com.larunda.monitor.util.BaseActivity;
 import cn.com.larunda.monitor.util.HttpUtil;
@@ -36,13 +42,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText loginPassword;
     private CheckBox checkBox;
     private Button loginButton;
+    private Button loginButtonDemo;
     private SharedPreferences.Editor editor;
     private SharedPreferences preferences;
-    private final String LOGIN_URL = MyApplication.URL + "login";
-    private final String UNIT_URL = MyApplication.URL + "config/unit";
+    private String LOGIN_URL;
+    private String UNIT_URL;
     private boolean isLogin = false;
     private String person = "李俊";
     private String tel = "18762870876";
+    private LinearLayout dialog;
+    private TextView dialogText;
+    private Timer timer;
+    private int count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,17 +91,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
         if (preferences.getString("unit", null) == null) {
             sendRequest();
         }
-    }
+    }*/
 
-    /**
+    /*
      * 加载单位接口
-     */
+
     private void sendRequest() {
         HttpUtil.sendGetRequestWithHttp(UNIT_URL, new Callback() {
             @Override
@@ -106,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
-    }
+    }*/
 
     /**
      * 初始化view
@@ -116,8 +127,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginPassword = findViewById(R.id.login_password);
         checkBox = findViewById(R.id.check_button);
         loginButton = findViewById(R.id.login_button);
+        loginButtonDemo = findViewById(R.id.login_button2);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
+        dialog = findViewById(R.id.login_dialog);
+        dialogText = findViewById(R.id.login_dialog_text);
     }
 
     /**
@@ -125,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void initEvent() {
         loginButton.setOnClickListener(this);
+        loginButtonDemo.setOnClickListener(this);
     }
 
     /**
@@ -137,8 +152,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.login_button:
                 if (!isLogin) {
+                    MyApplication.URL = "http://ksdy_db.dsmcase.com:90/api/";
+                    MyApplication.IMG_URL = "http://ksdy_db.dsmcase.com:90";
+                    LOGIN_URL = "http://ksdy_db.dsmcase.com:90/api/login";
+                    UNIT_URL = "http://ksdy_db.dsmcase.com:90/api/config/unit";
                     isLogin = true;
                     login();
+                    showDialog();
+                }
+                break;
+            case R.id.login_button2:
+                if (!isLogin) {
+                    MyApplication.URL = "http://ksdy_demo.dsmcase.com:90/api/";
+                    MyApplication.IMG_URL = "http://ksdy_demo.dsmcase.com:90";
+                    LOGIN_URL = "http://ksdy_demo.dsmcase.com:90/api/login";
+                    UNIT_URL = "http://ksdy_demo.dsmcase.com:90/config/unit";
+                    isLogin = true;
+                    login();
+                    showDialog();
                 }
                 break;
             default:
@@ -192,6 +223,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void run() {
                             isLogin = false;
+                            cancelDialog();
                             Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -199,22 +231,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    isLogin = false;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            isLogin = false;
+                            cancelDialog();
+                        }
+                    });
                     String content = response.body().string();
                     if (Util.isGoodJson(content)) {
                         UserToken userToken = Util.handleLoginInfo(content);
                         if (userToken != null && userToken.message == null) {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            editor.putString("token", userToken.token);
-                            editor.apply();
+                            UnitInfo info = userToken.unit;
+                            editor.putString("token", userToken.token).commit();
+                            editor.putString("power_unit", info.getPower()).commit();
+                            editor.putString("water_unit", info.getWater_usage()).commit();
+                            editor.putString("steam_unit", info.getSteam_usage()).commit();
+                            editor.putString("gas_unit", info.getGas_usage()).commit();
+                            editor.putString("energy_unit", info.getEnergy_usage()).commit();
+                            editor.putString("carbon_unit", info.getCarbon_emissions()).commit();
+                            editor.putString("installed_capacity_unit", info.getInstalled_capacity()).commit();
                             startActivity(intent);
                             finish();
                         } else {
-
+                            person = userToken.connect_info.user + "";
+                            tel = userToken.connect_info.phone + "";
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(LoginActivity.this, "账号或者密码无效,请联系负责人:"+person+",电话:"+tel, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this,
+                                            "账号或者密码无效,请联系负责人:" + person + "，电话:" + tel,
+                                            Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -224,6 +272,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             });
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void showDialog() {
+        dialog.setVisibility(View.VISIBLE);
+        loginButton.setBackground(getResources().getDrawable(R.drawable.login_button_color2));
+        loginButtonDemo.setBackground(getResources().getDrawable(R.drawable.login_button_color2));
+        loginButton.setTextColor(getResources().getColor(R.color.white));
+        count = 20;
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (count > 1) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialogText.setText("请稍等(" + count + ")");
+                        }
+                    });
+                    count--;
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            isLogin = false;
+                            cancelDialog();
+                        }
+                    });
+                }
+            }
+        }, 1000, 1000);
+    }
+
+    private void cancelDialog() {
+        dialog.setVisibility(View.GONE);
+        loginButton.setBackground(getResources().getDrawable(R.drawable.login_button_color));
+        loginButtonDemo.setBackground(getResources().getDrawable(R.drawable.demo_button_color));
+        loginButton.setTextColor(getResources().getColor(R.color.tool_bar_color1));
+        timer.cancel();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (timer != null) {
+            timer.cancel();
         }
     }
 }

@@ -80,7 +80,7 @@ import okhttp3.Response;
  */
 
 public class MapFragment extends Fragment implements View.OnClickListener, OnGetDistricSearchResultListener {
-    private static final String MAP_URL = MyApplication.URL + "side/heat_map" + MyApplication.TOKEN;
+    private final String MAP_URL = MyApplication.URL + "side/heat_map" + MyApplication.TOKEN;
     private final int color = 0xAA00FF00;
     private SharedPreferences preferences;
     public static String token;

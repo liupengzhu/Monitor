@@ -64,7 +64,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private TextView carbonUnitText;
     private TextView powerGeneratedUnitText;
     private TextView safeDayUnitText;
-    private String unit;
 
     private SwipeRefreshLayout refreshLayout;
     private LinearLayout layout;
@@ -107,7 +106,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void initView(View view) {
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
-        unit = preferences.getString("unit", null);
         powerText = view.findViewById(R.id.home_item_text_1);
         waterText = view.findViewById(R.id.home_item_text_2);
         steamText = view.findViewById(R.id.home_item_text_3);
@@ -216,18 +214,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         powerGeneratedText.setText(Util.formatNum(homeInfo.getPower_generated().getData()) + "");
         safeDayText.setText(homeInfo.getSafe_day() + "");
 
-        if (unit != null && Util.isGoodJson(unit)) {
-            UnitInfo info = Util.handleUnitInfo(unit);
-            powerUnitText.setText("单位:" + homeInfo.getPower().getRatio() + info.getPower());
-            waterUnitText.setText("单位:" + info.getWater_usage());
-            steamUnitText.setText("单位:" + info.getSteam_usage());
-            gasUnitText.setText("单位:" + info.getGas_usage());
-            energyUnitText.setText("单位:" + info.getEnergy_usage());
-            carbonUnitText.setText("单位:" + info.getCarbon_emissions());
-            powerGeneratedUnitText.setText("单位:" + homeInfo.getPower_generated().getRatio() + info.getPower());
-            safeDayUnitText.setText("单位:天");
 
-        }
+        powerUnitText.setText("单位:" + homeInfo.getPower().getRatio()
+                + preferences.getString("power_unit", null));
+        waterUnitText.setText("单位:" + preferences.getString("water_unit", null));
+        steamUnitText.setText("单位:" + preferences.getString("steam_unit", null));
+        gasUnitText.setText("单位:" + preferences.getString("gas_unit", null));
+        energyUnitText.setText("单位:" + preferences.getString("energy_unit", null));
+        carbonUnitText.setText("单位:" + preferences.getString("carbon_unit", null));
+        powerGeneratedUnitText.setText("单位:" + homeInfo.getPower_generated().getRatio()
+                + preferences.getString("power_unit", null));
+        safeDayUnitText.setText("单位:天");
 
     }
 

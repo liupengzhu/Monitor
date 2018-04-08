@@ -38,7 +38,7 @@ import okhttp3.Response;
 public class AlarmActivity extends BaseActivity implements View.OnClickListener {
 
     private Button backButton;
-    private static final String ALARM_URL = MyApplication.URL + "integrated_maint_company/alarm_lists" + MyApplication.TOKEN;
+    private final String ALARM_URL = MyApplication.URL + "integrated_maint_company/alarm_lists" + MyApplication.TOKEN;
     private static final int REQUEST_CODE = 11;
     private SharedPreferences preferences;
     private String token;

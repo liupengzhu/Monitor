@@ -1,17 +1,26 @@
 package cn.com.larunda.monitor;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +59,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private Button cancelButton;
     private Button rePasswordButton;
 
+    private LinearLayout telButton;
+    private TextView telText;
+    private LinearLayout telButton2;
+    private TextView telText2;
+    private final int REQUEST_CODE = 3;
+    private String telNum;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +82,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initEvent() {
         cancelButton.setOnClickListener(this);
         rePasswordButton.setOnClickListener(this);
+        telButton.setOnClickListener(this);
+        telButton2.setOnClickListener(this);
     }
 
     @Override
@@ -117,6 +135,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     private void initView() {
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        telButton = findViewById(R.id.user_menu_tel_button);
+        telText = findViewById(R.id.user_menu_tel_text);
+        telButton2 = findViewById(R.id.user_menu_tel_button2);
+        telText2 = findViewById(R.id.user_menu_tel_text2);
 
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
@@ -230,6 +253,58 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.user_menu_re_password:
                 Intent intent1 = new Intent(MainActivity.this, RePasswordActivity.class);
                 startActivity(intent1);
+                break;
+            case R.id.user_menu_tel_button:
+                call(telText.getText().toString().trim() + "");
+                break;
+            case R.id.user_menu_tel_button2:
+                call(telText2.getText().toString().trim() + "");
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 拨打电话
+     *
+     * @param tel
+     */
+    private void call(String tel) {
+        telNum = tel;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
+                    REQUEST_CODE);
+        } else {
+            callPhone(tel);
+        }
+    }
+
+    /**
+     * 拨打电话（直接拨打电话）
+     *
+     * @param phoneNum 电话号码
+     */
+    @SuppressLint("MissingPermission")
+    public void callPhone(String phoneNum) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    callPhone(telNum);
+                } else {
+                    Toast.makeText(this, "您必须同意拨打电话权限才能使用此功能!", Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;

@@ -41,6 +41,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private final String LOGIN_URL = MyApplication.URL + "login";
     private final String UNIT_URL = MyApplication.URL + "config/unit";
     private boolean isLogin = false;
+    private String person = "李俊";
+    private String tel = "18762870876";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,7 +214,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(LoginActivity.this, "账号或者密码不正确！", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "账号或者密码无效,请联系负责人:"+person+",电话:"+tel, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }

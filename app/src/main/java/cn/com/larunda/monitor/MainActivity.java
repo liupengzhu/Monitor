@@ -44,7 +44,7 @@ import okhttp3.Response;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private CustomViewPager viewPager;
     private TabLayout tabLayout;
-    private String[] titles = {"数据总览", "综合监控", "用能地图", "事件总览"};
+    private String[] titles = {"数据总览", "用能地图", "事件总览"};
     private int[] icons = {R.drawable.home_icon2, R.drawable.monitor_icon2, R.drawable.map_icon2,
             R.drawable.maintenance_icon2};
     private HomeAdapter homeAdapter;
@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
         fragments.add(new HomeFragment());
-        fragments.add(new MonitorFragment());
+        //fragments.add(new MonitorFragment());
         fragments.add(new MapFragment());
         fragments.add(new MaintenanceFragment());
         homeAdapter = new HomeAdapter(getSupportFragmentManager(), fragments);
@@ -175,12 +175,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         tab.getCustomView().findViewById(R.id.tab_image_view).setBackgroundResource(R.drawable.home_icon1);
                         break;
                     case 1:
-                        tab.getCustomView().findViewById(R.id.tab_image_view).setBackgroundResource(R.drawable.monitor_icon1);
-                        break;
-                    case 2:
                         tab.getCustomView().findViewById(R.id.tab_image_view).setBackgroundResource(R.drawable.map_icon1);
                         break;
-                    case 3:
+                    case 2:
                         tab.getCustomView().findViewById(R.id.tab_image_view).setBackgroundResource(R.drawable.maintenance_icon1);
                         break;
                     default:
@@ -199,12 +196,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         tab.getCustomView().findViewById(R.id.tab_image_view).setBackgroundResource(R.drawable.home_icon2);
                         break;
                     case 1:
-                        tab.getCustomView().findViewById(R.id.tab_image_view).setBackgroundResource(R.drawable.monitor_icon2);
-                        break;
-                    case 2:
                         tab.getCustomView().findViewById(R.id.tab_image_view).setBackgroundResource(R.drawable.map_icon2);
                         break;
-                    case 3:
+                    case 2:
                         tab.getCustomView().findViewById(R.id.tab_image_view).setBackgroundResource(R.drawable.maintenance_icon2);
                         break;
                     default:

@@ -20,10 +20,16 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import cn.com.larunda.monitor.CarbonActivity;
+import cn.com.larunda.monitor.ElectricActivity;
+import cn.com.larunda.monitor.GasActivity;
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.MainActivity;
 import cn.com.larunda.monitor.PowerActivity;
 import cn.com.larunda.monitor.R;
+import cn.com.larunda.monitor.RenewableActivity;
+import cn.com.larunda.monitor.SteamActivity;
+import cn.com.larunda.monitor.WaterActivity;
 import cn.com.larunda.monitor.gson.HomeInfo;
 import cn.com.larunda.monitor.gson.UnitInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
@@ -67,6 +73,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Button leftButton;
 
     private RelativeLayout button;
+
+    LinearLayout electricButton;
+    LinearLayout waterButton;
+    LinearLayout gasButton;
+    LinearLayout steamButton;
+    LinearLayout carbonButton;
+    LinearLayout renewableButton;
 
     @Nullable
     @Override
@@ -127,6 +140,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         leftButton = view.findViewById(R.id.home_left_button);
 
         button = view.findViewById(R.id.home_button);
+
+        electricButton = view.findViewById(R.id.home_button1);
+        waterButton = view.findViewById(R.id.home_button2);
+        gasButton = view.findViewById(R.id.home_button3);
+        steamButton = view.findViewById(R.id.home_button4);
+        renewableButton = view.findViewById(R.id.home_button5);
+        carbonButton = view.findViewById(R.id.home_button6);
     }
 
 
@@ -220,6 +240,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 sendRequest();
             }
         });
+
+        electricButton.setOnClickListener(this);
+        waterButton.setOnClickListener(this);
+        gasButton.setOnClickListener(this);
+        steamButton.setOnClickListener(this);
+        renewableButton.setOnClickListener(this);
+        carbonButton.setOnClickListener(this);
     }
 
     @Override
@@ -231,6 +258,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.home_button:
                 Intent intent = new Intent(getContext(), PowerActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.home_button1:
+                Intent electricIntent = new Intent(getContext(), ElectricActivity.class);
+                startActivity(electricIntent);
+                break;
+            case R.id.home_button2:
+                Intent waterIntent = new Intent(getContext(), WaterActivity.class);
+                startActivity(waterIntent);
+                break;
+            case R.id.home_button3:
+                Intent gasIntent = new Intent(getContext(), GasActivity.class);
+                startActivity(gasIntent);
+                break;
+            case R.id.home_button4:
+                Intent steamIntent = new Intent(getContext(), SteamActivity.class);
+                startActivity(steamIntent);
+                break;
+            case R.id.home_button5:
+                Intent renewableIntent = new Intent(getContext(), RenewableActivity.class);
+                startActivity(renewableIntent);
+                break;
+            case R.id.home_button6:
+                Intent carbonIntent = new Intent(getContext(), CarbonActivity.class);
+                startActivity(carbonIntent);
                 break;
             default:
                 break;

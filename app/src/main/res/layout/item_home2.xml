@@ -5,6 +5,7 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/home_button4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -75,6 +76,7 @@
         android:background="@color/line" />
 
     <LinearLayout
+        android:id="@+id/home_button3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

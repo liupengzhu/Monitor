@@ -65,8 +65,14 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:layout_width="12dp"
+                android:src="@drawable/right_icon"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp" />
         </RelativeLayout>
-
 
     </LinearLayout>
 
@@ -135,7 +141,13 @@
                     android:textSize="15sp" />
 
             </LinearLayout>
-
+            <ImageView
+                android:layout_width="12dp"
+                android:src="@drawable/right_icon"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp" />
         </RelativeLayout>
 
 

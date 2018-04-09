@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
+
     <LinearLayout
         android:id="@+id/home_button5"
         android:layout_width="0dp"
@@ -64,6 +65,13 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/right_icon" />
         </RelativeLayout>
 
 
@@ -135,6 +143,13 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/right_icon" />
         </RelativeLayout>
 
 

@@ -70,6 +70,7 @@ public class WarningInfo {
         private String content;
         private String status;
         private String created_at;
+        private String is_send;
 
         public int getId() {
             return id;
@@ -117,6 +118,14 @@ public class WarningInfo {
 
         public void setCreated_at(String created_at) {
             this.created_at = created_at;
+        }
+
+        public String getIs_send() {
+            return is_send;
+        }
+
+        public void setIs_send(String is_send) {
+            this.is_send = is_send;
         }
     }
 }

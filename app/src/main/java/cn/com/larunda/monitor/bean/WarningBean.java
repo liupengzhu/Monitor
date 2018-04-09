@@ -10,6 +10,7 @@ public class WarningBean {
     private String time;
     private String data;
     private String type;
+    private String status;
 
     public WarningBean() {
         super();
@@ -61,5 +62,13 @@ public class WarningBean {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

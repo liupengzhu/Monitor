@@ -303,6 +303,7 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
                 bean.setTime(dataBean.getCreated_at());
                 bean.setTitle(dataBean.getType());
                 bean.setType(dataBean.getStatus());
+                bean.setStatus(dataBean.getIs_send());
                 warningBeanList.add(bean);
             }
         }
@@ -395,6 +396,7 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
                 bean.setTime(dataBean.getCreated_at());
                 bean.setTitle(dataBean.getType());
                 bean.setType(dataBean.getStatus());
+                bean.setStatus(dataBean.getIs_send());
                 warningBeanList.add(bean);
             }
         }

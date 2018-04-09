@@ -33,6 +33,20 @@
             android:textColor="@color/tab_text_color2"
             android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/warning_item_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/type_blue"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="已下发"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
@@ -44,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/text_yellow"
-            android:paddingTop="3dp"
             android:paddingBottom="3dp"
+            android:paddingTop="3dp"
             android:text="处理中"
             android:textColor="@color/type_yellow_color1" />
 

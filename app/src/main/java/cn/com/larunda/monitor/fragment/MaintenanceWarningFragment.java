@@ -311,6 +311,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                 bean.setTime(dataBean.getCreated_at());
                 bean.setTitle(dataBean.getType());
                 bean.setType(dataBean.getStatus());
+                bean.setStatus(dataBean.getIs_send());
                 warningBeanList.add(bean);
             }
         }
@@ -404,6 +405,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                 bean.setTime(dataBean.getCreated_at());
                 bean.setTitle(dataBean.getType());
                 bean.setType(dataBean.getStatus());
+                bean.setStatus(dataBean.getIs_send());
                 warningBeanList.add(bean);
             }
         }

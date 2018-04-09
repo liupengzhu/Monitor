@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.com.larunda.dialog.ChooseDialog;
 import cn.com.larunda.dialog.DateDialog;
 import cn.com.larunda.monitor.adapter.WarningAdapter;
 import cn.com.larunda.monitor.bean.WarningBean;
@@ -35,6 +36,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static cn.com.larunda.monitor.util.MyApplication.getContext;
+
 public class AlarmActivity extends BaseActivity implements View.OnClickListener {
 
     private Button backButton;
@@ -43,7 +46,7 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
     private SharedPreferences preferences;
     private String token;
 
-    private Spinner spinner;
+    private TextView typeText;
     private TextView textView;
     private LinearLayout button;
     private DateDialog dialog;
@@ -62,11 +65,15 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
     private int page;
     private int maxPage;
 
+    private List<String> types = new ArrayList<>();
+    private ChooseDialog chooseDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
         company_id = getIntent().getIntExtra("id", 0);
+        intData();
         initView();
         initEvent();
         initType();
@@ -75,6 +82,15 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
         layout.setVisibility(View.GONE);
     }
 
+    /**
+     * 初始化数据
+     */
+    private void intData() {
+        types.clear();
+        types.add("全部");
+        types.add("处理中");
+        types.add("未开始");
+    }
 
     /**
      * 初始化view
@@ -83,6 +99,9 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         token = preferences.getString("token", null);
+
+        chooseDialog = new ChooseDialog(this, types);
+        typeText = findViewById(R.id.alarm_types_text);
 
         backButton = findViewById(R.id.alarm_back_button);
         errorLayout = findViewById(R.id.alarm_error_layout);
@@ -110,19 +129,6 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
         button.setVisibility(View.GONE);
         dialog = new DateDialog(this, true, true);
 
-        spinner = findViewById(R.id.alarm_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item_spinner_showed) {
-
-            @Override
-            public int getCount() {
-                return super.getCount();
-            }
-        };
-        adapter.setDropDownViewResource(R.layout.item_spinner_option);
-        adapter.add("-请选择-");
-        adapter.add("处理中");
-        adapter.add("未开始");
-        spinner.setAdapter(adapter);
 
     }
 
@@ -130,29 +136,8 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
      * 初始化点击事件
      */
     private void initEvent() {
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        status = 0;
-                        break;
-                    case 1:
-                        status = 2;
-                        break;
-                    case 2:
-                        status = 3;
-                        break;
-                }
-                sendRequest();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        typeText.setOnClickListener(this);
         backButton.setOnClickListener(this);
         textView.setOnClickListener(this);
         dialog.setOnCancelClickListener(new DateDialog.OnCancelClickListener() {
@@ -169,6 +154,22 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
                     sendRequest();
                 }
                 dialog.cancel();
+            }
+        });
+
+        chooseDialog.setOnClickListener(new ChooseDialog.OnClickListener() {
+            @Override
+            public void OnClick(View v, int position) {
+                if (position == 1) {
+                    status = 2;
+                } else if (position == 2) {
+                    status = 3;
+                } else {
+                    status = 0;
+                }
+                typeText.setText(types.get(position) + "");
+                sendRequest();
+                chooseDialog.cancel();
             }
         });
 
@@ -206,6 +207,11 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.alarm_back_button:
                 finish();
+                break;
+            case R.id.alarm_types_text:
+                chooseDialog.show();
+                break;
+            default:
                 break;
         }
     }
@@ -401,7 +407,8 @@ public class AlarmActivity extends BaseActivity implements View.OnClickListener 
     private void initType() {
 
         textView.setText("选择时间");
-        spinner.setSelection(0);
+        typeText.setText("全部");
+        status = 0;
     }
 
 

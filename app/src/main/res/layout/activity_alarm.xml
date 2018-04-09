@@ -67,7 +67,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_toRightOf="@id/alarm_spinner"
+                android:layout_toRightOf="@id/alarm_types_text"
                 android:background="@drawable/search_button"
                 android:gravity="center">
 
@@ -89,19 +89,16 @@
                 android:text="警报状态"
                 android:textColor="@color/tab_text_color2" />
 
-            <Spinner
-                android:id="@+id/alarm_spinner"
+            <TextView
+                android:id="@+id/alarm_types_text"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/alarm_text"
                 android:background="@drawable/date_text"
                 android:gravity="center"
-                android:overlapAnchor="false"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:spinnerMode="dropdown"></Spinner>
+                android:textSize="12sp" />
 
         </RelativeLayout>
 

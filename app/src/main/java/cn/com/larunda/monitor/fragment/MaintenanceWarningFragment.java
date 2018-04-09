@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.com.larunda.dialog.ChooseDialog;
 import cn.com.larunda.dialog.DateDialog;
 import cn.com.larunda.monitor.AlarmActivity;
 import cn.com.larunda.monitor.FilterCompanyActivity;
@@ -55,7 +56,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
     private SharedPreferences preferences;
     private String token;
 
-    private Spinner spinner;
+    private TextView typeText;
     private TextView textView;
     private LinearLayout button;
     private DateDialog dialog;
@@ -74,10 +75,14 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
     private int page;
     private int maxPage;
 
+    private List<String> types = new ArrayList<>();
+    private ChooseDialog chooseDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maintenance_warning, container, false);
+        intData();
         initView(view);
         initEvent();
         initType();
@@ -85,6 +90,16 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         errorLayout.setVisibility(View.GONE);
         layout.setVisibility(View.GONE);
         return view;
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void intData() {
+        types.clear();
+        types.add("全部");
+        types.add("处理中");
+        types.add("未开始");
     }
 
     /**
@@ -96,6 +111,9 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
+
+        chooseDialog = new ChooseDialog(getContext(), types);
+        typeText = view.findViewById(R.id.maintenance_warning_types_text);
 
         errorLayout = view.findViewById(R.id.maintenance_warning_error_layout);
         layout = view.findViewById(R.id.maintenance_warning_layout);
@@ -121,19 +139,6 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
         button = view.findViewById(R.id.maintenance_warning_search_button);
         dialog = new DateDialog(getContext(), true, true);
 
-        spinner = view.findViewById(R.id.maintenance_warning_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.item_spinner_showed) {
-
-            @Override
-            public int getCount() {
-                return super.getCount();
-            }
-        };
-        adapter.setDropDownViewResource(R.layout.item_spinner_option);
-        adapter.add("-请选择-");
-        adapter.add("处理中");
-        adapter.add("未开始");
-        spinner.setAdapter(adapter);
 
     }
 
@@ -141,29 +146,7 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
      * 初始化点击事件
      */
     private void initEvent() {
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        status = 0;
-                        break;
-                    case 1:
-                        status = 2;
-                        break;
-                    case 2:
-                        status = 3;
-                        break;
-                }
-                sendRequest();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        typeText.setOnClickListener(this);
         textView.setOnClickListener(this);
         dialog.setOnCancelClickListener(new DateDialog.OnCancelClickListener() {
             @Override
@@ -179,6 +162,22 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                     sendRequest();
                 }
                 dialog.cancel();
+            }
+        });
+
+        chooseDialog.setOnClickListener(new ChooseDialog.OnClickListener() {
+            @Override
+            public void OnClick(View v, int position) {
+                if (position == 1) {
+                    status = 2;
+                } else if (position == 2) {
+                    status = 3;
+                } else {
+                    status = 0;
+                }
+                typeText.setText(types.get(position) + "");
+                sendRequest();
+                chooseDialog.cancel();
             }
         });
 
@@ -213,6 +212,11 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
                 Intent intent = new Intent(getContext(), FilterCompanyActivity.class);
                 intent.putExtra("type", "alarm");
                 startActivityForResult(intent, REQUEST_CODE);
+                break;
+            case R.id.maintenance_warning_types_text:
+                chooseDialog.show();
+                break;
+            default:
                 break;
         }
     }
@@ -412,7 +416,8 @@ public class MaintenanceWarningFragment extends Fragment implements View.OnClick
     private void initType() {
         company_id = 0;
         textView.setText("选择时间");
-        spinner.setSelection(0);
+        typeText.setText("全部");
+        status = 0;
     }
 
     @Override

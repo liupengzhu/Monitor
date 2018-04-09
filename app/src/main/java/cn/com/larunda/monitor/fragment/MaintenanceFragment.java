@@ -54,7 +54,7 @@ public class MaintenanceFragment extends Fragment implements View.OnClickListene
     }
 
     private void init() {
-        fragmentList.add(new MaintenanceSituationFragment());
+        fragmentList.add(new CompanyFragment());
         fragmentList.add(new MaintenanceWarningFragment());
         fragmentList.add(new MaintenanceWorksheetFragment());
         titleList.add("维保概况");

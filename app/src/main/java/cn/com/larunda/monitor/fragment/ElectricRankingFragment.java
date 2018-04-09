@@ -77,11 +77,13 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
 
     private PieChartViewPager mPieChart;
     private TextView textView1;
+    private DateDialog yearDialog;
     private DateDialog dateDialog;
     private DateDialog monthDialog;
     private TextView dateText;
-    private RadioButton monthButton;
 
+    private RadioButton yearButton;
+    private RadioButton monthButton;
     private RadioButton dayButton;
     private RadioGroup timeGroup;
     private RadioGroup typeGroup;
@@ -136,9 +138,11 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
 
         textView1 = view.findViewById(R.id.electric_ranking_fragment_chart_text);
 
+        yearDialog = new DateDialog(getContext(), false, false);
         dateDialog = new DateDialog(getContext());
         monthDialog = new DateDialog(getContext(), true, false);
         dateText = view.findViewById(R.id.electric_ranking_date_text);
+        yearButton = view.findViewById(R.id.electric_ranking_fragment_year_button);
         monthButton = view.findViewById(R.id.electric_ranking_fragment_month_button);
         dayButton = view.findViewById(R.id.electric_ranking_fragment_day_button);
         timeGroup = view.findViewById(R.id.electric_ranking_fragment_time_group);
@@ -195,6 +199,7 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
      * 初始化点击事件
      */
     private void initEvent() {
+        yearButton.setOnClickListener(this);
         monthButton.setOnClickListener(this);
         dayButton.setOnClickListener(this);
 
@@ -211,13 +216,29 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
                 dateDialog.cancel();
             }
         });
+
         monthDialog.setOnCancelClickListener(new DateDialog.OnCancelClickListener() {
             @Override
             public void OnClick(View view) {
                 monthDialog.cancel();
             }
         });
-
+        yearDialog.setOnCancelClickListener(new DateDialog.OnCancelClickListener() {
+            @Override
+            public void OnClick(View view) {
+                yearDialog.cancel();
+            }
+        });
+        yearDialog.setOnOkClickListener(new DateDialog.OnOkClickListener() {
+            @Override
+            public void OnClick(View view, String date) {
+                if (dateText != null && date != null) {
+                    dateText.setText(date);
+                    sendRequest();
+                }
+                yearDialog.cancel();
+            }
+        });
         dateDialog.setOnOkClickListener(new DateDialog.OnOkClickListener() {
             @Override
             public void OnClick(View view, String date) {
@@ -273,7 +294,12 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.electric_ranking_fragment_year_button:
+                long time1 = System.currentTimeMillis();
+                String date1 = Util.parseTime(time1, 1);
+                dateText.setText(date1);
+                sendRequest();
+                break;
             case R.id.electric_ranking_fragment_month_button:
                 long time2 = System.currentTimeMillis();
                 String date2 = Util.parseTime(time2, 2);
@@ -300,7 +326,10 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
                 sendRequest();
                 break;
             case R.id.electric_ranking_date_text:
-                if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_month_button) {
+
+                if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_year_button) {
+                    yearDialog.show();
+                } else if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_month_button) {
                     monthDialog.show();
                 } else {
                     dateDialog.show();
@@ -420,7 +449,10 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
 
         ratio = rankCompanyInfo.getChart().getRatio();
         if (style.equals("company")) {
-            if (date_type.equals("month")) {
+            if (date_type.equals("year")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] +
+                        "年 企业耗电排行占比图");
+            } else if (date_type.equals("month")) {
                 textView1.setText(dateText.getText().toString().split("-")[0] + "年"
                         + dateText.getText().toString().split("-")[1]
                         + "月 企业耗电排行占比图");
@@ -431,7 +463,10 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
                         + "日 企业耗电排行占比图");
             }
         } else {
-            if (date_type.equals("month")) {
+            if (date_type.equals("year")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] +
+                        "年 行业耗电排行占比图");
+            } else if (date_type.equals("month")) {
                 textView1.setText(dateText.getText().toString().split("-")[0] + "年"
                         + dateText.getText().toString().split("-")[1]
                         + "月 行业耗电排行占比图");
@@ -484,7 +519,9 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
         } else {
             type = "original";
         }
-        if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_day_button) {
+        if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_year_button) {
+            date_type = "year";
+        } else if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_day_button) {
             date_type = "date";
         } else {
             date_type = "month";

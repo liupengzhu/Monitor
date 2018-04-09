@@ -32,8 +32,8 @@
                 android:id="@+id/map_item_original_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <TextView
@@ -52,6 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="2dp"
                     android:layout_marginLeft="5dp"
                     android:gravity="right|center_vertical"
                     android:text="16223.11"
@@ -87,6 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="2dp"
                     android:layout_marginLeft="5dp"
                     android:gravity="right|center_vertical"
                     android:text="1122"

@@ -68,6 +68,7 @@ import cn.com.larunda.monitor.bean.MapCompanyBean;
 import cn.com.larunda.monitor.bean.PointBean;
 import cn.com.larunda.monitor.gson.MapInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
+import cn.com.larunda.monitor.util.BottomBar;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
 import cn.com.larunda.monitor.util.Util;
@@ -94,7 +95,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
 
 
     private ImageView img;
-    private LinearLayout mapUpLayout;
+    private BottomBar mapUpLayout;
     private boolean isUp = false;
 
     private RadioGroup radioGroup;
@@ -243,7 +244,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
      */
     private void initEvent() {
         leftButton.setOnClickListener(this);
-        mapUpLayout.setOnClickListener(this);
         mDistrictSearch.setOnDistrictSearchListener(this);
 
         radioButton1.setOnClickListener(this);
@@ -278,17 +278,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
             case R.id.map_left_button:
                 MainActivity.drawerLayout.openDrawer(Gravity.START);
                 break;
-            case R.id.map_up_layout:
-                if (!isUp) {
-                    isUp = true;
-                    changeMarginUp();
-                    img.setRotation(180);
-                } else {
-                    isUp = false;
-                    changeMarginDown();
-                    img.setRotation(0);
-                }
-                break;
+
             case R.id.map_radio1:
                 sendRequest();
                 break;
@@ -346,20 +336,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         }
     }
 
-    private void changeMarginUp() {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mapUpLayout.getLayoutParams();
-        params.bottomMargin = 0;
-        mapUpLayout.setLayoutParams(params);
-    }
-
-    private void changeMarginDown() {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mapUpLayout.getLayoutParams();
-        params.bottomMargin = -(int) (mapUpLayout.getHeight() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                55, getContext().getResources().getDisplayMetrics()));
-
-        mapUpLayout.setLayoutParams(params);
-    }
-
     /**
      * 发送网络请求
      */
@@ -414,13 +390,12 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
             for (int i = 0; i < info.getData().size(); i++) {
                 LatLng latLng = new LatLng(Double.valueOf(info.getData().get(i).getLat()),
                         Double.valueOf(info.getData().get(i).getLng()));
-                if (i < 10) {
-                    PointBean pointBean = new PointBean();
-                    pointBean.setName(info.getData().get(i).getName() + "");
-                    pointBean.setRank(info.getData().get(i).getTop_ten() + "");
-                    pointBean.setLatLng(latLng);
-                    pointBeanList.add(pointBean);
-                }
+
+                PointBean pointBean = new PointBean();
+                pointBean.setName(info.getData().get(i).getName() + "");
+                pointBean.setRank(info.getData().get(i).getTop_ten() + "");
+                pointBean.setLatLng(latLng);
+                pointBeanList.add(pointBean);
                 latLngList.add(latLng);
                 WeightedLatLng weightedLatLng = new WeightedLatLng(latLng, info.getData().get(i).getCount());
                 weightedLatLngList.add(weightedLatLng);

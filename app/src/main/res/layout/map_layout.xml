@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/dialog_icon1"
+    android:background="@drawable/dialog_icon"
     android:clickable="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="25dp">
+    android:paddingBottom="13dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_margin="2dp"
+        android:layout_marginBottom="2dp"
         android:text="当月数据"
         android:textColor="@color/text_l"
         android:textSize="10sp" />

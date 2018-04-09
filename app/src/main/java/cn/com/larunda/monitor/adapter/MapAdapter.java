@@ -50,9 +50,9 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mapOnClickListener!=null){
+                if (mapOnClickListener != null) {
                     int position = viewHolder.getAdapterPosition();
-                    mapOnClickListener.onClick(v,position,pointBeanList.get(position).getLatLng());
+                    mapOnClickListener.onClick(v, position, pointBeanList.get(position).getLatLng());
                 }
             }
         });
@@ -62,7 +62,7 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         PointBean bean = pointBeanList.get(position);
-        holder.textView.setText(bean.getRank());
+        holder.textView.setText((position + 1)+"");
         holder.name.setText(bean.getName());
     }
 

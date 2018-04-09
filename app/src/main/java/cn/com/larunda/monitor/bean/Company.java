@@ -23,6 +23,8 @@ public class Company {
     private String electric;
     private String alarm;
     private String maintenance;
+    private List<MaintenanceCompany> maintenanceCompanyList = new ArrayList<>();
+
     public Company() {
         super();
     }
@@ -141,5 +143,13 @@ public class Company {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public List<MaintenanceCompany> getMaintenanceCompanyList() {
+        return maintenanceCompanyList;
+    }
+
+    public void setMaintenanceCompanyList(List<MaintenanceCompany> maintenanceCompanyList) {
+        this.maintenanceCompanyList = maintenanceCompanyList;
     }
 }

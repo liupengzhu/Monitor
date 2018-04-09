@@ -1,6 +1,7 @@
 package cn.com.larunda.monitor.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -60,6 +62,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         TextView alarm;
         TextView maintenance;
 
+        RecyclerView recyclerView;
+        RecyclerView recyclerViewRight;
+
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.company_list_item_company_img);
@@ -67,20 +72,22 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             industry = itemView.findViewById(R.id.company_list_item_industry);
             tel = itemView.findViewById(R.id.company_list_item_tel);
             address = itemView.findViewById(R.id.company_list_item_address);
-            img1 = itemView.findViewById(R.id.company_list_item_img1);
+           /* img1 = itemView.findViewById(R.id.company_list_item_img1);
             img2 = itemView.findViewById(R.id.company_list_item_img2);
             img3 = itemView.findViewById(R.id.company_list_item_img3);
             img4 = itemView.findViewById(R.id.company_list_item_img4);
-            img5 = itemView.findViewById(R.id.company_list_item_img5);
+            img5 = itemView.findViewById(R.id.company_list_item_img5);*/
             circleTextView = itemView.findViewById(R.id.company_list_item_circle_text);
-            textView1 = itemView.findViewById(R.id.company_list_item_text1);
+            /*textView1 = itemView.findViewById(R.id.company_list_item_text1);
             textView2 = itemView.findViewById(R.id.company_list_item_text2);
             textView3 = itemView.findViewById(R.id.company_list_item_text3);
             textView4 = itemView.findViewById(R.id.company_list_item_text4);
-            textView5 = itemView.findViewById(R.id.company_list_item_text5);
+            textView5 = itemView.findViewById(R.id.company_list_item_text5);*/
             alarm = itemView.findViewById(R.id.company_list_item_alarm_text);
             maintenance = itemView.findViewById(R.id.company_list_item_maintenance_text);
 
+            recyclerView = itemView.findViewById(R.id.company_list_item_recycler);
+            recyclerViewRight = itemView.findViewById(R.id.company_list_item_right_recycler);
         }
     }
 
@@ -137,7 +144,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             holder.circleTextView.setNumberColor(context.getResources().getColor(R.color.circle_color3));
         }
         holder.circleTextView.setCircleAngle(company.getAngle());
-        String electricText = "<font color='#999999'>安全用电:</font>" + " " + "<font color='#d94a2b'>"
+        /*String electricText = "<font color='#999999'>安全用电:</font>" + " " + "<font color='#d94a2b'>"
                 + company.getElectric() + "</font>" + "<font color='#333333'>台</font>";
         holder.textView1.setText(Html.fromHtml(electricText));
         if (company.getDeviceList().size() >= 1) {
@@ -177,47 +184,18 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             holder.textView5.setText(Html.fromHtml(text5));
         } else {
             holder.textView5.setVisibility(View.GONE);
+        }*/
+        if (company.getDeviceList() != null) {
+            CompanyDeviceAdapter adapter = new CompanyDeviceAdapter(company.getDeviceList(), this.context);
+            LinearLayoutManager manager = new LinearLayoutManager(this.context);
+            holder.recyclerViewRight.setAdapter(adapter);
+            holder.recyclerViewRight.setLayoutManager(manager);
         }
-
-        if (company.getTypeList().size() >= 1) {
-            holder.img1.setVisibility(View.VISIBLE);
-            if (iconList.get(company.getTypeList().get(0)) != null) {
-                holder.img1.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(0))));
-            }
-        } else {
-            holder.img1.setVisibility(View.GONE);
-        }
-        if (company.getTypeList().size() >= 2) {
-            holder.img2.setVisibility(View.VISIBLE);
-            if (iconList.get(company.getTypeList().get(1)) != null) {
-                holder.img2.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(1))));
-            }
-        } else {
-            holder.img2.setVisibility(View.GONE);
-        }
-        if (company.getTypeList().size() >= 3) {
-            holder.img3.setVisibility(View.VISIBLE);
-            if (iconList.get(company.getTypeList().get(2)) != null) {
-                holder.img3.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(2))));
-            }
-        } else {
-            holder.img3.setVisibility(View.GONE);
-        }
-        if (company.getTypeList().size() >= 4) {
-            holder.img4.setVisibility(View.VISIBLE);
-            if (iconList.get(company.getTypeList().get(3)) != null) {
-                holder.img4.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(3))));
-            }
-        } else {
-            holder.img4.setVisibility(View.GONE);
-        }
-        if (company.getTypeList().size() >= 5) {
-            holder.img5.setVisibility(View.VISIBLE);
-            if (iconList.get(company.getTypeList().get(4)) != null) {
-                holder.img5.setImageDrawable(context.getResources().getDrawable(iconList.get(company.getTypeList().get(4))));
-            }
-        } else {
-            holder.img5.setVisibility(View.GONE);
+        if (company.getMaintenanceCompanyList() != null) {
+            CompanyItemAdapter adapter = new CompanyItemAdapter(company.getMaintenanceCompanyList(), this.context, iconList);
+            LinearLayoutManager manager = new LinearLayoutManager(this.context);
+            holder.recyclerView.setAdapter(adapter);
+            holder.recyclerView.setLayoutManager(manager);
         }
 
     }

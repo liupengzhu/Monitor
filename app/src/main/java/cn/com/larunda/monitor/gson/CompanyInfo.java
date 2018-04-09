@@ -2,6 +2,8 @@ package cn.com.larunda.monitor.gson;
 
 import java.util.List;
 
+import cn.com.larunda.monitor.bean.MaintenanceCompany;
+
 /**
  * Created by sddt on 18-3-22.
  */
@@ -137,6 +139,15 @@ public class CompanyInfo {
         private int alarm_data;
         private int maintenance_num;
         private List<MaintenanceTypeBean> maintenance_type;
+        private List<MaintenanceCompanyInfo.DataBean> maintenance_company;
+
+        public List<MaintenanceCompanyInfo.DataBean> getMaintenanceCompanyInfoList() {
+            return maintenance_company;
+        }
+
+        public void setMaintenanceCompanyInfoList(List<MaintenanceCompanyInfo.DataBean> maintenanceCompanyInfoList) {
+            this.maintenance_company = maintenanceCompanyInfoList;
+        }
 
         public String getCompany_id() {
             return company_id;

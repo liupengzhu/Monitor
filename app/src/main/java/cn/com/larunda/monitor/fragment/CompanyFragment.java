@@ -27,7 +27,9 @@ import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.WorksheetActivity;
 import cn.com.larunda.monitor.adapter.CompanyAdapter;
 import cn.com.larunda.monitor.bean.Company;
+import cn.com.larunda.monitor.bean.MaintenanceCompany;
 import cn.com.larunda.monitor.gson.CompanyInfo;
+import cn.com.larunda.monitor.gson.MaintenanceCompanyInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;
 import cn.com.larunda.monitor.util.HttpUtil;
 import cn.com.larunda.monitor.util.MyApplication;
@@ -230,6 +232,7 @@ public class CompanyFragment extends Fragment {
                 Company company = new Company();
                 List<String> typeList = new ArrayList<>();
                 List<String> deviceList = new ArrayList<>();
+                List<MaintenanceCompany> maintenanceCompanyList = new ArrayList<>();
                 if (dataBean.getCompany_pic() != null) {
                     company.setImg(MyApplication.IMG_URL + dataBean.getCompany_pic());
                 }
@@ -248,18 +251,29 @@ public class CompanyFragment extends Fragment {
 
                     company.setAngle((float) normal / (float) dataBean.getDevice_data().getDevice_total() * 360);
                 }
-                if (dataBean.getMaintenance_type() != null) {
-                    for (CompanyInfo.DataBeanX.MaintenanceTypeBean typeBean : dataBean.getMaintenance_type()) {
-                        typeList.add(typeBean.getName());
-                    }
-                }
+                deviceList.add("安全用电" + " " + dataBean.getDevice_data().getMeter_total_num());
                 if (dataBean.getDevice_data().getOther_device() != null) {
                     for (CompanyInfo.DataBeanX.DeviceDataBean.OtherDeviceBean deviceBean : dataBean.getDevice_data().getOther_device()) {
                         deviceList.add(deviceBean.getName() + " " + deviceBean.getData().getTotal());
                     }
                 }
-                company.setTypeList(typeList);
+                if (dataBean.getMaintenanceCompanyInfoList() != null) {
+                    for (MaintenanceCompanyInfo.DataBean dataBean1 : dataBean.getMaintenanceCompanyInfoList()) {
+                        typeList.clear();
+                        if (dataBean1.getMaintenance_type() != null) {
+                            for (MaintenanceCompanyInfo.DataBean.MaintenanceTypeBean typeBean : dataBean1.getMaintenance_type()) {
+                                typeList.add(typeBean.getName());
+                            }
+                        }
+                        MaintenanceCompany maintenanceCompany = new MaintenanceCompany();
+                        maintenanceCompany.setName(dataBean1.getName() + " (" + dataBean1.getTel() + ")");
+                        maintenanceCompany.setTypeList(typeList);
+                        maintenanceCompanyList.add(maintenanceCompany);
+                    }
+
+                }
                 company.setDeviceList(deviceList);
+                company.setMaintenanceCompanyList(maintenanceCompanyList);
                 companyList.add(company);
 
             }
@@ -335,6 +349,7 @@ public class CompanyFragment extends Fragment {
                 Company company = new Company();
                 List<String> typeList = new ArrayList<>();
                 List<String> deviceList = new ArrayList<>();
+                List<MaintenanceCompany> maintenanceCompanyList = new ArrayList<>();
                 if (dataBean.getCompany_pic() != null) {
                     company.setImg(MyApplication.IMG_URL + dataBean.getCompany_pic());
                 }
@@ -353,18 +368,29 @@ public class CompanyFragment extends Fragment {
 
                     company.setAngle((float) normal / (float) dataBean.getDevice_data().getDevice_total() * 360);
                 }
-                if (dataBean.getMaintenance_type() != null) {
-                    for (CompanyInfo.DataBeanX.MaintenanceTypeBean typeBean : dataBean.getMaintenance_type()) {
-                        typeList.add(typeBean.getName());
-                    }
-                }
+                deviceList.add("安全用电" + " " + dataBean.getDevice_data().getMeter_total_num());
                 if (dataBean.getDevice_data().getOther_device() != null) {
                     for (CompanyInfo.DataBeanX.DeviceDataBean.OtherDeviceBean deviceBean : dataBean.getDevice_data().getOther_device()) {
                         deviceList.add(deviceBean.getName() + " " + deviceBean.getData().getTotal());
                     }
                 }
-                company.setTypeList(typeList);
+                if (dataBean.getMaintenanceCompanyInfoList() != null) {
+                    for (MaintenanceCompanyInfo.DataBean dataBean1 : dataBean.getMaintenanceCompanyInfoList()) {
+                        typeList.clear();
+                        if (dataBean1.getMaintenance_type() != null) {
+                            for (MaintenanceCompanyInfo.DataBean.MaintenanceTypeBean typeBean : dataBean1.getMaintenance_type()) {
+                                typeList.add(typeBean.getName());
+                            }
+                        }
+                        MaintenanceCompany maintenanceCompany = new MaintenanceCompany();
+                        maintenanceCompany.setName(dataBean1.getName() + " (" + dataBean1.getTel() + ")");
+                        maintenanceCompany.setTypeList(typeList);
+                        maintenanceCompanyList.add(maintenanceCompany);
+                    }
+
+                }
                 company.setDeviceList(deviceList);
+                company.setMaintenanceCompanyList(maintenanceCompanyList);
                 companyList.add(company);
 
             }

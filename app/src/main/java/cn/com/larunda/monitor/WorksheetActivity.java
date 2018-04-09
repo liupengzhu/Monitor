@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.com.larunda.dialog.ChooseDialog;
 import cn.com.larunda.dialog.DateDialog;
 import cn.com.larunda.monitor.adapter.WorksheetAdapter;
 import cn.com.larunda.monitor.bean.WorksheetBean;
@@ -44,7 +45,7 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
     private SharedPreferences preferences;
     private String token;
 
-    private Spinner spinner;
+    private TextView typeText;
     private TextView textView;
     private LinearLayout button;
     private DateDialog dialog;
@@ -63,11 +64,15 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
     private int maxPage;
     private FrameLayout layout;
 
+    private List<String> types = new ArrayList<>();
+    private ChooseDialog chooseDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_worksheet);
         company_id = getIntent().getIntExtra("id", 0);
+        intData();
         initView();
         initEvent();
         initType();
@@ -76,6 +81,17 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
         layout.setVisibility(View.GONE);
     }
 
+    /**
+     * 初始化数据
+     */
+    private void intData() {
+        types.clear();
+        types.add("全部");
+        types.add("已取消");
+        types.add("已完成");
+        types.add("处理中");
+        types.add("未开始");
+    }
 
     /**
      * 初始化view
@@ -84,6 +100,9 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
         backButton = findViewById(R.id.worksheet_back_button);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         token = preferences.getString("token", null);
+
+        chooseDialog = new ChooseDialog(this, types);
+        typeText = findViewById(R.id.worksheet_types_text);
 
         errorLayout = findViewById(R.id.worksheet_error_layout);
         layout = findViewById(R.id.worksheet_layout);
@@ -110,21 +129,6 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
         button.setVisibility(View.GONE);
         dialog = new DateDialog(this, true, true);
 
-        spinner = findViewById(R.id.worksheet_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item_spinner_showed) {
-
-            @Override
-            public int getCount() {
-                return super.getCount();
-            }
-        };
-        adapter.setDropDownViewResource(R.layout.item_spinner_option);
-        adapter.add("-请选择-");
-        adapter.add("已取消");
-        adapter.add("已完成");
-        adapter.add("处理中");
-        adapter.add("未开始");
-        spinner.setAdapter(adapter);
 
     }
 
@@ -132,37 +136,8 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
      * 初始化点击事件
      */
     private void initEvent() {
-
+        typeText.setOnClickListener(this);
         backButton.setOnClickListener(this);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        status = 0;
-                        break;
-                    case 1:
-                        status = 1;
-                        break;
-                    case 2:
-                        status = 2;
-                        break;
-                    case 3:
-                        status = 3;
-                        break;
-                    case 4:
-                        status = 4;
-                        break;
-                }
-                sendRequest();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         textView.setOnClickListener(this);
         dialog.setOnCancelClickListener(new DateDialog.OnCancelClickListener() {
@@ -181,7 +156,15 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
                 dialog.cancel();
             }
         });
-
+        chooseDialog.setOnClickListener(new ChooseDialog.OnClickListener() {
+            @Override
+            public void OnClick(View v, int position) {
+                status = position;
+                typeText.setText(types.get(position) + "");
+                sendRequest();
+                chooseDialog.cancel();
+            }
+        });
         button.setOnClickListener(this);
         recyclerView.setOnLoadListener(new OnLoadListener() {
             @Override
@@ -211,6 +194,11 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
             case R.id.worksheet_back_button:
                 finish();
                 break;
+            case R.id.worksheet_types_text:
+                chooseDialog.show();
+                break;
+            default:
+                break;
         }
     }
 
@@ -221,7 +209,8 @@ public class WorksheetActivity extends BaseActivity implements View.OnClickListe
     private void initType() {
 
         textView.setText("选择时间");
-        spinner.setSelection(0);
+        typeText.setText("全部");
+        status = 0;
     }
 
     /**

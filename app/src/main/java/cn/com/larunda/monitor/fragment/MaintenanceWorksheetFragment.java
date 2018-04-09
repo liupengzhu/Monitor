@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.com.larunda.dialog.ChooseDialog;
 import cn.com.larunda.dialog.DateDialog;
 import cn.com.larunda.monitor.FilterCompanyActivity;
 import cn.com.larunda.monitor.LoginActivity;
@@ -58,7 +59,7 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
     private SharedPreferences preferences;
     private String token;
 
-    private Spinner spinner;
+    private TextView typeText;
     private TextView textView;
     private LinearLayout button;
     private DateDialog dialog;
@@ -77,10 +78,14 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
     private int maxPage;
     private FrameLayout layout;
 
+    private List<String> types = new ArrayList<>();
+    private ChooseDialog chooseDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maintenance_worksheet, container, false);
+        intData();
         initView(view);
         initEvent();
         initType();
@@ -88,6 +93,18 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         errorLayout.setVisibility(View.GONE);
         layout.setVisibility(View.GONE);
         return view;
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void intData() {
+        types.clear();
+        types.add("全部");
+        types.add("已取消");
+        types.add("已完成");
+        types.add("处理中");
+        types.add("未开始");
     }
 
 
@@ -100,6 +117,9 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
+
+        chooseDialog = new ChooseDialog(getContext(), types);
+        typeText = view.findViewById(R.id.maintenance_worksheet_types_text);
 
         errorLayout = view.findViewById(R.id.maintenance_worksheet_error_layout);
         layout = view.findViewById(R.id.maintenance_worksheet_layout);
@@ -125,21 +145,6 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
         button = view.findViewById(R.id.maintenance_worksheet_search_button);
         dialog = new DateDialog(getContext(), true, true);
 
-        spinner = view.findViewById(R.id.maintenance_worksheet_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.item_spinner_showed) {
-
-            @Override
-            public int getCount() {
-                return super.getCount();
-            }
-        };
-        adapter.setDropDownViewResource(R.layout.item_spinner_option);
-        adapter.add("-请选择-");
-        adapter.add("已取消");
-        adapter.add("已完成");
-        adapter.add("处理中");
-        adapter.add("未开始");
-        spinner.setAdapter(adapter);
 
     }
 
@@ -147,35 +152,8 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
      * 初始化点击事件
      */
     private void initEvent() {
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        status = 0;
-                        break;
-                    case 1:
-                        status = 1;
-                        break;
-                    case 2:
-                        status = 2;
-                        break;
-                    case 3:
-                        status = 3;
-                        break;
-                    case 4:
-                        status = 4;
-                        break;
-                }
-                sendRequest();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        typeText.setOnClickListener(this);
         textView.setOnClickListener(this);
         dialog.setOnCancelClickListener(new DateDialog.OnCancelClickListener() {
             @Override
@@ -191,6 +169,15 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
                     sendRequest();
                 }
                 dialog.cancel();
+            }
+        });
+        chooseDialog.setOnClickListener(new ChooseDialog.OnClickListener() {
+            @Override
+            public void OnClick(View v, int position) {
+                status = position;
+                typeText.setText(types.get(position) + "");
+                sendRequest();
+                chooseDialog.cancel();
             }
         });
 
@@ -225,6 +212,11 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
                 intent.putExtra("type", "worksheet");
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
+            case R.id.maintenance_worksheet_types_text:
+                chooseDialog.show();
+                break;
+            default:
+                break;
         }
     }
 
@@ -235,7 +227,8 @@ public class MaintenanceWorksheetFragment extends Fragment implements View.OnCli
     private void initType() {
         company_id = 0;
         textView.setText("选择时间");
-        spinner.setSelection(0);
+        typeText.setText("全部");
+        status = 0;
     }
 
     /**

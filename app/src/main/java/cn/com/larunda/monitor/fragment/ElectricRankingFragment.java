@@ -266,7 +266,13 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
                 StringBuffer content = new StringBuffer();
                 PieEntry pieEntry = (PieEntry) e;
                 content.append("企业名称:" + pieEntry.getLabel() + "\r\n");
-                if (date_type.equals("date")) {
+                if (date_type.equals("year")) {
+                    if (type.equals("original")) {
+                        content.append("当年能耗:" + Util.formatNum(e.getY()) + ratio + powerUnit);
+                    } else {
+                        content.append("当年能耗:" + Util.formatNum(e.getY()) + "tce");
+                    }
+                } else if (date_type.equals("date")) {
                     if (type.equals("original")) {
                         content.append("当日能耗:" + Util.formatNum(e.getY()) + ratio + powerUnit);
                     } else {

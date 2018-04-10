@@ -181,7 +181,9 @@ public class WaterRankingFragment extends Fragment implements View.OnClickListen
     private void initData() {
         long time = System.currentTimeMillis();
         String date;
-        if (timeGroup.getCheckedRadioButtonId() == R.id.water_ranking_fragment_day_button) {
+        if (timeGroup.getCheckedRadioButtonId() == R.id.water_ranking_fragment_year_button) {
+            date = Util.parseTime(time, 1);
+        } else if (timeGroup.getCheckedRadioButtonId() == R.id.water_ranking_fragment_day_button) {
             date = Util.parseTime(time, 3);
         } else {
             date = Util.parseTime(time, 2);

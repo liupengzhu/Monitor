@@ -49,6 +49,7 @@ public class BottomBar extends LinearLayout {
         bottomBar.layout(0, getMeasuredHeight() - bottomBar.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
         bottomContent.layout(0, getMeasuredHeight(), getMeasuredWidth(), bottomBar.getBottom() + bottomContent.getMeasuredHeight());
         imageView = bottomBar.findViewById(R.id.map_up_view);
+
     }
 
     @Override
@@ -83,13 +84,19 @@ public class BottomBar extends LinearLayout {
                 offset = event.getY() - downY2;
                 if (offset > 0) {
                     closeNavigation();
-                } else {
+                } else if (offset < 0) {
                     if (scrollOffset > bottomContent.getMeasuredHeight() / 4) {
                         showNavigation();
                     } else {
                         closeNavigation();
                     }
 
+                } else {
+                    if (isShow) {
+                        closeNavigation();
+                    } else {
+                        showNavigation();
+                    }
                 }
                 break;
         }
@@ -99,7 +106,7 @@ public class BottomBar extends LinearLayout {
 
     private void showNavigation() {
         int dy = bottomContent.getMeasuredHeight() - scrollOffset;
-        mScroller.startScroll(getScrollX(), getScrollY(), 0, dy, 300);
+        mScroller.startScroll(getScrollX(), getScrollY(), 0, dy, 500);
         invalidate();
         isShow = true;
         imageView.setRotation(180);

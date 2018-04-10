@@ -75,4 +75,5 @@
     <color name="login_white1">#66ffffff</color>
     <color name="type_color1">#85cef4</color>
     <color name="type_color2">#cccccc</color>
+    <color name="map_bg">#e4e6ea</color>
 </resources>

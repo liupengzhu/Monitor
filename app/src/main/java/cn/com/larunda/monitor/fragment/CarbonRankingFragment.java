@@ -73,11 +73,13 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
 
     private PieChartViewPager mPieChart;
     private TextView textView1;
+    private DateDialog yearDialog;
     private DateDialog dateDialog;
     private DateDialog monthDialog;
     private TextView dateText;
-    private RadioButton monthButton;
 
+    private RadioButton yearButton;
+    private RadioButton monthButton;
     private RadioButton dayButton;
     private RadioGroup timeGroup;
 
@@ -129,8 +131,10 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
         textView1 = view.findViewById(R.id.carbon_ranking_fragment_chart_text);
 
         dateDialog = new DateDialog(getContext());
+        yearDialog = new DateDialog(getContext(), false, false);
         monthDialog = new DateDialog(getContext(), true, false);
         dateText = view.findViewById(R.id.carbon_ranking_date_text);
+        yearButton = view.findViewById(R.id.carbon_ranking_fragment_year_button);
         monthButton = view.findViewById(R.id.carbon_ranking_fragment_month_button);
         dayButton = view.findViewById(R.id.carbon_ranking_fragment_day_button);
         timeGroup = view.findViewById(R.id.carbon_ranking_fragment_time_group);
@@ -171,7 +175,9 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
     private void initData() {
         long time = System.currentTimeMillis();
         String date;
-        if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_day_button) {
+        if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_year_button) {
+            date = Util.parseTime(time, 1);
+        } else if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_day_button) {
             date = Util.parseTime(time, 3);
         } else {
             date = Util.parseTime(time, 2);
@@ -183,6 +189,7 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
      * 初始化点击事件
      */
     private void initEvent() {
+        yearButton.setOnClickListener(this);
         monthButton.setOnClickListener(this);
         dayButton.setOnClickListener(this);
 
@@ -202,7 +209,22 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                 monthDialog.cancel();
             }
         });
-
+        yearDialog.setOnCancelClickListener(new DateDialog.OnCancelClickListener() {
+            @Override
+            public void OnClick(View view) {
+                yearDialog.cancel();
+            }
+        });
+        yearDialog.setOnOkClickListener(new DateDialog.OnOkClickListener() {
+            @Override
+            public void OnClick(View view, String date) {
+                if (dateText != null && date != null) {
+                    dateText.setText(date);
+                    sendRequest();
+                }
+                yearDialog.cancel();
+            }
+        });
         dateDialog.setOnOkClickListener(new DateDialog.OnOkClickListener() {
             @Override
             public void OnClick(View view, String date) {
@@ -230,7 +252,9 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                 StringBuffer content = new StringBuffer();
                 PieEntry pieEntry = (PieEntry) e;
                 content.append("企业名称:" + pieEntry.getLabel() + "\r\n");
-                if (date_type.equals("date")) {
+                if (date_type.equals("year")) {
+                    content.append("当年排放:" + Util.formatNum(e.getY()) + carbonUnit);
+                } else if (date_type.equals("date")) {
                     content.append("当日排放:" + Util.formatNum(e.getY()) + carbonUnit);
                 } else {
                     content.append("当月排放:" + Util.formatNum(e.getY()) + carbonUnit);
@@ -356,7 +380,9 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
     private void parseInfo(RankCompanyInfo rankCompanyInfo) {
 
         if (style.equals("company")) {
-            if (date_type.equals("month")) {
+            if (date_type.equals("year")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年 企业二氧化碳排放排行占比图");
+            } else if (date_type.equals("month")) {
                 textView1.setText(dateText.getText().toString().split("-")[0] + "年"
                         + dateText.getText().toString().split("-")[1]
                         + "月 企业二氧化碳排放排行占比图");
@@ -367,7 +393,10 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                         + "日 企业二氧化碳排放排行占比图");
             }
         } else {
-            if (date_type.equals("month")) {
+            if (date_type.equals("year")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年" +
+                        " 行业二氧化碳排放排行占比图");
+            } else if (date_type.equals("month")) {
                 textView1.setText(dateText.getText().toString().split("-")[0] + "年"
                         + dateText.getText().toString().split("-")[1]
                         + "月 行业二氧化碳排放排行占比图");
@@ -414,6 +443,12 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.carbon_ranking_fragment_year_button:
+                long time1 = System.currentTimeMillis();
+                String date1 = Util.parseTime(time1, 1);
+                dateText.setText(date1);
+                sendRequest();
+                break;
             case R.id.carbon_ranking_fragment_month_button:
                 long time2 = System.currentTimeMillis();
                 String date2 = Util.parseTime(time2, 2);
@@ -434,7 +469,9 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                 sendRequest();
                 break;
             case R.id.carbon_ranking_date_text:
-                if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_month_button) {
+                if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_year_button) {
+                    yearDialog.show();
+                } else if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_month_button) {
                     monthDialog.show();
                 } else {
                     dateDialog.show();
@@ -448,7 +485,9 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
      */
     private void getType() {
 
-        if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_day_button) {
+        if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_year_button) {
+            date_type = "year";
+        } else if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_day_button) {
             date_type = "date";
         } else {
             date_type = "month";

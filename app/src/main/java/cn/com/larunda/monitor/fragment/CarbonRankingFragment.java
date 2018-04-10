@@ -251,7 +251,11 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
             public void onClick(Entry e, Highlight highlight, View v) {
                 StringBuffer content = new StringBuffer();
                 PieEntry pieEntry = (PieEntry) e;
-                content.append("企业名称:" + pieEntry.getLabel() + "\r\n");
+                if (style.equals("company")) {
+                    content.append("企业名称:" + pieEntry.getLabel() + "\r\n");
+                } else {
+                    content.append("行业名称:" + pieEntry.getLabel() + "\r\n");
+                }
                 if (date_type.equals("year")) {
                     content.append("当年排放:" + Util.formatNum(e.getY()) + carbonUnit);
                 } else if (date_type.equals("date")) {

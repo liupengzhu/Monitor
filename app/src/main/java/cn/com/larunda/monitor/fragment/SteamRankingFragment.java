@@ -74,11 +74,13 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
 
     private PieChartViewPager mPieChart;
     private TextView textView1;
+    private DateDialog yearDialog;
     private DateDialog dateDialog;
     private DateDialog monthDialog;
     private TextView dateText;
-    private RadioButton monthButton;
 
+    private RadioButton yearButton;
+    private RadioButton monthButton;
     private RadioButton dayButton;
     private RadioGroup timeGroup;
     private RadioGroup typeGroup;
@@ -132,10 +134,12 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
 
         textView1 = view.findViewById(R.id.steam_ranking_fragment_chart_text);
 
+        yearDialog = new DateDialog(getContext(), false, false);
         dateDialog = new DateDialog(getContext());
         monthDialog = new DateDialog(getContext(), true, false);
         dateText = view.findViewById(R.id.steam_ranking_date_text);
         monthButton = view.findViewById(R.id.steam_ranking_fragment_month_button);
+        yearButton = view.findViewById(R.id.steam_ranking_fragment_year_button);
         dayButton = view.findViewById(R.id.steam_ranking_fragment_day_button);
         timeGroup = view.findViewById(R.id.steam_ranking_fragment_time_group);
 
@@ -178,7 +182,9 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
     private void initData() {
         long time = System.currentTimeMillis();
         String date;
-        if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_day_button) {
+        if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_year_button) {
+            date = Util.parseTime(time, 1);
+        } else if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_day_button) {
             date = Util.parseTime(time, 3);
         } else {
             date = Util.parseTime(time, 2);
@@ -190,6 +196,7 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
      * 初始化点击事件
      */
     private void initEvent() {
+        yearButton.setOnClickListener(this);
         monthButton.setOnClickListener(this);
         dayButton.setOnClickListener(this);
 
@@ -212,7 +219,22 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
                 monthDialog.cancel();
             }
         });
-
+        yearDialog.setOnCancelClickListener(new DateDialog.OnCancelClickListener() {
+            @Override
+            public void OnClick(View view) {
+                yearDialog.cancel();
+            }
+        });
+        yearDialog.setOnOkClickListener(new DateDialog.OnOkClickListener() {
+            @Override
+            public void OnClick(View view, String date) {
+                if (dateText != null && date != null) {
+                    dateText.setText(date);
+                    sendRequest();
+                }
+                yearDialog.cancel();
+            }
+        });
         dateDialog.setOnOkClickListener(new DateDialog.OnOkClickListener() {
             @Override
             public void OnClick(View view, String date) {
@@ -240,7 +262,13 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
                 StringBuffer content = new StringBuffer();
                 PieEntry pieEntry = (PieEntry) e;
                 content.append("企业名称:" + pieEntry.getLabel() + "\r\n");
-                if (date_type.equals("date")) {
+                if (date_type.equals("year")) {
+                    if (type.equals("original")) {
+                        content.append("当年能耗:" + Util.formatNum(e.getY()) + steamUnit);
+                    } else {
+                        content.append("当年能耗:" + Util.formatNum(e.getY()) + "tce");
+                    }
+                } else if (date_type.equals("date")) {
                     if (type.equals("original")) {
                         content.append("当日能耗:" + Util.formatNum(e.getY()) + steamUnit);
                     } else {
@@ -374,7 +402,10 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
     private void parseInfo(RankCompanyInfo rankCompanyInfo) {
 
         if (style.equals("company")) {
-            if (date_type.equals("month")) {
+            if (date_type.equals("year")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年" +
+                        " 企业耗汽排行占比图");
+            } else if (date_type.equals("month")) {
                 textView1.setText(dateText.getText().toString().split("-")[0] + "年"
                         + dateText.getText().toString().split("-")[1]
                         + "月 企业耗汽排行占比图");
@@ -385,7 +416,10 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
                         + "日 企业耗汽排行占比图");
             }
         } else {
-            if (date_type.equals("month")) {
+            if (date_type.equals("year")) {
+                textView1.setText(dateText.getText().toString().split("-")[0] + "年" +
+                        " 行业耗汽排行占比图");
+            } else if (date_type.equals("month")) {
                 textView1.setText(dateText.getText().toString().split("-")[0] + "年"
                         + dateText.getText().toString().split("-")[1]
                         + "月 行业耗汽排行占比图");
@@ -436,6 +470,12 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.steam_ranking_fragment_year_button:
+                long time1 = System.currentTimeMillis();
+                String date1 = Util.parseTime(time1, 1);
+                dateText.setText(date1);
+                sendRequest();
+                break;
             case R.id.steam_ranking_fragment_month_button:
                 long time2 = System.currentTimeMillis();
                 String date2 = Util.parseTime(time2, 2);
@@ -462,7 +502,9 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
                 sendRequest();
                 break;
             case R.id.steam_ranking_date_text:
-                if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_month_button) {
+                if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_year_button) {
+                    yearDialog.show();
+                } else if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_month_button) {
                     monthDialog.show();
                 } else {
                     dateDialog.show();
@@ -480,7 +522,10 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
         } else {
             type = "original";
         }
-        if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_day_button) {
+
+        if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_year_button) {
+            date_type = "year";
+        } else if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_day_button) {
             date_type = "date";
         } else {
             date_type = "month";

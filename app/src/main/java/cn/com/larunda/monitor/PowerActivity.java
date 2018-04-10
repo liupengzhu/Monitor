@@ -2,23 +2,18 @@ package cn.com.larunda.monitor;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -215,6 +210,12 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
         companyBarChart = findViewById(R.id.power_bar_rank);
         companyBarChartManager = new HBarChartManager(companyBarChart);
         companyBarChartManager.setDescription("");
+        companyBarChartManager.setyValueFormatter(new YValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return Util.formatNum(value);
+            }
+        });
         companyBarMarkerView = new XYMarkerView(this);
         companyBarMarkerView.setChartView(companyBarChart);
         companyBarChart.setMarker(companyBarMarkerView);

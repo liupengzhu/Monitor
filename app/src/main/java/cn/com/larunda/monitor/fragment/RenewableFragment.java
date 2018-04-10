@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 
 import cn.com.larunda.dialog.DateDialog;
@@ -34,7 +32,6 @@ import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.adapter.RenewableRecyclerAdapter;
 import cn.com.larunda.monitor.bean.RenewableBean;
-import cn.com.larunda.monitor.gson.DayElectricInfo;
 import cn.com.larunda.monitor.gson.DayRenewableInfo;
 import cn.com.larunda.monitor.gson.RenewableInfo;
 import cn.com.larunda.monitor.util.ActivityCollector;

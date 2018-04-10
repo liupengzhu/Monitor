@@ -3,7 +3,6 @@ package cn.com.larunda.monitor.util;
 import android.graphics.Color;
 
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -84,7 +83,7 @@ public class HBarChartManager {
         leftAxis.setAxisMinimum(0f);
         rightAxis.setAxisMinimum(0f);
         leftAxis.setDrawGridLines(false);
-        rightAxis.setDrawGridLines(false);
+        rightAxis.setDrawGridLines(true);
         rightAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {

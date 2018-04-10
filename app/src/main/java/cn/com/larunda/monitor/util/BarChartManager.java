@@ -95,7 +95,6 @@ public class BarChartManager {
                 return (int) value + "";
             }
         });
-
         xAxis.setDrawGridLines(false);
         xAxis.setDrawLabels(true);
         /*xAxis.setCenterAxisLabels(true);*/
@@ -110,8 +109,6 @@ public class BarChartManager {
                 return (int) value + "";
             }
         });
-
-
     }
 
     /**
@@ -134,7 +131,6 @@ public class BarChartManager {
         barDataSet.setValueTextSize(9f);
         barDataSet.setFormLineWidth(1f);
         barDataSet.setFormSize(15.f);
-
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
         dataSets.add(barDataSet);
         BarData data = new BarData(dataSets);

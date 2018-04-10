@@ -8,14 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.HorizontalBarChart;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import cn.com.larunda.monitor.R;
-import cn.com.larunda.monitor.bean.Company;
 import cn.com.larunda.monitor.bean.MaintenanceCompany;
 
 /**

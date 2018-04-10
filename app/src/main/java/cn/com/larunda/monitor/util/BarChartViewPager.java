@@ -3,9 +3,9 @@ package cn.com.larunda.monitor.util;
 import android.content.Context;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 
 import com.github.mikephil.charting.charts.BarChart;
+
 
 /**
  * Created by sddt on 18-3-15.

@@ -13,6 +13,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.renderer.BarChartRenderer;
+import com.github.mikephil.charting.renderer.scatter.BarRenderListener;
 
 /**
  * Chart that draws bars.
@@ -55,7 +56,17 @@ public class BarChart extends BarLineChartBase<BarData> implements BarDataProvid
         super.init();
 
         mRenderer = new BarChartRenderer(this, mAnimator, mViewPortHandler);
-
+        BarChartRenderer renderer = (BarChartRenderer) mRenderer;
+        renderer.setOnListener(new BarRenderListener() {
+            @Override
+            public void onDrawBar(float x, float y) {
+                Highlight h = getHighlightByTouchPoint(x, y);
+                highlightValue(h);
+                /*if (barChartSelectListener != null) {
+                    barChartSelectListener.showMarker(h);
+                }*/
+            }
+        });
         setHighlighter(new BarHighlighter(this));
 
         getXAxis().setSpaceMin(0.5f);

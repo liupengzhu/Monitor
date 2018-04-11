@@ -1,8 +1,10 @@
 package cn.com.larunda.monitor.util;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChartSelectListener;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -12,7 +14,9 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import java.util.ArrayList;

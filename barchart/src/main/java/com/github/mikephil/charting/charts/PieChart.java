@@ -1,13 +1,16 @@
 
 package com.github.mikephil.charting.charts;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 
+import com.github.mikephil.charting.animation.AnimatorEndListener;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -112,7 +115,17 @@ public class PieChart extends PieRadarChartBase<PieData> {
 
         mRenderer = new PieChartRenderer(this, mAnimator, mViewPortHandler);
         mXAxis = null;
-
+        mAnimator.setEndListener(new AnimatorEndListener() {
+            @Override
+            public void onEnd(Animator animator) {
+                PieChartRenderer renderer = (PieChartRenderer) mRenderer;
+                float radius = renderer.getmRadius();
+                float x = renderer.getmX();
+                float y = renderer.getmY();
+                Highlight highlight = getHighlightByTouchPoint(x + radius / 2, y + 0.1f);
+                highlightValue(highlight);
+            }
+        });
         mHighlighter = new PieHighlighter(this);
     }
 
@@ -257,7 +270,6 @@ public class PieChart extends PieRadarChartBase<PieData> {
      * @return
      */
     public boolean needsHighlight(int index) {
-
         // no highlight
         if (!valuesToHighlight())
             return false;
@@ -266,6 +278,7 @@ public class PieChart extends PieRadarChartBase<PieData> {
 
             // check if the xvalue for the given dataset needs highlight
             if ((int) mIndicesToHighlight[i].getX() == index)
+
                 return true;
 
         return false;

@@ -1,6 +1,7 @@
 
 package com.github.mikephil.charting.charts;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.SuppressLint;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import com.github.mikephil.charting.animation.AnimatorEndListener;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.animation.EasingFunction;
@@ -556,7 +558,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     * @param x The x-value to highlight
+     *
+     * @param x            The x-value to highlight
      * @param dataSetIndex The dataset index to search in
      */
     public void highlightValue(float x, int dataSetIndex) {
@@ -567,8 +570,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights the value at the given x-value and y-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     * @param x The x-value to highlight
-     * @param y The y-value to highlight. Supply `NaN` for "any"
+     *
+     * @param x            The x-value to highlight
+     * @param y            The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
      */
     public void highlightValue(float x, float y, int dataSetIndex) {
@@ -578,7 +582,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     * @param x The x-value to highlight
+     *
+     * @param x            The x-value to highlight
      * @param dataSetIndex The dataset index to search in
      * @param callListener Should the listener be called for this change
      */
@@ -589,8 +594,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     * @param x The x-value to highlight
-     * @param y The y-value to highlight. Supply `NaN` for "any"
+     *
+     * @param x            The x-value to highlight
+     * @param y            The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
      * @param callListener Should the listener be called for this change
      */

@@ -1,19 +1,23 @@
 
 package com.github.mikephil.charting.animation;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 
 /**
  * Object responsible for all animations in the Chart. ANIMATIONS ONLY WORK FOR
  * API LEVEL 11 (Android 3.0.x) AND HIGHER.
- * 
+ *
  * @author Philipp Jahoda
  */
 public class ChartAnimator {
 
-    /** object that is updated upon animation update */
+    /**
+     * object that is updated upon animation update
+     */
     private AnimatorUpdateListener mListener;
+    private AnimatorEndListener endListener;
 
     public ChartAnimator() {
 
@@ -28,10 +32,14 @@ public class ChartAnimator {
      */
     /** CODE BELOW THIS RELATED TO ANIMATION */
 
-    /** the phase that is animated and influences the drawn values on the y-axis */
+    /**
+     * the phase that is animated and influences the drawn values on the y-axis
+     */
     protected float mPhaseY = 1f;
 
-    /** the phase that is animated and influences the drawn values on the x-axis */
+    /**
+     * the phase that is animated and influences the drawn values on the x-axis
+     */
     protected float mPhaseX = 1f;
 
     /**
@@ -50,7 +58,7 @@ public class ChartAnimator {
      * @param easingY
      */
     public void animateXY(int durationMillisX, int durationMillisY, EasingFunction easingX,
-            EasingFunction easingY) {
+                          EasingFunction easingY) {
 
         if (android.os.Build.VERSION.SDK_INT < 11)
             return;
@@ -132,7 +140,7 @@ public class ChartAnimator {
      * @param easingY
      */
     public void animateXY(int durationMillisX, int durationMillisY, Easing.EasingOption easingX,
-            Easing.EasingOption easingY) {
+                          Easing.EasingOption easingY) {
 
         if (android.os.Build.VERSION.SDK_INT < 11)
             return;
@@ -191,10 +199,33 @@ public class ChartAnimator {
         if (android.os.Build.VERSION.SDK_INT < 11)
             return;
 
-        ObjectAnimator animatorY = ObjectAnimator.ofFloat(this, "phaseY", 0f, 1f);
+        final ObjectAnimator animatorY = ObjectAnimator.ofFloat(this, "phaseY", 0f, 1f);
         animatorY.setInterpolator(Easing.getEasingFunctionFromOption(easing));
         animatorY.setDuration(durationMillis);
         animatorY.addUpdateListener(mListener);
+        animatorY.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (endListener != null) {
+                    endListener.onEnd(animation);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         animatorY.start();
     }
 
@@ -305,5 +336,9 @@ public class ChartAnimator {
      */
     public void setPhaseX(float phase) {
         mPhaseX = phase;
+    }
+
+    public void setEndListener(AnimatorEndListener endListener) {
+        this.endListener = endListener;
     }
 }

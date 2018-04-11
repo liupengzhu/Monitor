@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.LineChart;
@@ -16,6 +17,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.renderer.scatter.BarRenderListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointD;
 import com.github.mikephil.charting.utils.MPPointF;
@@ -30,6 +32,9 @@ import java.util.List;
 public class LineChartRenderer extends LineRadarRenderer {
 
     protected LineDataProvider mChart;
+
+    private boolean isFirst = true;
+    private BarRenderListener barRenderListener;
 
     /**
      * paint for the inner circle of the value indicators
@@ -60,7 +65,7 @@ public class LineChartRenderer extends LineRadarRenderer {
                              ViewPortHandler viewPortHandler) {
         super(animator, viewPortHandler);
         mChart = chart;
-
+        isFirst = true;
         mCirclePaintInner = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCirclePaintInner.setStyle(Paint.Style.FILL);
         mCirclePaintInner.setColor(Color.WHITE);
@@ -181,6 +186,10 @@ public class LineChartRenderer extends LineRadarRenderer {
         mRenderPaint.setPathEffect(null);
     }
 
+    public void setBarRenderListener(BarRenderListener barRenderListener) {
+        this.barRenderListener = barRenderListener;
+    }
+
     protected void drawCubicBezier(ILineDataSet dataSet) {
 
         float phaseX = Math.max(0.f, Math.min(1.f, mAnimator.getPhaseX()));
@@ -219,7 +228,12 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             // let the spline start
             cubicPath.moveTo(cur.getX(), cur.getY() * phaseY);
-
+            
+            //获得第一个点的数据
+            if (isFirst && barRenderListener != null) {
+                barRenderListener.onDrawBar(cur.getX(), cur.getY()/2);
+                isFirst = false;
+            }
             for (int j = mXBounds.min + 1; j <= mXBounds.range + mXBounds.min; j++) {
 
                 prevPrev = prev;
@@ -323,7 +337,6 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             if (mLineBuffer.length <= pointsPerEntryPair * 2)
                 mLineBuffer = new float[pointsPerEntryPair * 4];
-
             for (int j = mXBounds.min; j <= mXBounds.range + mXBounds.min; j++) {
 
                 Entry e = dataSet.getEntryForIndex(j);
@@ -576,8 +589,8 @@ public class LineChartRenderer extends LineRadarRenderer {
                         Utils.drawImage(
                                 c,
                                 icon,
-                                (int)(x + iconsOffset.x),
-                                (int)(y + iconsOffset.y),
+                                (int) (x + iconsOffset.x),
+                                (int) (y + iconsOffset.y),
                                 icon.getIntrinsicWidth(),
                                 icon.getIntrinsicHeight());
                     }

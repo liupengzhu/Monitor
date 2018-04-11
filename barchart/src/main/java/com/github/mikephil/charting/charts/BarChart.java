@@ -62,9 +62,7 @@ public class BarChart extends BarLineChartBase<BarData> implements BarDataProvid
             public void onDrawBar(float x, float y) {
                 Highlight h = getHighlightByTouchPoint(x, y);
                 highlightValue(h);
-                /*if (barChartSelectListener != null) {
-                    barChartSelectListener.showMarker(h);
-                }*/
+
             }
         });
         setHighlighter(new BarHighlighter(this));

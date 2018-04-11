@@ -3,10 +3,13 @@ package com.github.mikephil.charting.charts;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.renderer.LineChartRenderer;
+import com.github.mikephil.charting.renderer.scatter.BarRenderListener;
 
 /**
  * Chart that draws lines, surfaces, circles, ...
@@ -32,6 +35,14 @@ public class LineChart extends BarLineChartBase<LineData> implements LineDataPro
         super.init();
 
         mRenderer = new LineChartRenderer(this, mAnimator, mViewPortHandler);
+        LineChartRenderer renderer = (LineChartRenderer) mRenderer;
+        renderer.setBarRenderListener(new BarRenderListener() {
+            @Override
+            public void onDrawBar(float x, float y) {
+                Highlight h = getHighlightByTouchPoint(x, y);
+                highlightValue(h);
+            }
+        });
     }
 
     @Override

@@ -255,14 +255,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             startActivity(intent);
                             finish();
                         } else {
-                            person = userToken.connect_info.user + "";
-                            tel = userToken.connect_info.phone + "";
+                            if (userToken.connect_info.user == null) {
+                                person = "";
+                            } else {
+                                person = userToken.connect_info.user.trim();
+                            }
+                            if (userToken.connect_info.phone == null) {
+                                tel = "";
+                            } else {
+                                tel = userToken.connect_info.phone.trim();
+                            }
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(LoginActivity.this,
-                                            "账号或者密码无效,请联系负责人:" + person + "，电话:" + tel,
-                                            Toast.LENGTH_SHORT).show();
+                                    if (!person.equals("") && !tel.equals("")) {
+                                        Toast.makeText(LoginActivity.this,
+                                                "账号或者密码无效，\n请联系负责人：" + person + "，\n电话：" + tel,
+                                                Toast.LENGTH_SHORT).show();
+                                    } else if (!person.equals("")) {
+                                        Toast.makeText(LoginActivity.this,
+                                                "账号或者密码无效，\n请联系负责人：" + person,
+                                                Toast.LENGTH_SHORT).show();
+                                    } else if (!tel.equals("")) {
+                                        Toast.makeText(LoginActivity.this,
+                                                "账号或者密码无效，\n" + "请联系电话：" + tel,
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(LoginActivity.this,
+                                                "账号或者密码无效",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             });
                         }

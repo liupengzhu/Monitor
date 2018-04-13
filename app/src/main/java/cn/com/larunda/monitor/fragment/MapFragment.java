@@ -44,6 +44,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.Stroke;
+import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.map.WeightedLatLng;
@@ -108,22 +109,11 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
 
     private RecyclerView recyclerView;
     private MapAdapter adapter;
-    private GridLayoutManager manager;
+    private LinearLayoutManager manager;
     private List<PointBean> pointBeanList = new ArrayList<>();
     private List<LatLng> latLngList = new ArrayList<>();
     private List<WeightedLatLng> weightedLatLngList = new ArrayList<>();
-    private BitmapDescriptor bitmap1;
-    private BitmapDescriptor bitmap2;
-    private BitmapDescriptor bitmap3;
-    private BitmapDescriptor bitmap4;
-    private BitmapDescriptor bitmap5;
-    private BitmapDescriptor bitmap6;
-    private BitmapDescriptor bitmap7;
-    private BitmapDescriptor bitmap8;
-    private BitmapDescriptor bitmap9;
-    private BitmapDescriptor bitmap10;
-    private BitmapDescriptor bitmap11;
-    private List<BitmapDescriptor> list = new ArrayList<>();
+
     private HeatMap heatmap;
     private List<MapInfo.DataBeanX> dadas = new ArrayList<>();
     private InfoWindow mInfoWindow;
@@ -141,7 +131,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     private LatLng pSE;
     private LatLng pSW;
     private LatLng pNW2;
-    private BitmapDescriptor bitmap12;
+    private View markerView2;
+    private BitmapDescriptor bitmap;
 
 
     @Nullable
@@ -170,6 +161,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
      */
     private void initView(View view) {
         markerView = LayoutInflater.from(getContext()).inflate(R.layout.map_layout, null);
+        markerView2 = LayoutInflater.from(getContext()).inflate(R.layout.mark_view, null);
         //markerView.setMinimumWidth(800);
         markerView.setPadding(0, 0, 0, 35);
         textView = markerView.findViewById(R.id.map_marker_text);
@@ -207,35 +199,10 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
 
         recyclerView = view.findViewById(R.id.map_recycler);
         adapter = new MapAdapter(getContext(), pointBeanList);
-        manager = new GridLayoutManager(getContext(), 2);
+        manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
-        //构建Marker图标
-        bitmap1 = BitmapDescriptorFactory.fromResource(R.mipmap.point1);
-        bitmap2 = BitmapDescriptorFactory.fromResource(R.mipmap.point2);
-        bitmap3 = BitmapDescriptorFactory.fromResource(R.mipmap.point3);
-        bitmap4 = BitmapDescriptorFactory.fromResource(R.mipmap.point4);
-        bitmap5 = BitmapDescriptorFactory.fromResource(R.mipmap.point5);
-        bitmap6 = BitmapDescriptorFactory.fromResource(R.mipmap.point6);
-        bitmap7 = BitmapDescriptorFactory.fromResource(R.mipmap.point7);
-        bitmap8 = BitmapDescriptorFactory.fromResource(R.mipmap.point8);
-        bitmap9 = BitmapDescriptorFactory.fromResource(R.mipmap.point9);
-        bitmap10 = BitmapDescriptorFactory.fromResource(R.mipmap.point10);
-        bitmap11 = BitmapDescriptorFactory.fromResource(R.mipmap.point11);
-        bitmap12 = BitmapDescriptorFactory.fromResource(R.mipmap.point_go);
-        list.add(bitmap1);
-        list.add(bitmap2);
-        list.add(bitmap3);
-        list.add(bitmap4);
-        list.add(bitmap5);
-        list.add(bitmap6);
-        list.add(bitmap7);
-        list.add(bitmap8);
-        list.add(bitmap9);
-        list.add(bitmap10);
-        list.add(bitmap11);
-        list.add(bitmap12);
         pNW = new LatLng(59.0, 73.0);
         pNE = new LatLng(59.0, 136.0);
         pSE = new LatLng(3.0, 136.0);
@@ -407,22 +374,17 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         }
         adapter.notifyDataSetChanged();
         for (int i = 0; i < latLngList.size(); i++) {
+            TextView textView = markerView2.findViewById(R.id.map_marker);
+            textView.setText((i + 1) + "");
+            bitmap = BitmapDescriptorFactory.fromView(markerView2);
             //构建MarkerOption，用于在地图上添加Marker
-            OverlayOptions option;
-            if (i < 11) {
-                option = new MarkerOptions()
-                        .position(latLngList.get(i))
-                        .icon(list.get(i))
-                        .title(i + "");
-            } else {
-                option = new MarkerOptions()
-                        .position(latLngList.get(i))
-                        .icon(bitmap12)
-                        .title(i + "");
-            }
-
+            OverlayOptions option = new MarkerOptions()
+                    .position(latLngList.get(i))
+                    .icon(bitmap)
+                    .title(i + "");
             //在地图上添加Marker，并显示
             mBaiduMap.addOverlay(option);
+            bitmap.recycle();
         }
         heatmap = new HeatMap.Builder().weightedData(weightedLatLngList).radius(30).build();
         mBaiduMap.addHeatMap(heatmap);
@@ -540,15 +502,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         if (mMapView != null) {
             mMapView.onDestroy();
         }
-        for (BitmapDescriptor descriptor : list) {
-            if (descriptor != null) {
-                descriptor.recycle();
-                descriptor = null;
-            }
+        if (bitmap != null) {
+            bitmap.recycle();
+            bitmap = null;
         }
-        list.clear();
-
-
     }
-
 }

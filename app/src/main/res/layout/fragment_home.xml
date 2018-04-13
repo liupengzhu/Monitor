@@ -75,15 +75,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:text="当月数据"
-                        android:textColor="@color/text_l"
-                        android:textSize="10sp" />
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
@@ -116,6 +107,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:background="@color/line" />
+
+                    <TextView
+                        android:layout_marginTop="3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="3dp"
+                        android:text="以上数据均为当月数据"
+                        android:textColor="@color/text_l"
+                        android:textSize="10sp" />
 
                     <RelativeLayout
                         android:id="@+id/home_button"

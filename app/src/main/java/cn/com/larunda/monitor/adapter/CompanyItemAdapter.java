@@ -36,12 +36,14 @@ public class CompanyItemAdapter extends RecyclerView.Adapter<CompanyItemAdapter.
         TextView textView;
         RecyclerView recyclerView;
         LinearLayout telLayout;
+        LinearLayout typeLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.item_company_list_item_name);
             recyclerView = itemView.findViewById(R.id.item_company_list_item_recycler);
             telLayout = itemView.findViewById(R.id.item_company_list_item_tel_layout);
+            typeLayout = itemView.findViewById(R.id.item_company_list_item_type);
         }
     }
 
@@ -55,6 +57,11 @@ public class CompanyItemAdapter extends RecyclerView.Adapter<CompanyItemAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         final MaintenanceCompany maintenanceCompany = maintenanceCompanyList.get(position);
         holder.textView.setText(maintenanceCompany.getName() + "");
+        if (maintenanceCompany.getName().equals("无")) {
+            holder.typeLayout.setVisibility(View.GONE);
+        } else {
+            holder.typeLayout.setVisibility(View.VISIBLE);
+        }
         if (maintenanceCompany.getTypeList() != null) {
             LinearLayoutManager manager = new LinearLayoutManager(this.context);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);

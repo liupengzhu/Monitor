@@ -26,9 +26,10 @@
             android:layout_gravity="center"
             android:background="@drawable/point_icon"
             android:gravity="center_horizontal"
+            android:paddingTop="1.5dp"
             android:text="1"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="9sp" />
 
         <TextView
             android:id="@+id/map_item_text2"

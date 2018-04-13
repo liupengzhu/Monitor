@@ -102,6 +102,10 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
     private List<String> dateXList = new ArrayList<>();
     private String pieRatio;
 
+    private TextView chartbg;
+    private TextView linebg;
+    private TextView piebg;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -126,6 +130,11 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
      * @param view
      */
     private void initView(View view) {
+
+        chartbg = view.findViewById(R.id.renewable_fragment_chart_bg);
+        linebg = view.findViewById(R.id.renewable_fragment_line_bg);
+        piebg = view.findViewById(R.id.renewable_fragment_pie_bg);
+
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
         powerUnit = preferences.getString("power_unit", null);
@@ -421,6 +430,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
      * @param renewableInfo
      */
     private void parseRenewableForLine(DayRenewableInfo renewableInfo) {
+        chartbg.setVisibility(View.GONE);
         mBarChart.setVisibility(View.GONE);
         mLineChart.setVisibility(View.VISIBLE);
         mPieChart.setVisibility(View.VISIBLE);
@@ -429,6 +439,11 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
         pieRatio = renewableInfo.getPie_ratio();
 
         dateXList = renewableInfo.getX_name();
+        if (renewableInfo.getChart().size() > 0) {
+            linebg.setVisibility(View.GONE);
+        } else {
+            linebg.setVisibility(View.VISIBLE);
+        }
         if (renewableInfo.getChart() != null && renewableInfo.getChart().size() != 0) {
             //设置x轴的数据
             ArrayList<Float> xValues = new ArrayList<>();
@@ -455,6 +470,11 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
 
 
         if (renewableInfo.getPeak_valley_pie() != null) {
+            if (renewableInfo.getPeak_valley_pie().size() > 0) {
+                piebg.setVisibility(View.GONE);
+            } else {
+                piebg.setVisibility(View.VISIBLE);
+            }
             List<DayRenewableInfo.PeakValleyPieBean> peakList = renewableInfo.getPeak_valley_pie();
             //设置饼图数据
             ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
@@ -494,9 +514,16 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
         mLineChart.setVisibility(View.GONE);
         mPieChart.setVisibility(View.GONE);
         mPieLayout.setVisibility(View.GONE);
+        linebg.setVisibility(View.GONE);
+        piebg.setVisibility(View.GONE);
         ratio = renewableInfo.getRatio();
 
         if (renewableInfo.getChart() != null) {
+            if (renewableInfo.getChart().size() > 0) {
+                chartbg.setVisibility(View.GONE);
+            } else {
+                chartbg.setVisibility(View.VISIBLE);
+            }
             float values[] = new float[renewableInfo.getChart().size()];
             for (int i = 0; i < renewableInfo.getChart().size(); i++) {
                 String value = renewableInfo.getChart().get(i);

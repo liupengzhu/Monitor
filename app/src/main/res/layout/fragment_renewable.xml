@@ -135,6 +135,15 @@
                             android:id="@+id/renewable_fragment_chart"
                             android:layout_width="match_parent"
                             android:layout_height="250dp"></cn.com.larunda.monitor.util.BarChartViewPager>
+
+                        <TextView
+                            android:id="@+id/renewable_fragment_chart_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="正在测试"
+                            android:visibility="gone" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -147,6 +156,15 @@
                             android:id="@+id/renewable_fragment_line"
                             android:layout_width="match_parent"
                             android:layout_height="250dp"></cn.com.larunda.monitor.util.LineChartViewPager>
+
+                        <TextView
+                            android:id="@+id/renewable_fragment_line_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="正在测试"
+                            android:visibility="gone" />
                     </RelativeLayout>
 
 
@@ -183,6 +201,15 @@
                             android:id="@+id/renewable_fragment_pie"
                             android:layout_width="match_parent"
                             android:layout_height="250dp"></cn.com.larunda.monitor.util.PieChartViewPager>
+
+                        <TextView
+                            android:id="@+id/renewable_fragment_pie_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="正在测试"
+                            android:visibility="gone" />
                     </RelativeLayout>
 
                     <android.support.v7.widget.RecyclerView

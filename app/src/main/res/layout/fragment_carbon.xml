@@ -119,6 +119,15 @@
                             android:id="@+id/carbon_fragment_chart"
                             android:layout_width="match_parent"
                             android:layout_height="250dp"></cn.com.larunda.monitor.util.BarChartViewPager>
+
+                        <TextView
+                            android:id="@+id/carbon_fragment_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="正在测试"
+                            android:visibility="gone" />
                     </RelativeLayout>
 
                     <android.support.v7.widget.RecyclerView

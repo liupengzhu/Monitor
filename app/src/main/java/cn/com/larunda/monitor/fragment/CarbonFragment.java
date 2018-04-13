@@ -77,6 +77,7 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
 
     private BarChartManager barManager;
     private XYMarkerView barMarkerView;
+    private TextView bgText;
 
     @Nullable
     @Override
@@ -102,6 +103,8 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
      * @param view
      */
     private void initView(View view) {
+        bgText = view.findViewById(R.id.carbon_fragment_bg);
+
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
         textView1 = view.findViewById(R.id.carbon_fragment_chart_text);
@@ -305,6 +308,11 @@ public class CarbonFragment extends Fragment implements View.OnClickListener {
     private void parseCarbon(CarbonInfo carbonInfo) {
 
         if (carbonInfo.getChart() != null) {
+            if (carbonInfo.getChart().size() > 0) {
+                bgText.setVisibility(View.GONE);
+            } else {
+                bgText.setVisibility(View.VISIBLE);
+            }
             float values[] = new float[carbonInfo.getChart().size()];
             for (int i = 0; i < carbonInfo.getChart().size(); i++) {
                 String value = carbonInfo.getChart().get(i);

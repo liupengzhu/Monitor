@@ -98,6 +98,8 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
     private PieChartManager pieChartManager;
     private XYMarkerView pieMarkerView;
 
+    private TextView bgText;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -122,6 +124,9 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
      * @param view
      */
     private void initView(View view) {
+
+        bgText = view.findViewById(R.id.carbon_fragment_ranking_bg);
+
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         token = preferences.getString("token", null);
         carbonUnit = preferences.getString("carbon_unit", null);
@@ -412,6 +417,11 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
         }
 
         if (rankCompanyInfo.getChart() != null) {
+            if (rankCompanyInfo.getChart().getData().size() > 0) {
+                bgText.setVisibility(View.GONE);
+            } else {
+                bgText.setVisibility(View.VISIBLE);
+            }
             //设置饼图数据
             ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
             for (int i = 0; i < rankCompanyInfo.getChart().getData().size(); i++) {

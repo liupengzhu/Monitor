@@ -32,10 +32,12 @@ public class CompanyImageAdapter extends RecyclerView.Adapter<CompanyImageAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView textView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.item_company_list_item_image);
+            textView = itemView.findViewById(R.id.item_company_list_item_image_text);
         }
     }
 
@@ -49,6 +51,11 @@ public class CompanyImageAdapter extends RecyclerView.Adapter<CompanyImageAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         String name = typeList.get(position);
         holder.imageView.setImageDrawable(context.getResources().getDrawable(iconList.get(name)));
+        if (name != null && name.equals("用电安全")) {
+            holder.textView.setText(" 电");
+        } else {
+            holder.textView.setText(" " + name);
+        }
     }
 
     @Override

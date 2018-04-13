@@ -15,6 +15,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.renderer.HorizontalBarChartRenderer;
 import com.github.mikephil.charting.renderer.XAxisRendererHorizontalBarChart;
 import com.github.mikephil.charting.renderer.YAxisRendererHorizontalBarChart;
+import com.github.mikephil.charting.renderer.scatter.BarRenderListener;
 import com.github.mikephil.charting.utils.HorizontalViewPortHandler;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.TransformerHorizontalBarChart;
@@ -52,6 +53,14 @@ public class HorizontalBarChart extends BarChart {
 
         mRenderer = new HorizontalBarChartRenderer(this, mAnimator, mViewPortHandler);
         setHighlighter(new HorizontalBarHighlighter(this));
+        HorizontalBarChartRenderer renderer = (HorizontalBarChartRenderer) mRenderer;
+        renderer.setListener(new BarRenderListener() {
+            @Override
+            public void onDrawBar(float x, float y) {
+                Highlight h = getHighlightByTouchPoint(x, y);
+                highlightValue(h);
+            }
+        });
 
         mAxisRendererLeft = new YAxisRendererHorizontalBarChart(mViewPortHandler, mAxisLeft, mLeftAxisTransformer);
         mAxisRendererRight = new YAxisRendererHorizontalBarChart(mViewPortHandler, mAxisRight, mRightAxisTransformer);

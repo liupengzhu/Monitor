@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint.Align;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.buffer.BarBuffer;
@@ -16,6 +17,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider;
 import com.github.mikephil.charting.interfaces.dataprovider.ChartInterface;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.renderer.scatter.BarRenderListener;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
@@ -29,6 +31,9 @@ import java.util.List;
  * @author Philipp Jahoda
  */
 public class HorizontalBarChartRenderer extends BarChartRenderer {
+
+    private boolean isFirst = true;
+    private BarRenderListener listener;
 
     public HorizontalBarChartRenderer(BarDataProvider chart, ChartAnimator animator,
                                       ViewPortHandler viewPortHandler) {
@@ -75,7 +80,7 @@ public class HorizontalBarChartRenderer extends BarChartRenderer {
             final float barWidthHalf = barWidth / 2.0f;
             float x;
 
-            for (int i = 0, count = Math.min((int)(Math.ceil((float)(dataSet.getEntryCount()) * phaseX)), dataSet.getEntryCount());
+            for (int i = 0, count = Math.min((int) (Math.ceil((float) (dataSet.getEntryCount()) * phaseX)), dataSet.getEntryCount());
                  i < count;
                  i++) {
 
@@ -118,6 +123,12 @@ public class HorizontalBarChartRenderer extends BarChartRenderer {
             mRenderPaint.setColor(dataSet.getColor());
         }
 
+        if (listener != null && isFirst) {
+            if (buffer.buffer.length >= 2) {
+                listener.onDrawBar(buffer.buffer[0], buffer.buffer[1]);
+                isFirst = false;
+            }
+        }
         for (int j = 0; j < buffer.size(); j += 4) {
 
             if (!mViewPortHandler.isInBoundsTop(buffer.buffer[j + 3]))
@@ -229,8 +240,8 @@ public class HorizontalBarChartRenderer extends BarChartRenderer {
                             Utils.drawImage(
                                     c,
                                     icon,
-                                    (int)px,
-                                    (int)py,
+                                    (int) px,
+                                    (int) py,
                                     icon.getIntrinsicWidth(),
                                     icon.getIntrinsicHeight());
                         }
@@ -300,8 +311,8 @@ public class HorizontalBarChartRenderer extends BarChartRenderer {
                                 Utils.drawImage(
                                         c,
                                         icon,
-                                        (int)px,
-                                        (int)py,
+                                        (int) px,
+                                        (int) py,
                                         icon.getIntrinsicWidth(),
                                         icon.getIntrinsicHeight());
                             }
@@ -378,8 +389,8 @@ public class HorizontalBarChartRenderer extends BarChartRenderer {
                                     Utils.drawImage(
                                             c,
                                             icon,
-                                            (int)(x + iconsOffset.x),
-                                            (int)(y + iconsOffset.y),
+                                            (int) (x + iconsOffset.x),
+                                            (int) (y + iconsOffset.y),
                                             icon.getIntrinsicWidth(),
                                             icon.getIntrinsicHeight());
                                 }
@@ -423,5 +434,9 @@ public class HorizontalBarChartRenderer extends BarChartRenderer {
     protected boolean isDrawingValuesAllowed(ChartInterface chart) {
         return chart.getData().getEntryCount() < chart.getMaxVisibleCount()
                 * mViewPortHandler.getScaleY();
+    }
+
+    public void setListener(BarRenderListener listener) {
+        this.listener = listener;
     }
 }

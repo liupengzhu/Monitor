@@ -94,6 +94,13 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
     private List<String> names;
     private XYMarkerView companyBarMarkerView;
 
+    private TextView powerbg;
+    private TextView waterbg;
+    private TextView steambg;
+    private TextView gasbg;
+    private TextView renewablebg;
+    private TextView rankbg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +121,13 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
      * 初始化view
      */
     private void initView() {
+
+        powerbg = findViewById(R.id.power_bg);
+        waterbg = findViewById(R.id.water_bg);
+        steambg = findViewById(R.id.steam_bg);
+        gasbg = findViewById(R.id.gas_bg);
+        renewablebg = findViewById(R.id.renewable_bg);
+        rankbg = findViewById(R.id.rank_bg);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         token = preferences.getString("token", null);
@@ -546,6 +560,11 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
             Collections.reverse(names);
         }
         if (usageInfo.getData() != null) {
+            if (usageInfo.getData().size() > 0) {
+                rankbg.setVisibility(View.GONE);
+            } else {
+                rankbg.setVisibility(View.VISIBLE);
+            }
             List<String> data = usageInfo.getData();
             Collections.reverse(data);
             float values[] = new float[data.size()];
@@ -564,6 +583,11 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
         ratio = usageInfo.getRatio();
         textView.setText("当月可再生能源发电量(" + ratio + powerUnit + ")");
         if (usageInfo.getSeries() != null) {
+            if (usageInfo.getSeries().size() > 0) {
+                renewablebg.setVisibility(View.GONE);
+            } else {
+                renewablebg.setVisibility(View.VISIBLE);
+            }
             float values[] = new float[usageInfo.getSeries().size()];
             for (int i = 0; i < usageInfo.getSeries().size(); i++) {
                 String value = usageInfo.getSeries().get(i);
@@ -577,6 +601,11 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
 
     private void parseUsageGasInfo(PowerUsageInfo usageInfo) {
         if (usageInfo.getSeries() != null) {
+            if (usageInfo.getSeries().size() > 0) {
+                gasbg.setVisibility(View.GONE);
+            } else {
+                gasbg.setVisibility(View.VISIBLE);
+            }
             float values[] = new float[usageInfo.getSeries().size()];
             for (int i = 0; i < usageInfo.getSeries().size(); i++) {
                 String value = usageInfo.getSeries().get(i);
@@ -590,6 +619,11 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
 
     private void parseUsageSteamInfo(PowerUsageInfo usageInfo) {
         if (usageInfo.getSeries() != null) {
+            if (usageInfo.getSeries().size() > 0) {
+                steambg.setVisibility(View.GONE);
+            } else {
+                steambg.setVisibility(View.VISIBLE);
+            }
             float values[] = new float[usageInfo.getSeries().size()];
             for (int i = 0; i < usageInfo.getSeries().size(); i++) {
                 String value = usageInfo.getSeries().get(i);
@@ -604,6 +638,11 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
 
     private void parseUsageWaterInfo(PowerUsageInfo usageInfo) {
         if (usageInfo.getSeries() != null) {
+            if (usageInfo.getSeries().size() > 0) {
+                waterbg.setVisibility(View.GONE);
+            } else {
+                waterbg.setVisibility(View.VISIBLE);
+            }
             float values[] = new float[usageInfo.getSeries().size()];
             for (int i = 0; i < usageInfo.getSeries().size(); i++) {
                 String value = usageInfo.getSeries().get(i);
@@ -622,7 +661,13 @@ public class PowerActivity extends BaseActivity implements View.OnClickListener 
      */
     private void parseUsageInfo(PowerUsageInfo usageInfo) {
         dateXList = usageInfo.getX_name();
-        if (usageInfo.getSeries() != null) {
+        if (usageInfo.getSeries().size() > 0) {
+            powerbg.setVisibility(View.GONE);
+        } else {
+            powerbg.setVisibility(View.VISIBLE);
+        }
+        if (usageInfo.getSeries() != null && usageInfo.getSeries().size() > 0) {
+
             //设置x轴的数据
             ArrayList<Float> xValues = new ArrayList<>();
             for (int i = 0; i < 288; i++) {

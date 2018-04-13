@@ -73,6 +73,14 @@
                     android:id="@+id/power_line"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"></cn.com.larunda.monitor.util.LineChartViewPager>
+                <TextView
+                    android:id="@+id/power_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="正在测试"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -107,6 +115,14 @@
                     android:id="@+id/power_bar_water"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"></cn.com.larunda.monitor.util.BarChartViewPager>
+                <TextView
+                    android:id="@+id/water_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="正在测试"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -141,6 +157,14 @@
                     android:id="@+id/power_bar_steam"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"></cn.com.larunda.monitor.util.BarChartViewPager>
+                <TextView
+                    android:id="@+id/steam_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="正在测试"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -175,6 +199,14 @@
                     android:id="@+id/power_bar_gas"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"></cn.com.larunda.monitor.util.BarChartViewPager>
+                <TextView
+                    android:id="@+id/gas_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="正在测试"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -210,6 +242,14 @@
                     android:id="@+id/power_bar_renewable"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"></cn.com.larunda.monitor.util.BarChartViewPager>
+                <TextView
+                    android:id="@+id/renewable_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="正在测试"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -244,6 +284,14 @@
                     android:id="@+id/power_bar_rank"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"></cn.com.larunda.monitor.util.HLineChartText>
+                <TextView
+                    android:id="@+id/rank_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="正在测试"
+                    android:visibility="gone" />
             </RelativeLayout>
 
 

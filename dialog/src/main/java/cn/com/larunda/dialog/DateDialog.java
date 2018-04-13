@@ -120,6 +120,8 @@ public class DateDialog extends Dialog {
         if (!isShowDay) {
             ((ViewGroup) ((ViewGroup) datePicker.getChildAt(0)).getChildAt(0)).getChildAt(2).setVisibility(View.GONE);
         }
+        long now = System.currentTimeMillis() - 1000;
+        datePicker.setMaxDate(now);
     }
 
     public interface OnOkClickListener {

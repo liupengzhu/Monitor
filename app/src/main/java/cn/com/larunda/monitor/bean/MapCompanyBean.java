@@ -8,6 +8,8 @@ public class MapCompanyBean {
     private String type;
     private String original;
     private String data;
+    private String originalUnit;
+    private String dataUnit;
 
     public MapCompanyBean() {
         super();
@@ -35,5 +37,21 @@ public class MapCompanyBean {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getOriginalUnit() {
+        return originalUnit;
+    }
+
+    public void setOriginalUnit(String originalUnit) {
+        this.originalUnit = originalUnit;
+    }
+
+    public String getDataUnit() {
+        return dataUnit;
+    }
+
+    public void setDataUnit(String dataUnit) {
+        this.dataUnit = dataUnit;
     }
 }

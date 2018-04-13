@@ -32,6 +32,8 @@ public class MapCompanyAdapter extends RecyclerView.Adapter<MapCompanyAdapter.Vi
         TextView originalText;
         TextView original;
         TextView data;
+        TextView originalUnit;
+        TextView dataUnit;
         View line;
         LinearLayout originalLayout;
 
@@ -43,6 +45,8 @@ public class MapCompanyAdapter extends RecyclerView.Adapter<MapCompanyAdapter.Vi
             data = itemView.findViewById(R.id.map_item_data);
             line = itemView.findViewById(R.id.map_item_line);
             originalLayout = itemView.findViewById(R.id.map_item_original_layout);
+            originalUnit = itemView.findViewById(R.id.map_item_original_unit);
+            dataUnit = itemView.findViewById(R.id.map_item_data_unit);
         }
     }
 
@@ -59,6 +63,7 @@ public class MapCompanyAdapter extends RecyclerView.Adapter<MapCompanyAdapter.Vi
         if (companyBean.getData() != null) {
             holder.data.setText(companyBean.getData() + "");
         }
+        holder.dataUnit.setText(companyBean.getDataUnit());
         if (companyBean.getOriginal() == null) {
             holder.originalText.setVisibility(View.GONE);
             holder.original.setVisibility(View.GONE);
@@ -70,6 +75,7 @@ public class MapCompanyAdapter extends RecyclerView.Adapter<MapCompanyAdapter.Vi
             holder.line.setVisibility(View.VISIBLE);
             holder.originalLayout.setVisibility(View.VISIBLE);
             holder.original.setText(companyBean.getOriginal());
+            holder.originalUnit.setText(companyBean.getOriginalUnit());
         }
 
     }

@@ -43,19 +43,30 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
-                    android:text="原始读数:"
+                    android:text="表记读数:"
                     android:textColor="@color/text_n"
                     android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/map_item_original"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:text="16223.11"
+                    android:textColor="@color/text_h"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/map_item_original_unit"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="right|center_vertical"
-                    android:text="16223.11"
+                    android:gravity="left|center_vertical"
+                    android:text="tce"
                     android:textColor="@color/text_h"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -85,13 +96,24 @@
 
                 <TextView
                     android:id="@+id/map_item_data"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:text="1122"
+                    android:textColor="@color/text_h"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/map_item_data_unit"
+                    android:layout_width="20dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="right|center_vertical"
-                    android:text="1122"
+                    android:gravity="left|center_vertical"
+                    android:text="m³"
                     android:textColor="@color/text_h"
                     android:textSize="10sp" />
             </LinearLayout>

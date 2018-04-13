@@ -81,7 +81,7 @@ public class RenewableRankingRecyclerAdapter extends RecyclerView.Adapter<Renewa
         holder.textView.setText("发电排行" + renewableRankingBean.getRank());
         holder.name.setText(renewableRankingBean.getName() + "");
         if (renewableRankingBean.getInstalledCapacity() != null) {
-            if (renewableRankingBean.getInstalledCapacity().equals("/")) {
+            if (renewableRankingBean.getInstalledCapacity().equals("/")||renewableRankingBean.getInstalledCapacity().equals("")) {
                 holder.installedCapacity.setText("-");
             } else {
                 holder.installedCapacity.setText(Util.formatNum(Float.valueOf(renewableRankingBean.getInstalledCapacity())) + "");
@@ -89,14 +89,14 @@ public class RenewableRankingRecyclerAdapter extends RecyclerView.Adapter<Renewa
         }
         holder.installedCapacityUnit.setText("装机容量(" + renewableRankingBean.getInstalledCapacityRatio() + ")");
         if (renewableRankingBean.getTotal() != null) {
-            if (renewableRankingBean.getTotal().equals("/")) {
+            if (renewableRankingBean.getTotal().equals("/")||renewableRankingBean.getTotal().equals("")) {
                 holder.total.setText("-");
             } else {
                 holder.total.setText(Util.formatNum(Float.valueOf(renewableRankingBean.getTotal())) + "");
             }
         }
         if (renewableRankingBean.getHistory_average() != null) {
-            if (renewableRankingBean.getHistory_average().equals("/")) {
+            if (renewableRankingBean.getHistory_average().equals("/")||renewableRankingBean.getHistory_average().equals("")) {
                 holder.history_average.setText("-");
             } else {
                 holder.history_average.setText(Util.formatNum(Float.valueOf(renewableRankingBean.getHistory_average())) + "");
@@ -104,7 +104,7 @@ public class RenewableRankingRecyclerAdapter extends RecyclerView.Adapter<Renewa
         }
         holder.totalUnit.setText("实际发电量(" + renewableRankingBean.getRatio() + ")");
         holder.history_averageUnit.setText("历史同期发电量(" + renewableRankingBean.getRatio() + ")");
-        if (renewableRankingBean.getRange() != null && renewableRankingBean.getRange().equals("/")) {
+        if (renewableRankingBean.getRange() != null && (renewableRankingBean.getRange().equals("/")||renewableRankingBean.getRange().equals(""))) {
             holder.range.setText("-");
             holder.rangeImg.setImageResource(R.drawable.none);
         } else if (renewableRankingBean.getRange() != null) {

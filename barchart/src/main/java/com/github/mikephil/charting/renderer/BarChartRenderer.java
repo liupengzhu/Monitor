@@ -156,8 +156,10 @@ public class BarChartRenderer extends BarLineScatterCandleBubbleRenderer {
             mRenderPaint.setColor(dataSet.getColor());
         }
         if (listener != null && isFirst) {
-            listener.onDrawBar(buffer.buffer[0], buffer.buffer[1]);
-            isFirst = false;
+            if(buffer.buffer.length>=2) {
+                listener.onDrawBar(buffer.buffer[0], buffer.buffer[1]);
+                isFirst = false;
+            }
         }
         for (int j = 0; j < buffer.size(); j += 4) {
 

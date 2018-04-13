@@ -176,6 +176,7 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
         if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_year_button) {
             date = Util.parseTime(time, 1);
         } else if (timeGroup.getCheckedRadioButtonId() == R.id.carbon_ranking_fragment_day_button) {
+            time -= 24 * 60 * 60 * 1000;
             date = Util.parseTime(time, 3);
         } else {
             date = Util.parseTime(time, 2);
@@ -414,8 +415,13 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
             //设置饼图数据
             ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
             for (int i = 0; i < rankCompanyInfo.getChart().getData().size(); i++) {
-                entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
-                        rankCompanyInfo.getChart().getData().get(i).getName()));
+                if (rankCompanyInfo.getChart().getData().get(i).getValue() != null) {
+                    entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
+                            rankCompanyInfo.getChart().getData().get(i).getName()));
+                } else {
+                    entries.add(new PieEntry(0.00f,
+                            rankCompanyInfo.getChart().getData().get(i).getName()));
+                }
             }
 
             pieChartManager.showPieChart(entries, colors);
@@ -428,8 +434,16 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                 CarbonRankingBean carbonRankingBean = new CarbonRankingBean();
                 carbonRankingBean.setStyle(style);
                 carbonRankingBean.setName(bean.getName() + "");
-                carbonRankingBean.setData(bean.getData() + "");
-                carbonRankingBean.setPercent(bean.getPercent() + "");
+                if (bean.getData() == null) {
+                    carbonRankingBean.setData("0");
+                } else {
+                    carbonRankingBean.setData(bean.getData() + "");
+                }
+                if (bean.getPercent() == null) {
+                    carbonRankingBean.setPercent("0");
+                } else {
+                    carbonRankingBean.setPercent(bean.getPercent() + "");
+                }
                 carbonRankingBean.setRatio(carbonUnit + "");
                 carbonRankingBeanList.add(carbonRankingBean);
             }
@@ -458,7 +472,7 @@ public class CarbonRankingFragment extends Fragment implements View.OnClickListe
                 sendRequest();
                 break;
             case R.id.carbon_ranking_fragment_day_button:
-                long time3 = System.currentTimeMillis();
+                long time3 = System.currentTimeMillis() - 24 * 60 * 60 * 1000;
                 String date3 = Util.parseTime(time3, 3);
                 dateText.setText(date3);
                 sendRequest();

@@ -265,9 +265,21 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
                 RenewableRankingBean renewableRankingBean = new RenewableRankingBean();
                 renewableRankingBean.setRank(bean.getRank());
                 renewableRankingBean.setName(bean.getCompany_name());
-                renewableRankingBean.setInstalledCapacity(bean.getInstalled_capacity());
-                renewableRankingBean.setTotal(bean.getTotal_generated());
-                renewableRankingBean.setHistory_average(bean.getHistory_average());
+                if (bean.getInstalled_capacity() == null) {
+                    renewableRankingBean.setInstalledCapacity("0.00");
+                } else {
+                    renewableRankingBean.setInstalledCapacity(bean.getInstalled_capacity());
+                }
+                if (bean.getTotal_generated() == null) {
+                    renewableRankingBean.setTotal("0.00");
+                } else {
+                    renewableRankingBean.setTotal(bean.getTotal_generated());
+                }
+                if (bean.getHistory_average() == null) {
+                    renewableRankingBean.setHistory_average("0.00");
+                } else {
+                    renewableRankingBean.setHistory_average(bean.getHistory_average());
+                }
                 renewableRankingBean.setRange(bean.getRange());
                 renewableRankingBean.setInstalledCapacityRatio(preferences.getString("installed_capacity_unit", null) + "");
                 renewableRankingBean.setRatio(renewableRankInfo.getRatio() + preferences.getString("power_unit", null) + "");
@@ -350,9 +362,21 @@ public class RenewableRankingFragment extends Fragment implements View.OnClickLi
                 RenewableRankingBean renewableRankingBean = new RenewableRankingBean();
                 renewableRankingBean.setRank(bean.getRank());
                 renewableRankingBean.setName(bean.getCompany_name());
-                renewableRankingBean.setInstalledCapacity(bean.getInstalled_capacity());
-                renewableRankingBean.setTotal(bean.getTotal_generated());
-                renewableRankingBean.setHistory_average(bean.getHistory_average());
+                if (bean.getInstalled_capacity() == null) {
+                    renewableRankingBean.setInstalledCapacity("0.00");
+                } else {
+                    renewableRankingBean.setInstalledCapacity(bean.getInstalled_capacity());
+                }
+                if (bean.getTotal_generated() == null) {
+                    renewableRankingBean.setTotal("0.00");
+                } else {
+                    renewableRankingBean.setTotal(bean.getTotal_generated());
+                }
+                if (bean.getHistory_average() == null) {
+                    renewableRankingBean.setHistory_average("0.00");
+                } else {
+                    renewableRankingBean.setHistory_average(bean.getHistory_average());
+                }
                 renewableRankingBean.setRange(bean.getRange());
                 renewableRankingBean.setInstalledCapacityRatio(preferences.getString("installed_capacity_unit", null) + "");
                 renewableRankingBean.setRatio(renewableRankInfo.getRatio() + preferences.getString("power_unit", null) + "");

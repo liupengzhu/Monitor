@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,6 +184,7 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
         if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_year_button) {
             date = Util.parseTime(time, 1);
         } else if (timeGroup.getCheckedRadioButtonId() == R.id.steam_ranking_fragment_day_button) {
+            time -= 24 * 60 * 60 * 1000;
             date = Util.parseTime(time, 3);
         } else {
             date = Util.parseTime(time, 2);
@@ -437,8 +439,13 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
             //设置饼图数据
             ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
             for (int i = 0; i < rankCompanyInfo.getChart().getData().size(); i++) {
-                entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
-                        rankCompanyInfo.getChart().getData().get(i).getName()));
+                if (rankCompanyInfo.getChart().getData().get(i).getValue() != null) {
+                    entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
+                            rankCompanyInfo.getChart().getData().get(i).getName()));
+                } else {
+                    entries.add(new PieEntry(0.00f,
+                            rankCompanyInfo.getChart().getData().get(i).getName()));
+                }
             }
 
             pieChartManager.showPieChart(entries, colors);
@@ -451,8 +458,16 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
                 SteamRankingBean steamRankingBean = new SteamRankingBean();
                 steamRankingBean.setStyle(style);
                 steamRankingBean.setName(bean.getName() + "");
-                steamRankingBean.setData(bean.getData() + "");
-                steamRankingBean.setPercent(bean.getPercent() + "");
+                if (bean.getData() == null) {
+                    steamRankingBean.setData("0");
+                } else {
+                    steamRankingBean.setData(bean.getData() + "");
+                }
+                if (bean.getPercent() == null) {
+                    steamRankingBean.setPercent("0");
+                } else {
+                    steamRankingBean.setPercent(bean.getPercent() + "");
+                }
                 if (type.equals("original")) {
                     steamRankingBean.setRatio(steamUnit + "");
                 } else {
@@ -485,7 +500,7 @@ public class SteamRankingFragment extends Fragment implements View.OnClickListen
                 sendRequest();
                 break;
             case R.id.steam_ranking_fragment_day_button:
-                long time3 = System.currentTimeMillis();
+                long time3 = System.currentTimeMillis() - 24 * 60 * 60 * 1000;
                 String date3 = Util.parseTime(time3, 3);
                 dateText.setText(date3);
                 sendRequest();

@@ -184,6 +184,7 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
         if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_year_button) {
             date = Util.parseTime(time, 1);
         } else if (timeGroup.getCheckedRadioButtonId() == R.id.electric_ranking_fragment_day_button) {
+            time -= 24 * 60 * 60 * 1000;
             date = Util.parseTime(time, 3);
         } else {
             date = Util.parseTime(time, 2);
@@ -313,7 +314,7 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
                 sendRequest();
                 break;
             case R.id.electric_ranking_fragment_day_button:
-                long time3 = System.currentTimeMillis();
+                long time3 = System.currentTimeMillis() - 24 * 60 * 60 * 1000;
                 String date3 = Util.parseTime(time3, 3);
                 dateText.setText(date3);
                 sendRequest();
@@ -488,8 +489,13 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
             //设置饼图数据
             ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
             for (int i = 0; i < rankCompanyInfo.getChart().getData().size(); i++) {
-                entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
-                        rankCompanyInfo.getChart().getData().get(i).getName()));
+                if (rankCompanyInfo.getChart().getData().get(i).getValue() == null) {
+                    entries.add(new PieEntry(0.00f,
+                            rankCompanyInfo.getChart().getData().get(i).getName()));
+                } else {
+                    entries.add(new PieEntry(Float.valueOf(rankCompanyInfo.getChart().getData().get(i).getValue()),
+                            rankCompanyInfo.getChart().getData().get(i).getName()));
+                }
             }
 
             pieChartManager.showPieChart(entries, colors);
@@ -503,8 +509,16 @@ public class ElectricRankingFragment extends Fragment implements View.OnClickLis
                 ElectricRankingBean electricRankingBean = new ElectricRankingBean();
                 electricRankingBean.setStyle(style);
                 electricRankingBean.setName(bean.getName() + "");
-                electricRankingBean.setData(bean.getData() + "");
-                electricRankingBean.setPercent(bean.getPercent() + "");
+                if (bean.getData() == null) {
+                    electricRankingBean.setData("0.00");
+                } else {
+                    electricRankingBean.setData(bean.getData() + "");
+                }
+                if (bean.getPercent() == null) {
+                    electricRankingBean.setPercent("0.00");
+                } else {
+                    electricRankingBean.setPercent(bean.getPercent() + "");
+                }
                 if (type.equals("original")) {
                     electricRankingBean.setRatio(rankCompanyInfo.getChart().getRatio() + powerUnit + "");
                 } else {

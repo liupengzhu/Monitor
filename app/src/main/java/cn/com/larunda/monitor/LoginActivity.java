@@ -157,8 +157,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     LOGIN_URL = "http://ksdy_db.dsmcase.com:90/api/login";
                     UNIT_URL = "http://ksdy_db.dsmcase.com:90/api/config/unit";
                     isLogin = true;
-                    login();
                     showDialog();
+                    login();
                 }
                 break;
             case R.id.login_button2:
@@ -168,8 +168,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     LOGIN_URL = "http://ksdy_demo.dsmcase.com:90/api/login";
                     UNIT_URL = "http://ksdy_demo.dsmcase.com:90/config/unit";
                     isLogin = true;
-                    login();
                     showDialog();
+                    login();
                 }
                 break;
             default:
@@ -199,6 +199,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
         } else {
+            isLogin = false;
+            cancelDialog();
             Toast.makeText(this, "账号或者密码不能为空", Toast.LENGTH_SHORT).show();
         }
 

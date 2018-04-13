@@ -152,10 +152,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.login_button:
                 if (!isLogin) {
-                    MyApplication.URL = "http://ksdy_db.dsmcase.com:90/api/";
-                    MyApplication.IMG_URL = "http://ksdy_db.dsmcase.com:90";
-                    LOGIN_URL = "http://ksdy_db.dsmcase.com:90/api/login";
-                    UNIT_URL = "http://ksdy_db.dsmcase.com:90/api/config/unit";
+                    MyApplication.URL = "http://211.143.244.107:30080/api/";
+                    MyApplication.IMG_URL = "http://211.143.244.107:30080";
+                    LOGIN_URL = "http://211.143.244.107:30080/api/login";
+                    UNIT_URL = "http://211.143.244.107:30080/api/config/unit";
                     isLogin = true;
                     showDialog();
                     login();
@@ -163,10 +163,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.login_button2:
                 if (!isLogin) {
-                    MyApplication.URL = "http://ksdy_demo.dsmcase.com:90/api/";
-                    MyApplication.IMG_URL = "http://ksdy_demo.dsmcase.com:90";
-                    LOGIN_URL = "http://ksdy_demo.dsmcase.com:90/api/login";
-                    UNIT_URL = "http://ksdy_demo.dsmcase.com:90/config/unit";
+                    MyApplication.URL = "http://kunshan.dsmcase.com:90/api/";
+                    MyApplication.IMG_URL = "http://kunshan.dsmcase.com:90";
+                    LOGIN_URL = "http://kunshan.dsmcase.com:90/api/login";
+                    UNIT_URL = "http://kunshan.dsmcase.com:90/config/unit";
                     isLogin = true;
                     showDialog();
                     login();

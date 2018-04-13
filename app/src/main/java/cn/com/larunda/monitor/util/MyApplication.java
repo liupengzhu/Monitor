@@ -11,8 +11,8 @@ import org.litepal.LitePal;
 public class MyApplication extends Application {
 
     public static final String VERSION = "V1.0.1";
-    public static String URL =  "http://ksdy_db.dsmcase.com:90/api/";
-    public static String IMG_URL =  "http://ksdy_db.dsmcase.com:90";
+    public static String URL =  "http://211.143.244.107:30080/api/";
+    public static String IMG_URL =  "http://211.143.244.107:30080";
     public static final String TOKEN = "?_token=";
     private static Context context;
 

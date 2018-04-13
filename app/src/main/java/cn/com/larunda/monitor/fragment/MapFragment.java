@@ -141,6 +141,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
     private LatLng pSE;
     private LatLng pSW;
     private LatLng pNW2;
+    private BitmapDescriptor bitmap12;
 
 
     @Nullable
@@ -222,6 +223,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         bitmap9 = BitmapDescriptorFactory.fromResource(R.mipmap.point9);
         bitmap10 = BitmapDescriptorFactory.fromResource(R.mipmap.point10);
         bitmap11 = BitmapDescriptorFactory.fromResource(R.mipmap.point11);
+        bitmap12 = BitmapDescriptorFactory.fromResource(R.mipmap.point_go);
         list.add(bitmap1);
         list.add(bitmap2);
         list.add(bitmap3);
@@ -233,6 +235,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
         list.add(bitmap9);
         list.add(bitmap10);
         list.add(bitmap11);
+        list.add(bitmap12);
         pNW = new LatLng(59.0, 73.0);
         pNE = new LatLng(59.0, 136.0);
         pSE = new LatLng(3.0, 136.0);
@@ -414,7 +417,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnGet
             } else {
                 option = new MarkerOptions()
                         .position(latLngList.get(i))
-                        .icon(bitmap1)
+                        .icon(bitmap12)
                         .title(i + "");
             }
 

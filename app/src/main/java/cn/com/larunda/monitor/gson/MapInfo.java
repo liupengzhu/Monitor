@@ -57,7 +57,7 @@ public class MapInfo {
         private String lng;
         private String lat;
         private double count;
-        private double percent;
+        //private double percent;
         private DataBean data;
         private OriginalDataBean original_data;
         private int top_ten;
@@ -94,13 +94,13 @@ public class MapInfo {
             this.count = count;
         }
 
-        public double getPercent() {
+        /*public double getPercent() {
             return percent;
         }
 
         public void setPercent(double percent) {
             this.percent = percent;
-        }
+        }*/
 
         public DataBean getData() {
             return data;

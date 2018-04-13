@@ -238,14 +238,22 @@ public class CompanyFragment extends Fragment {
                 }
                 int normal = dataBean.getDevice_data().getDevice_total()
                         - dataBean.getDevice_data().getError_total();
-                company.setAddress(dataBean.getCompany_address());
+                if (dataBean.getCompany_address() == null) {
+                    company.setAddress("");
+                } else {
+                    company.setAddress(dataBean.getCompany_address());
+                }
                 company.setAlarm(dataBean.getAlarm_data() + "");
                 company.setId(Integer.parseInt(dataBean.getCompany_id()));
                 company.setElectric(dataBean.getDevice_data().getMeter_total_num() + "");
                 company.setIndustry(dataBean.getCompany_industry());
                 company.setMaintenance(dataBean.getMaintenance_num() + "");
                 company.setName(dataBean.getCompany_name());
-                company.setTel(dataBean.getCompany_tel());
+                if (dataBean.getCompany_tel() == null) {
+                    company.setTel("");
+                } else {
+                    company.setTel(dataBean.getCompany_tel());
+                }
                 company.setTotal(normal + "");
                 if (dataBean.getDevice_data().getDevice_total() != 0) {
 
@@ -266,11 +274,15 @@ public class CompanyFragment extends Fragment {
                             }
                         }
                         MaintenanceCompany maintenanceCompany = new MaintenanceCompany();
-                        maintenanceCompany.setName(dataBean1.getName() + " (" + dataBean1.getTel() + ")");
+                        maintenanceCompany.setName(dataBean1.getName() + " ( " + dataBean1.getTel() + " ) ");
                         maintenanceCompany.setTypeList(typeList);
                         maintenanceCompanyList.add(maintenanceCompany);
                     }
-
+                    if (dataBean.getMaintenanceCompanyInfoList().size() == 0) {
+                        MaintenanceCompany maintenanceCompany = new MaintenanceCompany();
+                        maintenanceCompany.setName("无");
+                        maintenanceCompanyList.add(maintenanceCompany);
+                    }
                 }
                 company.setDeviceList(deviceList);
                 company.setMaintenanceCompanyList(maintenanceCompanyList);
@@ -355,14 +367,22 @@ public class CompanyFragment extends Fragment {
                 }
                 int normal = dataBean.getDevice_data().getDevice_total()
                         - dataBean.getDevice_data().getError_total();
-                company.setAddress(dataBean.getCompany_address());
+                if (dataBean.getCompany_address() == null) {
+                    company.setAddress("");
+                } else {
+                    company.setAddress(dataBean.getCompany_address());
+                }
                 company.setAlarm(dataBean.getAlarm_data() + "");
                 company.setId(Integer.parseInt(dataBean.getCompany_id()));
                 company.setElectric(dataBean.getDevice_data().getMeter_total_num() + "");
                 company.setIndustry(dataBean.getCompany_industry());
                 company.setMaintenance(dataBean.getMaintenance_num() + "");
                 company.setName(dataBean.getCompany_name());
-                company.setTel(dataBean.getCompany_tel());
+                if (dataBean.getCompany_tel() == null) {
+                    company.setTel("");
+                } else {
+                    company.setTel(dataBean.getCompany_tel());
+                }
                 company.setTotal(normal + "");
                 if (dataBean.getDevice_data().getDevice_total() != 0) {
 
@@ -383,11 +403,15 @@ public class CompanyFragment extends Fragment {
                             }
                         }
                         MaintenanceCompany maintenanceCompany = new MaintenanceCompany();
-                        maintenanceCompany.setName(dataBean1.getName() + " (" + dataBean1.getTel() + ")");
+                        maintenanceCompany.setName(dataBean1.getName() + " ( " + dataBean1.getTel() + " ) ");
                         maintenanceCompany.setTypeList(typeList);
                         maintenanceCompanyList.add(maintenanceCompany);
                     }
-
+                    if (dataBean.getMaintenanceCompanyInfoList().size() == 0) {
+                        MaintenanceCompany maintenanceCompany = new MaintenanceCompany();
+                        maintenanceCompany.setName("无");
+                        maintenanceCompanyList.add(maintenanceCompany);
+                    }
                 }
                 company.setDeviceList(deviceList);
                 company.setMaintenanceCompanyList(maintenanceCompanyList);

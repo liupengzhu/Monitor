@@ -205,14 +205,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
      * @param homeInfo
      */
     private void parseHomeInfo(HomeInfo homeInfo) {
-        powerText.setText(Util.formatNum(homeInfo.getPower().getData()) + "");
-        waterText.setText(Util.formatNum(homeInfo.getWater()) + "");
-        steamText.setText(Util.formatNum(homeInfo.getSteam()) + "");
-        gasText.setText(Util.formatNum(homeInfo.getGas()) + "");
-        energyText.setText(Util.formatNum(homeInfo.getEnergy()) + "");
-        carbonText.setText(Util.formatNum(homeInfo.getCarbon()) + "");
-        powerGeneratedText.setText(Util.formatNum(homeInfo.getPower_generated().getData()) + "");
+        if (homeInfo.getPower().getData() == 0) {
+            powerText.setText("正在测试");
+        } else {
+            powerText.setText(Util.formatNum(homeInfo.getPower().getData()) + "");
+        }
+        if (homeInfo.getWater() == 0) {
+            waterText.setText("正在测试");
+        } else {
+            waterText.setText(Util.formatNum(homeInfo.getWater()) + "");
+        }
+        if (homeInfo.getSteam() == 0) {
+            steamText.setText("正在测试");
+        } else {
+            steamText.setText(Util.formatNum(homeInfo.getSteam()) + "");
+        }
+        if (homeInfo.getGas() == 0) {
+            gasText.setText("正在测试");
+        } else {
+            gasText.setText(Util.formatNum(homeInfo.getGas()) + "");
+        }
+        if (homeInfo.getEnergy() == 0) {
+            energyText.setText("正在测试");
+        } else {
+            energyText.setText(Util.formatNum(homeInfo.getEnergy()) + "");
+        }
+        if (homeInfo.getCarbon() == 0) {
+            carbonText.setText("正在测试");
+        } else {
+            carbonText.setText(Util.formatNum(homeInfo.getCarbon()) + "");
+        }
+        if (homeInfo.getPower_generated().getData() == 0) {
+            powerGeneratedText.setText("正在测试");
+        } else {
+            powerGeneratedText.setText(Util.formatNum(homeInfo.getPower_generated().getData()) + "");
+        }
+
         safeDayText.setText(homeInfo.getSafe_day() + "");
+
 
 
         powerUnitText.setText("单位:" + homeInfo.getPower().getRatio()

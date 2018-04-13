@@ -57,9 +57,9 @@ public class MaintenanceFragment extends Fragment implements View.OnClickListene
         fragmentList.add(new CompanyFragment());
         fragmentList.add(new MaintenanceWarningFragment());
         fragmentList.add(new MaintenanceWorksheetFragment());
-        titleList.add("维保概况");
-        titleList.add("维保警报");
-        titleList.add("维保工单");
+        titleList.add("事件概况");
+        titleList.add("事件列表");
+        titleList.add("事件处理");
     }
 
     /**

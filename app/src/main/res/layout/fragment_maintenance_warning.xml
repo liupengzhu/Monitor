@@ -52,7 +52,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/maintenance_warning_date_text"
-            android:text="警报状态"
+            android:text="事件状态"
             android:textColor="@color/tab_text_color2" />
 
         <TextView

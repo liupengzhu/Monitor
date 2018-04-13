@@ -629,7 +629,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
         ratio = electricInfo.getChart_ratio();
         pieRatio = electricInfo.getPie_ratio();
         dateXList = electricInfo.getX_name();
-        if (electricInfo.getChart() != null) {
+        if (electricInfo.getChart() != null && electricInfo.getChart().size() != 0) {
             electricList = electricInfo.getChart();
             //设置x轴的数据
             ArrayList<Float> xValues = new ArrayList<>();
@@ -655,7 +655,7 @@ public class ElectricFragment extends Fragment implements View.OnClickListener {
                 + "日 区间用电量曲线图");
 
 
-        if (electricInfo.getPeak_valley_pie() != null) {
+        if (electricInfo.getPeak_valley_pie() != null && electricInfo.getPeak_valley_pie().size() != 0) {
             List<DayElectricInfo.PeakValleyPieBean> peakList = electricInfo.getPeak_valley_pie();
             //设置饼图数据
             ArrayList<PieEntry> entries = new ArrayList<PieEntry>();

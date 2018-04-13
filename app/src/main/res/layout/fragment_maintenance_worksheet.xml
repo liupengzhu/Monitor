@@ -52,7 +52,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/maintenance_worksheet_date_text"
-            android:text="工单状态"
+            android:text="处理状态"
             android:textColor="@color/tab_text_color2" />
 
         <TextView

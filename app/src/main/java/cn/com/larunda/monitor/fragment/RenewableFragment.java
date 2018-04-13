@@ -429,7 +429,7 @@ public class RenewableFragment extends Fragment implements View.OnClickListener 
         pieRatio = renewableInfo.getPie_ratio();
 
         dateXList = renewableInfo.getX_name();
-        if (renewableInfo.getChart() != null) {
+        if (renewableInfo.getChart() != null && renewableInfo.getChart().size() != 0) {
             //设置x轴的数据
             ArrayList<Float> xValues = new ArrayList<>();
             for (int i = 0; i < 288; i++) {

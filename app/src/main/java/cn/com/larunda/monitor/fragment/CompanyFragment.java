@@ -1,19 +1,27 @@
 package cn.com.larunda.monitor.fragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.com.larunda.monitor.AlarmActivity;
-import cn.com.larunda.monitor.CompanyListActivity;
 import cn.com.larunda.monitor.LoginActivity;
 import cn.com.larunda.monitor.R;
 import cn.com.larunda.monitor.WorksheetActivity;
@@ -66,6 +73,9 @@ public class CompanyFragment extends Fragment {
     private LinearLayout errorLayout;
     private FrameLayout layout;
     private Toolbar toolbar;
+
+    private final int REQUEST_CODE_TEL = 4;
+    public String telNum;
 
     @Nullable
     @Override
@@ -157,6 +167,17 @@ public class CompanyFragment extends Fragment {
             @Override
             public void onStartLoading(int skip) {
                 sendLoadRequest();
+            }
+        });
+
+        adapter.setTelOnClickListener(new CompanyAdapter.TelOnClickListener() {
+            @Override
+            public void telOnClick(String tel) {
+                if (tel.equals("")) {
+                    Toast.makeText(getContext(), "电话号码不存在", Toast.LENGTH_SHORT).show();
+                } else {
+                    call(tel);
+                }
             }
         });
     }
@@ -275,6 +296,7 @@ public class CompanyFragment extends Fragment {
                         }
                         MaintenanceCompany maintenanceCompany = new MaintenanceCompany();
                         maintenanceCompany.setName(dataBean1.getName() + " ( " + dataBean1.getTel() + " ) ");
+                        maintenanceCompany.setTel(dataBean1.getTel());
                         maintenanceCompany.setTypeList(typeList);
                         maintenanceCompanyList.add(maintenanceCompany);
                     }
@@ -404,6 +426,7 @@ public class CompanyFragment extends Fragment {
                         }
                         MaintenanceCompany maintenanceCompany = new MaintenanceCompany();
                         maintenanceCompany.setName(dataBean1.getName() + " ( " + dataBean1.getTel() + " ) ");
+                        maintenanceCompany.setTel(dataBean1.getTel());
                         maintenanceCompany.setTypeList(typeList);
                         maintenanceCompanyList.add(maintenanceCompany);
                     }
@@ -421,5 +444,35 @@ public class CompanyFragment extends Fragment {
         }
         /*adapter.notifyDataSetChanged();*/
         recyclerView.completeLoad(0);
+    }
+
+    /**
+     * 拨打电话
+     *
+     * @param tel
+     */
+    private void call(String tel) {
+        telNum = tel;
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},
+                    REQUEST_CODE_TEL);
+        } else {
+            callPhone(tel);
+        }
+    }
+
+    /**
+     * 拨打电话（直接拨打电话）
+     *
+     * @param phoneNum 电话号码
+     */
+    @SuppressLint("MissingPermission")
+    public void callPhone(String phoneNum) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        startActivity(intent);
     }
 }

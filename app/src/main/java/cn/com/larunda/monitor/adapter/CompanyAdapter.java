@@ -34,6 +34,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
     private HashMap<String, Integer> iconList = new HashMap<>();
     private AlarmOnClickListener alarmOnClickListener;
     private MaintenanceOnClickListener maintenanceOnClickListener;
+    private TelOnClickListener telOnClickListener;
 
     public CompanyAdapter(Context context, List<Company> companyList, HashMap<String, Integer> iconList) {
         this.context = context;
@@ -65,6 +66,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
         RecyclerView recyclerView;
         RecyclerView recyclerViewRight;
 
+        LinearLayout telLayout;
+
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.company_list_item_company_img);
@@ -88,6 +91,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
 
             recyclerView = itemView.findViewById(R.id.company_list_item_recycler);
             recyclerViewRight = itemView.findViewById(R.id.company_list_item_right_recycler);
+
+            telLayout = itemView.findViewById(R.id.company_list_item_tel_layout);
         }
     }
 
@@ -118,7 +123,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
                 }
             }
         });
-        Company company = companyList.get(position);
+        final Company company = companyList.get(position);
         if (company.getImg() != null) {
             Glide.with(context).load(company.getImg())
                     .placeholder(R.drawable.circle_null)
@@ -196,7 +201,27 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
             LinearLayoutManager manager = new LinearLayoutManager(this.context);
             holder.recyclerView.setAdapter(adapter);
             holder.recyclerView.setLayoutManager(manager);
+            adapter.setItemOnClickListener(new CompanyItemAdapter.ItemOnClickListener() {
+                @Override
+                public void telOnClick(String tel) {
+                    if (telOnClickListener != null) {
+                        if (tel != null) {
+                            telOnClickListener.telOnClick(tel);
+                        } else {
+                            telOnClickListener.telOnClick("");
+                        }
+                    }
+                }
+            });
         }
+        holder.telLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (telOnClickListener != null) {
+                    telOnClickListener.telOnClick(company.getTel());
+                }
+            }
+        });
 
     }
 
@@ -219,5 +244,13 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.ViewHold
 
     public void setMaintenanceOnClickListener(MaintenanceOnClickListener maintenanceOnClickListener) {
         this.maintenanceOnClickListener = maintenanceOnClickListener;
+    }
+
+    public interface TelOnClickListener {
+        void telOnClick(String tel);
+    }
+
+    public void setTelOnClickListener(TelOnClickListener telOnClickListener) {
+        this.telOnClickListener = telOnClickListener;
     }
 }
